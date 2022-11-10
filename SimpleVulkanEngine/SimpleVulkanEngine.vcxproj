@@ -157,11 +157,18 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SVEApp.cpp" />
+    <ClCompile Include="SVEPipeline.cpp" />
     <ClCompile Include="SVEWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SVEApp.h" />
+    <ClInclude Include="SVEPipeline.h" />
     <ClInclude Include="SVEWindow.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Shaders\compile.bat" />
+    <None Include="..\Shaders\shader.frag" />
+    <None Include="..\Shaders\shader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
