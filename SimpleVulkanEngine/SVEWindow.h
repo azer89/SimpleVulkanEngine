@@ -6,13 +6,28 @@
 #endif
 
 #include <GLFW/glfw3.h>
+#include <string>
 
-namespace SVE
+class SVEWindow
 {
-	class SVEWindow
-	{
+public:
+	SVEWindow(int w, int h, std::string name);
+	~SVEWindow();
 
-	};
-}
+	// Non copyable
+	SVEWindow(const SVEWindow&) = delete;
+	SVEWindow& operator=(const SVEWindow&) = delete;
+
+	bool ShouldClose();
+
+private:
+	void initWindow();
+
+	const int width;
+	const int height;
+
+	std::string windowName;
+	GLFWwindow* window;
+};
 
 #endif
