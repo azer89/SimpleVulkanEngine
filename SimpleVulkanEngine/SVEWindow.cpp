@@ -1,14 +1,16 @@
 #include "SVEWindow.h"
 
-SVEWindow::SVEWindow(int w, int h, std::string name) : 
-	width{w}, 
-	height{h}, 
-	windowName{name} 
+#include <stdexcept>
+
+SVEWindow::SVEWindow(int w, int h, std::string name) :
+	width{ w },
+	height{ h },
+	windowName{ name }
 {
 	initWindow();
 }
 
-SVEWindow::~SVEWindow() 
+SVEWindow::~SVEWindow()
 {
 	glfwDestroyWindow(window);
 	glfwTerminate();
@@ -25,4 +27,12 @@ void SVEWindow::initWindow()
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API); // No context
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 	window = glfwCreateWindow(width, height, windowName.c_str(), nullptr, nullptr);
+}
+
+void SVEWindow::createWindowSurface(VkInstance instance, VkSurfaceKHR* surface)
+{
+	if (glfwCreateWindowSurface(instance, window, nullptr, surface) != VK_SUCCESS)
+	{
+		throw std::runtime_error("Failed to create window surface");
+	}
 }

@@ -19,6 +19,7 @@ public:
 	SVEWindow& operator=(const SVEWindow&) = delete;
 
 	bool ShouldClose();
+	void createWindowSurface(VkInstance instance, VkSurfaceKHR* surface);
 
 private:
 	void initWindow();

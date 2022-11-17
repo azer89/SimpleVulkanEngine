@@ -156,11 +156,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="SVEEngine.cpp" />
     <ClCompile Include="SVEApp.cpp" />
     <ClCompile Include="SVEPipeline.cpp" />
     <ClCompile Include="SVEWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="SVEEngine.h" />
     <ClInclude Include="SVEApp.h" />
     <ClInclude Include="SVEPipeline.h" />
     <ClInclude Include="SVEWindow.h" />
