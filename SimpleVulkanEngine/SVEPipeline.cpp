@@ -42,13 +42,10 @@ void SVEPipeline::createGraphicsPipeline(const std::string& vertFilepath,
 {
 	/*auto vertCode = readFile(vertFilepath);
 	auto fragCode = readFile(fragFilepath);
-
 	std::cout << "Vertex Shader Code Size: " << vertCode.size() << '\n';
 	std::cout << "Fragment Shader Code Size: " << fragCode.size() << '\n';*/
-	assert(configInfo.pipelineLayout != VK_NULL_HANDLE &&
-		"Cannot create graphics pipeline: no pipelineLayout provided in configInfo");
-	assert(configInfo.renderPass != VK_NULL_HANDLE &&
-		"Cannot create graphics pipeline: no renderPass provided in configInfo");
+	assert(configInfo.pipelineLayout != VK_NULL_HANDLE && "Cannot create graphics pipeline: no pipelineLayout provided in configInfo");
+	assert(configInfo.renderPass != VK_NULL_HANDLE && "Cannot create graphics pipeline: no renderPass provided in configInfo");
 
 	auto vertCode = readFile(vertFilepath);
 	auto fragCode = readFile(fragFilepath);
@@ -153,7 +150,7 @@ void SVEPipeline::defaultPipelineConfigInfo(PipelineConfigInfo& configInfo,
 	configInfo.rasterizationInfo.rasterizerDiscardEnable = VK_FALSE;
 	configInfo.rasterizationInfo.polygonMode = VK_POLYGON_MODE_FILL;
 	configInfo.rasterizationInfo.lineWidth = 1.0f;
-	configInfo.rasterizationInfo.cullMode = VK_CULL_MODE_NONE;
+	configInfo.rasterizationInfo.cullMode = VK_CULL_MODE_NONE;	  // Need to be changed later
 	configInfo.rasterizationInfo.frontFace = VK_FRONT_FACE_CLOCKWISE;
 	configInfo.rasterizationInfo.depthBiasEnable = VK_FALSE;
 	configInfo.rasterizationInfo.depthBiasConstantFactor = 0.0f;  // Optional

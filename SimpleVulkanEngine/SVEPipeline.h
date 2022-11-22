@@ -48,7 +48,7 @@ private:
 	void createGraphicsPipeline(const std::string& vertFilepath, const std::string& fragFilepath, const PipelineConfigInfo& configInfo);
 	void createShaderModule(const std::vector<char>& code, VkShaderModule* shaderModule);
 
-	SVEEngine& sveEngine; // Reference
+	SVEEngine& sveEngine; // TODO Change this to a pointer or a shared pointer
 	VkPipeline graphicsPipeline;
 	VkShaderModule vertShaderModule;
 	VkShaderModule fragShaderModule;
