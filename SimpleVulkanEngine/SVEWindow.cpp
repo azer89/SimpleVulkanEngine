@@ -36,3 +36,8 @@ void SVEWindow::createWindowSurface(VkInstance instance, VkSurfaceKHR* surface)
 		throw std::runtime_error("Failed to create window surface");
 	}
 }
+
+VkExtent2D SVEWindow::getExtent()
+{
+	return { static_cast<uint32_t>(width), static_cast<uint32_t>(height) };
+}

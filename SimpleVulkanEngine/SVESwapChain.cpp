@@ -1,6 +1,5 @@
 #include "SVESwapChain.h"
 
-// std
 #include <array>
 #include <cstdlib>
 #include <cstring>
@@ -34,7 +33,7 @@ SVESwapChain::~SVESwapChain()
 		swapChain = nullptr;
 	}
 
-	for (int i = 0; i < depthImages.size(); i++) 
+	for (int i = 0; i < depthImages.size(); ++i) 
 	{
 		vkDestroyImageView(device.device(), depthImageViews[i], nullptr);
 		vkDestroyImage(device.device(), depthImages[i], nullptr);

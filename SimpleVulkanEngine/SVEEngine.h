@@ -74,7 +74,10 @@ public:
 	}
 
 	uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
-	QueueFamilyIndices findPhysicalQueueFamilies() { return findQueueFamilies(physicalDevice); }
+	QueueFamilyIndices findPhysicalQueueFamilies() 
+	{ 
+		return findQueueFamilies(physicalDevice); 
+	}
 	VkFormat findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
 
 	// Buffer Helper Functions

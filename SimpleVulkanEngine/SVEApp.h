@@ -4,6 +4,7 @@
 #include "SVEWindow.h"
 #include "SVEPipeline.h"
 #include "SVEEngine.h"
+#include "SVESwapChain.h"
 
 #include <memory>
 #include <vector>
@@ -20,6 +21,9 @@ public:
 	SVEApp();
 	~SVEApp();
 
+	SVEApp(const SVEApp&) = delete;
+	SVEApp& operator=(const SVEApp&) = delete;
+
 	void Run();
 
 private:
@@ -31,7 +35,10 @@ private:
 	//SVEPipeline svePipeline;
 	SVEWindow sveWindow{WIDTH, HEIGHT, TITLE};
 	SVEEngine sveEngine{sveWindow};
+	SVESwapChain sveSwapChain{sveEngine, sveWindow.getExtent()};
 	std::unique_ptr<SVEPipeline> svePipeline;
+	VkPipelineLayout pipelineLayout;
+	std::vector<VkCommandBuffer> commandBuffers;
 	//SVEPipeline svePipeline{sveEngine, VERTEX_SHADER_PATH, FRAGMENT_SHADER_PATH, SVEPipeline::defaultPipelineConfigInfo(WIDTH, HEIGHT) };
 };
 

@@ -40,12 +40,12 @@ void SVEPipeline::createGraphicsPipeline(const std::string& vertFilepath,
 	const std::string& fragFilepath,
 	const PipelineConfigInfo& configInfo)
 {
-	/*auto vertCode = readFile(vertFilepath);
-	auto fragCode = readFile(fragFilepath);
-	std::cout << "Vertex Shader Code Size: " << vertCode.size() << '\n';
-	std::cout << "Fragment Shader Code Size: " << fragCode.size() << '\n';*/
-	assert(configInfo.pipelineLayout != VK_NULL_HANDLE && "Cannot create graphics pipeline: no pipelineLayout provided in configInfo");
-	assert(configInfo.renderPass != VK_NULL_HANDLE && "Cannot create graphics pipeline: no renderPass provided in configInfo");
+	assert(
+		configInfo.pipelineLayout != VK_NULL_HANDLE &&
+		"Cannot create graphics pipeline: no pipelineLayout provided in configInfo");
+	assert(
+		configInfo.renderPass != VK_NULL_HANDLE &&
+		"Cannot create graphics pipeline: no renderPass provided in configInfo");
 
 	auto vertCode = readFile(vertFilepath);
 	auto fragCode = readFile(fragFilepath);
@@ -61,6 +61,7 @@ void SVEPipeline::createGraphicsPipeline(const std::string& vertFilepath,
 	shaderStages[0].flags = 0;
 	shaderStages[0].pNext = nullptr;
 	shaderStages[0].pSpecializationInfo = nullptr;
+
 	shaderStages[1].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
 	shaderStages[1].stage = VK_SHADER_STAGE_FRAGMENT_BIT;
 	shaderStages[1].module = fragShaderModule;
@@ -96,14 +97,18 @@ void SVEPipeline::createGraphicsPipeline(const std::string& vertFilepath,
 	pipelineInfo.basePipelineIndex = -1;
 	pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
-	if (vkCreateGraphicsPipelines(sveEngine.device(),
+	if (vkCreateGraphicsPipelines(
+		sveEngine.device(),
 		VK_NULL_HANDLE,
 		1,
 		&pipelineInfo,
 		nullptr,
-		&graphicsPipeline) != VK_SUCCESS) 
-	{
+		&graphicsPipeline) != VK_SUCCESS) {
 		throw std::runtime_error("Failed to create graphics pipeline");
+	}
+	else
+	{
+		std::cout << "Graphics pipeline created\n";
 	}
 }
 
@@ -123,8 +128,6 @@ void SVEPipeline::createShaderModule(const std::vector<char>& code, VkShaderModu
 void SVEPipeline::defaultPipelineConfigInfo(PipelineConfigInfo& configInfo,
 	uint32_t width, uint32_t height)
 {
-	//PipelineConfigInfo configInfo{};
-
 	configInfo.inputAssemblyInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
 	configInfo.inputAssemblyInfo.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
 	configInfo.inputAssemblyInfo.primitiveRestartEnable = VK_FALSE;
@@ -150,7 +153,7 @@ void SVEPipeline::defaultPipelineConfigInfo(PipelineConfigInfo& configInfo,
 	configInfo.rasterizationInfo.rasterizerDiscardEnable = VK_FALSE;
 	configInfo.rasterizationInfo.polygonMode = VK_POLYGON_MODE_FILL;
 	configInfo.rasterizationInfo.lineWidth = 1.0f;
-	configInfo.rasterizationInfo.cullMode = VK_CULL_MODE_NONE;	  // Need to be changed later
+	configInfo.rasterizationInfo.cullMode = VK_CULL_MODE_NONE;
 	configInfo.rasterizationInfo.frontFace = VK_FRONT_FACE_CLOCKWISE;
 	configInfo.rasterizationInfo.depthBiasEnable = VK_FALSE;
 	configInfo.rasterizationInfo.depthBiasConstantFactor = 0.0f;  // Optional
@@ -196,6 +199,9 @@ void SVEPipeline::defaultPipelineConfigInfo(PipelineConfigInfo& configInfo,
 	configInfo.depthStencilInfo.stencilTestEnable = VK_FALSE;
 	configInfo.depthStencilInfo.front = {};  // Optional
 	configInfo.depthStencilInfo.back = {};   // Optional
+}
 
-	//return configInfo;
+void SVEPipeline::bind(VkCommandBuffer commandBuffer)
+{
+	vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline);
 }
