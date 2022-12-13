@@ -1,35 +1,35 @@
 #include "SVEApp.h"
 
+// std
 #include <array>
 #include <stdexcept>
 
+
 SVEApp::SVEApp()
 {
-	loadModel();
+	loadModels();
 	createPipelineLayout();
 	createPipeline();
 	createCommandBuffers();
 }
 
-SVEApp::~SVEApp()
-{
-	vkDestroyPipelineLayout(sveEngine.device(), pipelineLayout, nullptr);
-}
+SVEApp::~SVEApp() { vkDestroyPipelineLayout(sveDevice.device(), pipelineLayout, nullptr); }
 
-void SVEApp::Run()
+void SVEApp::run()
 {
-	while (!sveWindow.ShouldClose())
+	while (!sveWindow.shouldClose())
 	{
 		glfwPollEvents();
 		drawFrame();
 	}
-	vkDeviceWaitIdle(sveEngine.device());
+
+	vkDeviceWaitIdle(sveDevice.device());
 }
 
-void SVEApp::loadModel() 
+void SVEApp::loadModels()
 {
 	std::vector<SVEModel::Vertex> vertices{ {{0.0f, -0.5f}}, {{0.5f, 0.5f}}, {{-0.5f, 0.5f}} };
-	sveModel = std::make_unique<SVEModel>(sveEngine, vertices);
+	sveModel = std::make_unique<SVEModel>(sveDevice, vertices);
 }
 
 void SVEApp::createPipelineLayout()
@@ -40,7 +40,8 @@ void SVEApp::createPipelineLayout()
 	pipelineLayoutInfo.pSetLayouts = nullptr;
 	pipelineLayoutInfo.pushConstantRangeCount = 0;
 	pipelineLayoutInfo.pPushConstantRanges = nullptr;
-	if (vkCreatePipelineLayout(sveEngine.device(), &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS)
+	if (vkCreatePipelineLayout(sveDevice.device(), &pipelineLayoutInfo, nullptr, &pipelineLayout) !=
+		VK_SUCCESS)
 	{
 		throw std::runtime_error("Failed to create pipeline layout!");
 	}
@@ -56,7 +57,7 @@ void SVEApp::createPipeline()
 	pipelineConfig.renderPass = sveSwapChain.getRenderPass();
 	pipelineConfig.pipelineLayout = pipelineLayout;
 	svePipeline = std::make_unique<SVEPipeline>(
-		sveEngine,
+		sveDevice,
 		VERTEX_SHADER_PATH,
 		FRAGMENT_SHADER_PATH,
 		pipelineConfig);
@@ -69,15 +70,16 @@ void SVEApp::createCommandBuffers()
 	VkCommandBufferAllocateInfo allocInfo{};
 	allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
 	allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-	allocInfo.commandPool = sveEngine.getCommandPool();
+	allocInfo.commandPool = sveDevice.getCommandPool();
 	allocInfo.commandBufferCount = static_cast<uint32_t>(commandBuffers.size());
 
-	if (vkAllocateCommandBuffers(sveEngine.device(), &allocInfo, commandBuffers.data()) != VK_SUCCESS)
+	if (vkAllocateCommandBuffers(sveDevice.device(), &allocInfo, commandBuffers.data()) !=
+		VK_SUCCESS)
 	{
 		throw std::runtime_error("Failed to allocate command buffers!");
 	}
 
-	for (int i = 0; i < commandBuffers.size(); ++i)
+	for (int i = 0; i < commandBuffers.size(); i++)
 	{
 		VkCommandBufferBeginInfo beginInfo{};
 		beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -95,7 +97,7 @@ void SVEApp::createCommandBuffers()
 		renderPassInfo.renderArea.offset = { 0, 0 };
 		renderPassInfo.renderArea.extent = sveSwapChain.getSwapChainExtent();
 
-		std::array<VkClearValue, 2> clearValues;
+		std::array<VkClearValue, 2> clearValues{};
 		clearValues[0].color = { 0.1f, 0.1f, 0.1f, 1.0f };
 		clearValues[1].depthStencil = { 1.0f, 0 };
 		renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
@@ -106,7 +108,6 @@ void SVEApp::createCommandBuffers()
 		svePipeline->bind(commandBuffers[i]);
 		sveModel->bind(commandBuffers[i]);
 		sveModel->draw(commandBuffers[i]);
-		vkCmdDraw(commandBuffers[i], 3, 1, 0, 0);
 
 		vkCmdEndRenderPass(commandBuffers[i]);
 		if (vkEndCommandBuffer(commandBuffers[i]) != VK_SUCCESS)
@@ -115,7 +116,6 @@ void SVEApp::createCommandBuffers()
 		}
 	}
 }
-
 void SVEApp::drawFrame()
 {
 	uint32_t imageIndex;

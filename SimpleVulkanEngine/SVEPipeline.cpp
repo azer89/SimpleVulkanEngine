@@ -1,43 +1,51 @@
 #include "SVEPipeline.h"
 #include "SVEModel.h"
 
+// std
 #include <cassert>
 #include <fstream>
 #include <iostream>
 #include <stdexcept>
 
-SVEPipeline::SVEPipeline(SVEEngine& engine, 
-	const std::string& vertFilepath, 
-	const std::string& fragFilepath, 
-	const PipelineConfigInfo& configInfo) :
-	sveEngine(engine)
+
+SVEPipeline::SVEPipeline(
+	SVEEngine& device,
+	const std::string& vertFilepath,
+	const std::string& fragFilepath,
+	const PipelineConfigInfo& configInfo)
+	: sveDevice{ device }
 {
 	createGraphicsPipeline(vertFilepath, fragFilepath, configInfo);
 }
 
 SVEPipeline::~SVEPipeline()
 {
-	vkDestroyShaderModule(sveEngine.device(), vertShaderModule, nullptr);
-	vkDestroyShaderModule(sveEngine.device(), fragShaderModule, nullptr);
-	vkDestroyPipeline(sveEngine.device(), graphicsPipeline, nullptr);
+	vkDestroyShaderModule(sveDevice.device(), vertShaderModule, nullptr);
+	vkDestroyShaderModule(sveDevice.device(), fragShaderModule, nullptr);
+	vkDestroyPipeline(sveDevice.device(), graphicsPipeline, nullptr);
 }
 
 std::vector<char> SVEPipeline::readFile(const std::string& filepath)
 {
-	std::ifstream file(filepath, std::ios::ate | std::ios::binary);
+	std::ifstream file{ filepath, std::ios::ate | std::ios::binary };
+
 	if (!file.is_open())
 	{
 		throw std::runtime_error("Failed to open file: " + filepath);
 	}
+
 	size_t fileSize = static_cast<size_t>(file.tellg());
 	std::vector<char> buffer(fileSize);
+
 	file.seekg(0);
 	file.read(buffer.data(), fileSize);
+
 	file.close();
 	return buffer;
 }
 
-void SVEPipeline::createGraphicsPipeline(const std::string& vertFilepath, 
+void SVEPipeline::createGraphicsPipeline(
+	const std::string& vertFilepath,
 	const std::string& fragFilepath,
 	const PipelineConfigInfo& configInfo)
 {
@@ -62,7 +70,6 @@ void SVEPipeline::createGraphicsPipeline(const std::string& vertFilepath,
 	shaderStages[0].flags = 0;
 	shaderStages[0].pNext = nullptr;
 	shaderStages[0].pSpecializationInfo = nullptr;
-
 	shaderStages[1].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
 	shaderStages[1].stage = VK_SHADER_STAGE_FRAGMENT_BIT;
 	shaderStages[1].module = fragShaderModule;
@@ -80,10 +87,6 @@ void SVEPipeline::createGraphicsPipeline(const std::string& vertFilepath,
 	vertexInputInfo.vertexBindingDescriptionCount = static_cast<uint32_t>(bindingDescriptions.size());
 	vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
 	vertexInputInfo.pVertexBindingDescriptions = bindingDescriptions.data();
-	vertexInputInfo.vertexAttributeDescriptionCount = 0;
-	vertexInputInfo.vertexBindingDescriptionCount = 0;
-	vertexInputInfo.pVertexAttributeDescriptions = nullptr;
-	vertexInputInfo.pVertexBindingDescriptions = nullptr;
 
 	VkGraphicsPipelineCreateInfo pipelineInfo{};
 	pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
@@ -106,17 +109,14 @@ void SVEPipeline::createGraphicsPipeline(const std::string& vertFilepath,
 	pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
 	if (vkCreateGraphicsPipelines(
-		sveEngine.device(),
+		sveDevice.device(),
 		VK_NULL_HANDLE,
 		1,
 		&pipelineInfo,
 		nullptr,
-		&graphicsPipeline) != VK_SUCCESS) {
-		throw std::runtime_error("Failed to create graphics pipeline");
-	}
-	else
+		&graphicsPipeline) != VK_SUCCESS)
 	{
-		std::cout << "Graphics pipeline created\n";
+		throw std::runtime_error("Failed to create graphics pipeline");
 	}
 }
 
@@ -127,14 +127,19 @@ void SVEPipeline::createShaderModule(const std::vector<char>& code, VkShaderModu
 	createInfo.codeSize = code.size();
 	createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
 
-	if (vkCreateShaderModule(sveEngine.device(), &createInfo, nullptr, shaderModule) != VK_SUCCESS) 
+	if (vkCreateShaderModule(sveDevice.device(), &createInfo, nullptr, shaderModule) != VK_SUCCESS)
 	{
-		throw std::runtime_error("Failed to create a shader module");
+		throw std::runtime_error("Failed to create shader module");
 	}
 }
 
-void SVEPipeline::defaultPipelineConfigInfo(PipelineConfigInfo& configInfo,
-	uint32_t width, uint32_t height)
+void SVEPipeline::bind(VkCommandBuffer commandBuffer)
+{
+	vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline);
+}
+
+void SVEPipeline::defaultPipelineConfigInfo(
+	PipelineConfigInfo& configInfo, uint32_t width, uint32_t height)
 {
 	configInfo.inputAssemblyInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
 	configInfo.inputAssemblyInfo.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
@@ -207,9 +212,4 @@ void SVEPipeline::defaultPipelineConfigInfo(PipelineConfigInfo& configInfo,
 	configInfo.depthStencilInfo.stencilTestEnable = VK_FALSE;
 	configInfo.depthStencilInfo.front = {};  // Optional
 	configInfo.depthStencilInfo.back = {};   // Optional
-}
-
-void SVEPipeline::bind(VkCommandBuffer commandBuffer)
-{
-	vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline);
 }

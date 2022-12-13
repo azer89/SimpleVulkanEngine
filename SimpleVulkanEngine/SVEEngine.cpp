@@ -1,20 +1,25 @@
 #include "SVEEngine.h"
 
+// std headers
 #include <cstring>
 #include <iostream>
 #include <set>
 #include <unordered_set>
 
-// TODO Refactor function names
 
-// Local callback functions
+// local callback functions
 static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
 	VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
 	VkDebugUtilsMessageTypeFlagsEXT messageType,
 	const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
 	void* pUserData)
 {
-	std::cerr << "Validation layer: " << pCallbackData->pMessage << "\n------------------------------\n";
+
+	if (messageSeverity >= VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT)
+	{
+		std::cerr << "Validation layer: " << pCallbackData->pMessage << "\n\n";
+	}
+
 	return VK_FALSE;
 }
 
@@ -24,7 +29,9 @@ VkResult CreateDebugUtilsMessengerEXT(
 	const VkAllocationCallbacks* pAllocator,
 	VkDebugUtilsMessengerEXT* pDebugMessenger)
 {
-	auto func = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
+	auto func = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(
+		instance,
+		"vkCreateDebugUtilsMessengerEXT");
 	if (func != nullptr)
 	{
 		return func(instance, pCreateInfo, pAllocator, pDebugMessenger);
@@ -40,7 +47,9 @@ void DestroyDebugUtilsMessengerEXT(
 	VkDebugUtilsMessengerEXT debugMessenger,
 	const VkAllocationCallbacks* pAllocator)
 {
-	auto func = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT");
+	auto func = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(
+		instance,
+		"vkDestroyDebugUtilsMessengerEXT");
 	if (func != nullptr)
 	{
 		func(instance, debugMessenger, pAllocator);
@@ -76,12 +85,12 @@ void SVEEngine::createInstance()
 {
 	if (enableValidationLayers && !checkValidationLayerSupport())
 	{
-		throw std::runtime_error("Validation layers requested, but not available!");
+		throw std::runtime_error("validation layers requested, but not available!");
 	}
 
 	VkApplicationInfo appInfo = {};
 	appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-	appInfo.pApplicationName = "SimpleVulkanEngine";
+	appInfo.pApplicationName = "SimpleVulkanEngine App";
 	appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
 	appInfo.pEngineName = "No Engine";
 	appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
@@ -145,7 +154,7 @@ void SVEEngine::pickPhysicalDevice()
 	}
 
 	vkGetPhysicalDeviceProperties(physicalDevice, &properties);
-	std::cout << "Physical device: " << properties.deviceName << std::endl;
+	std::cout << "physical device: " << properties.deviceName << std::endl;
 }
 
 void SVEEngine::createLogicalDevice()
@@ -179,7 +188,8 @@ void SVEEngine::createLogicalDevice()
 	createInfo.enabledExtensionCount = static_cast<uint32_t>(deviceExtensions.size());
 	createInfo.ppEnabledExtensionNames = deviceExtensions.data();
 
-	// Might not really be necessary anymore because device specific validation layers have been deprecated
+	// might not really be necessary anymore because device specific validation layers
+	// have been deprecated
 	if (enableValidationLayers)
 	{
 		createInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
@@ -206,7 +216,8 @@ void SVEEngine::createCommandPool()
 	VkCommandPoolCreateInfo poolInfo = {};
 	poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
 	poolInfo.queueFamilyIndex = queueFamilyIndices.graphicsFamily;
-	poolInfo.flags = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT | VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+	poolInfo.flags =
+		VK_COMMAND_POOL_CREATE_TRANSIENT_BIT | VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
 
 	if (vkCreateCommandPool(device_, &poolInfo, nullptr, &commandPool) != VK_SUCCESS)
 	{
@@ -214,10 +225,7 @@ void SVEEngine::createCommandPool()
 	}
 }
 
-void SVEEngine::createSurface()
-{
-	window.createWindowSurface(instance, &surface_);
-}
+void SVEEngine::createSurface() { window.createWindowSurface(instance, &surface_); }
 
 bool SVEEngine::isDeviceSuitable(VkPhysicalDevice device)
 {
@@ -243,7 +251,8 @@ void SVEEngine::populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfo
 {
 	createInfo = {};
 	createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
-	createInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
+	createInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT |
+		VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
 		VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
 	createInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT |
 		VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
@@ -254,10 +263,7 @@ void SVEEngine::populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfo
 
 void SVEEngine::setupDebugMessenger()
 {
-	if (!enableValidationLayers)
-	{
-		return;
-	}
+	if (!enableValidationLayers) return;
 	VkDebugUtilsMessengerCreateInfoEXT createInfo;
 	populateDebugMessengerCreateInfo(createInfo);
 	if (CreateDebugUtilsMessengerEXT(instance, &createInfo, nullptr, &debugMessenger) != VK_SUCCESS)
@@ -319,7 +325,7 @@ void SVEEngine::hasGflwRequiredInstanceExtensions()
 	std::vector<VkExtensionProperties> extensions(extensionCount);
 	vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, extensions.data());
 
-	std::cout << "Available extensions:" << std::endl;
+	std::cout << "available extensions:" << std::endl;
 	std::unordered_set<std::string> available;
 	for (const auto& extension : extensions)
 	{
@@ -327,7 +333,7 @@ void SVEEngine::hasGflwRequiredInstanceExtensions()
 		available.insert(extension.extensionName);
 	}
 
-	std::cout << "Required extensions:" << std::endl;
+	std::cout << "required extensions:" << std::endl;
 	auto requiredExtensions = getRequiredExtensions();
 	for (const auto& required : requiredExtensions)
 	{
@@ -390,7 +396,8 @@ QueueFamilyIndices SVEEngine::findQueueFamilies(VkPhysicalDevice device)
 		{
 			break;
 		}
-		++i;
+
+		i++;
 	}
 
 	return indices;
@@ -425,7 +432,8 @@ SwapChainSupportDetails SVEEngine::querySwapChainSupport(VkPhysicalDevice device
 	return details;
 }
 
-VkFormat SVEEngine::findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features)
+VkFormat SVEEngine::findSupportedFormat(
+	const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features)
 {
 	for (VkFormat format : candidates)
 	{
@@ -436,7 +444,8 @@ VkFormat SVEEngine::findSupportedFormat(const std::vector<VkFormat>& candidates,
 		{
 			return format;
 		}
-		else if (tiling == VK_IMAGE_TILING_OPTIMAL && (props.optimalTilingFeatures & features) == features)
+		else if (
+			tiling == VK_IMAGE_TILING_OPTIMAL && (props.optimalTilingFeatures & features) == features)
 		{
 			return format;
 		}
@@ -450,7 +459,8 @@ uint32_t SVEEngine::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags pr
 	vkGetPhysicalDeviceMemoryProperties(physicalDevice, &memProperties);
 	for (uint32_t i = 0; i < memProperties.memoryTypeCount; i++)
 	{
-		if ((typeFilter & (1 << i)) && (memProperties.memoryTypes[i].propertyFlags & properties) == properties)
+		if ((typeFilter & (1 << i)) &&
+			(memProperties.memoryTypes[i].propertyFlags & properties) == properties)
 		{
 			return i;
 		}
@@ -540,7 +550,8 @@ void SVEEngine::copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize 
 	endSingleTimeCommands(commandBuffer);
 }
 
-void SVEEngine::copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height, uint32_t layerCount)
+void SVEEngine::copyBufferToImage(
+	VkBuffer buffer, VkImage image, uint32_t width, uint32_t height, uint32_t layerCount)
 {
 	VkCommandBuffer commandBuffer = beginSingleTimeCommands();
 

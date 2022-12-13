@@ -1,5 +1,4 @@
-#ifndef SVE_MODEL_H
-#define SVE_MODEL_H
+#pragma once
 
 #include "SVEEngine.h"
 
@@ -14,7 +13,7 @@
 class SVEModel
 {
 public:
-	struct Vertex 
+	struct Vertex
 	{
 		glm::vec2 position;
 
@@ -34,10 +33,8 @@ public:
 private:
 	void createVertexBuffers(const std::vector<Vertex>& vertices);
 
-	SVEEngine& lveDevice;
+	SVEEngine& sveDevice;
 	VkBuffer vertexBuffer;
 	VkDeviceMemory vertexBufferMemory;
 	uint32_t vertexCount;
 };
-
-#endif

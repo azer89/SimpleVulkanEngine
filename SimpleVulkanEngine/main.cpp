@@ -1,6 +1,10 @@
 
 #include "SVEApp.h"
+
+// std
+#include <cstdlib>
 #include <iostream>
+#include <stdexcept>
 
 int main()
 {
@@ -8,7 +12,7 @@ int main()
 
 	try
 	{
-		app.Run();
+		app.run();
 	}
 	catch (const std::exception& e)
 	{

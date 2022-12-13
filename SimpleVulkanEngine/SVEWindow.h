@@ -1,11 +1,8 @@
-#ifndef SVE_WINDOW_H
-#define SVE_WINDOW_H
+#pragma once
 
-#ifndef GLFW_INCLUDE_VULKAN
 #define GLFW_INCLUDE_VULKAN
-#endif
-
 #include <GLFW/glfw3.h>
+
 #include <string>
 
 class SVEWindow
@@ -14,13 +11,13 @@ public:
 	SVEWindow(int w, int h, std::string name);
 	~SVEWindow();
 
-	// Non copyable
 	SVEWindow(const SVEWindow&) = delete;
 	SVEWindow& operator=(const SVEWindow&) = delete;
 
-	bool ShouldClose();
+	bool shouldClose() { return glfwWindowShouldClose(window); }
+	VkExtent2D getExtent() { return { static_cast<uint32_t>(width), static_cast<uint32_t>(height) }; }
+
 	void createWindowSurface(VkInstance instance, VkSurfaceKHR* surface);
-	VkExtent2D getExtent();
 
 private:
 	void initWindow();
@@ -31,5 +28,3 @@ private:
 	std::string windowName;
 	GLFWwindow* window;
 };
-
-#endif

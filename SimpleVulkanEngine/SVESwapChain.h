@@ -1,14 +1,16 @@
-#ifndef SVE_SWAPCHAIN_H
-#define SVE_SWAPCHAIN_H
+#pragma once
 
 #include "SVEEngine.h"
 
+// vulkan headers
 #include <vulkan/vulkan.h>
 
+// std lib headers
 #include <string>
 #include <vector>
 
-class SVESwapChain 
+
+class SVESwapChain
 {
 public:
 	static constexpr int MAX_FRAMES_IN_FLIGHT = 2;
@@ -19,52 +21,21 @@ public:
 	SVESwapChain(const SVESwapChain&) = delete;
 	void operator=(const SVESwapChain&) = delete;
 
-	VkFramebuffer getFrameBuffer(int index) 
-	{ 
-		return swapChainFramebuffers[index]; 
-	}
+	VkFramebuffer getFrameBuffer(int index) { return swapChainFramebuffers[index]; }
+	VkRenderPass getRenderPass() { return renderPass; }
+	VkImageView getImageView(int index) { return swapChainImageViews[index]; }
+	size_t imageCount() { return swapChainImages.size(); }
+	VkFormat getSwapChainImageFormat() { return swapChainImageFormat; }
+	VkExtent2D getSwapChainExtent() { return swapChainExtent; }
+	uint32_t width() { return swapChainExtent.width; }
+	uint32_t height() { return swapChainExtent.height; }
 
-	VkRenderPass getRenderPass() 
-	{ 
-		return renderPass; 
-	}
-
-	VkImageView getImageView(int index) 
-	{ 
-		return swapChainImageViews[index]; 
-	}
-
-	size_t imageCount() 
-	{ 
-		return swapChainImages.size(); 
-	}
-
-	VkFormat getSwapChainImageFormat() 
-	{ 
-		return swapChainImageFormat; 
-	}
-
-	VkExtent2D getSwapChainExtent() 
-	{ 
-		return swapChainExtent; 
-	}
-
-	uint32_t width() 
-	{ 
-		return swapChainExtent.width; 
-	}
-
-	uint32_t height() 
-	{ 
-		return swapChainExtent.height; 
-	}
-
-	float extentAspectRatio() 
+	float extentAspectRatio()
 	{
 		return static_cast<float>(swapChainExtent.width) / static_cast<float>(swapChainExtent.height);
 	}
-
 	VkFormat findDepthFormat();
+
 	VkResult acquireNextImage(uint32_t* imageIndex);
 	VkResult submitCommandBuffers(const VkCommandBuffer* buffers, uint32_t* imageIndex);
 
@@ -77,8 +48,10 @@ private:
 	void createSyncObjects();
 
 	// Helper functions
-	VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
-	VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
+	VkSurfaceFormatKHR chooseSwapSurfaceFormat(
+		const std::vector<VkSurfaceFormatKHR>& availableFormats);
+	VkPresentModeKHR chooseSwapPresentMode(
+		const std::vector<VkPresentModeKHR>& availablePresentModes);
 	VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
 
 	VkFormat swapChainImageFormat;
@@ -104,5 +77,3 @@ private:
 	std::vector<VkFence> imagesInFlight;
 	size_t currentFrame = 0;
 };
-
-#endif

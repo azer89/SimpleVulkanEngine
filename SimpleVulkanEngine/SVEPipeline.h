@@ -1,10 +1,11 @@
-#ifndef SVE_PIPELINE_H
-#define SVE_PIPELINE_H
+#pragma once
 
 #include "SVEEngine.h"
 
+// std
 #include <string>
 #include <vector>
+
 
 struct PipelineConfigInfo
 {
@@ -29,9 +30,10 @@ struct PipelineConfigInfo
 class SVEPipeline
 {
 public:
-	SVEPipeline(SVEEngine& engine,
-		const std::string& vertFilepath, 
-		const std::string& fragFilepath, 
+	SVEPipeline(
+		SVEEngine& device,
+		const std::string& vertFilepath,
+		const std::string& fragFilepath,
 		const PipelineConfigInfo& configInfo);
 	~SVEPipeline();
 
@@ -40,18 +42,21 @@ public:
 
 	void bind(VkCommandBuffer commandBuffer);
 
-	static void defaultPipelineConfigInfo(PipelineConfigInfo& configInfo, uint32_t width, uint32_t height);
+	static void defaultPipelineConfigInfo(
+		PipelineConfigInfo& configInfo, uint32_t width, uint32_t height);
 
 private:
 	static std::vector<char> readFile(const std::string& filepath);
 
-	void createGraphicsPipeline(const std::string& vertFilepath, const std::string& fragFilepath, const PipelineConfigInfo& configInfo);
+	void createGraphicsPipeline(
+		const std::string& vertFilepath,
+		const std::string& fragFilepath,
+		const PipelineConfigInfo& configInfo);
+
 	void createShaderModule(const std::vector<char>& code, VkShaderModule* shaderModule);
 
-	SVEEngine& sveEngine; 
+	SVEEngine& sveDevice;
 	VkPipeline graphicsPipeline;
 	VkShaderModule vertShaderModule;
 	VkShaderModule fragShaderModule;
 };
-
-#endif
