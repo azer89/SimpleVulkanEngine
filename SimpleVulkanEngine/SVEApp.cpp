@@ -5,6 +5,7 @@
 
 SVEApp::SVEApp()
 {
+	loadModel();
 	createPipelineLayout();
 	createPipeline();
 	createCommandBuffers();
@@ -23,6 +24,12 @@ void SVEApp::Run()
 		drawFrame();
 	}
 	vkDeviceWaitIdle(sveEngine.device());
+}
+
+void SVEApp::loadModel() 
+{
+	std::vector<SVEModel::Vertex> vertices{ {{0.0f, -0.5f}}, {{0.5f, 0.5f}}, {{-0.5f, 0.5f}} };
+	sveModel = std::make_unique<SVEModel>(sveEngine, vertices);
 }
 
 void SVEApp::createPipelineLayout()
@@ -97,6 +104,8 @@ void SVEApp::createCommandBuffers()
 		vkCmdBeginRenderPass(commandBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
 		svePipeline->bind(commandBuffers[i]);
+		sveModel->bind(commandBuffers[i]);
+		sveModel->draw(commandBuffers[i]);
 		vkCmdDraw(commandBuffers[i], 3, 1, 0, 0);
 
 		vkCmdEndRenderPass(commandBuffers[i]);

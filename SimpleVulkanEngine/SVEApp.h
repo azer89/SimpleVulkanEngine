@@ -5,6 +5,7 @@
 #include "SVEPipeline.h"
 #include "SVEEngine.h"
 #include "SVESwapChain.h"
+#include "SVEModel.h"
 
 #include <memory>
 #include <vector>
@@ -27,6 +28,7 @@ public:
 	void Run();
 
 private:
+	void loadModel();
 	void createPipelineLayout();
 	void createPipeline();
 	void createCommandBuffers();
@@ -37,6 +39,7 @@ private:
 	SVEEngine sveEngine{sveWindow};
 	SVESwapChain sveSwapChain{sveEngine, sveWindow.getExtent()};
 	std::unique_ptr<SVEPipeline> svePipeline;
+	std::unique_ptr<SVEModel> sveModel;
 	VkPipelineLayout pipelineLayout;
 	std::vector<VkCommandBuffer> commandBuffers;
 	//SVEPipeline svePipeline{sveEngine, VERTEX_SHADER_PATH, FRAGMENT_SHADER_PATH, SVEPipeline::defaultPipelineConfigInfo(WIDTH, HEIGHT) };
