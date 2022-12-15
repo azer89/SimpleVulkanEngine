@@ -28,7 +28,10 @@ void SVEApp::run()
 
 void SVEApp::loadModels()
 {
-	std::vector<SVEModel::Vertex> vertices{ {{0.0f, -0.5f}}, {{0.5f, 0.5f}}, {{-0.5f, 0.5f}} };
+	std::vector<SVEModel::Vertex> vertices{
+		{{0.0f, -0.5f}, {1.0f, 0.0f, 0.0f}},
+		{{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
+		{{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}} };
 	sveModel = std::make_unique<SVEModel>(sveDevice, vertices);
 }
 
