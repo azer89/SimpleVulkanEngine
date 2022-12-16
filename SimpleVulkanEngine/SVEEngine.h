@@ -37,7 +37,7 @@ public:
 
 	// Not copyable or movable
 	SVEEngine(const SVEEngine&) = delete;
-	void operator=(const SVEEngine&) = delete;
+	SVEEngine& operator=(const SVEEngine&) = delete;
 	SVEEngine(SVEEngine&&) = delete;
 	SVEEngine& operator=(SVEEngine&&) = delete;
 

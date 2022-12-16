@@ -33,11 +33,14 @@ private:
 	void createPipelineLayout();
 	void createPipeline();
 	void createCommandBuffers();
+	void freeCommandBuffers();
 	void drawFrame();
+	void recreateSwapChain();
+	void recordCommandBuffer(int imageIndex);
 
 	SVEWindow sveWindow{ WIDTH, HEIGHT, TITLE };
 	SVEEngine sveDevice{ sveWindow };
-	SVESwapChain sveSwapChain{ sveDevice, sveWindow.getExtent() };
+	std::unique_ptr<SVESwapChain> sveSwapChain;
 	std::unique_ptr<SVEPipeline> svePipeline;
 	VkPipelineLayout pipelineLayout;
 	std::vector<VkCommandBuffer> commandBuffers;

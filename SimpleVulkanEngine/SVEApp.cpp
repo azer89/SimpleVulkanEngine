@@ -2,14 +2,14 @@
 
 // std
 #include <array>
+#include <cassert>
 #include <stdexcept>
-
 
 SVEApp::SVEApp()
 {
 	loadModels();
 	createPipelineLayout();
-	createPipeline();
+	recreateSwapChain();
 	createCommandBuffers();
 }
 
@@ -50,14 +50,41 @@ void SVEApp::createPipelineLayout()
 	}
 }
 
+void SVEApp::recreateSwapChain()
+{
+	auto extent = sveWindow.getExtent();
+	while (extent.width == 0 || extent.height == 0)
+	{
+		extent = sveWindow.getExtent();
+		glfwWaitEvents();
+	}
+	vkDeviceWaitIdle(sveDevice.device());
+
+	if (sveSwapChain == nullptr)
+	{
+		sveSwapChain = std::make_unique<SVESwapChain>(sveDevice, extent);
+	}
+	else
+	{
+		sveSwapChain = std::make_unique<SVESwapChain>(sveDevice, extent, std::move(sveSwapChain));
+		if (sveSwapChain->imageCount() != commandBuffers.size())
+		{
+			freeCommandBuffers();
+			createCommandBuffers();
+		}
+	}
+
+	createPipeline();
+}
+
 void SVEApp::createPipeline()
 {
+	assert(lveSwapChain != nullptr && "Cannot create pipeline before swap chain");
+	assert(pipelineLayout != nullptr && "Cannot create pipeline before pipeline layout");
+
 	PipelineConfigInfo pipelineConfig{};
-	SVEPipeline::defaultPipelineConfigInfo(
-		pipelineConfig,
-		sveSwapChain.width(),
-		sveSwapChain.height());
-	pipelineConfig.renderPass = sveSwapChain.getRenderPass();
+	SVEPipeline::defaultPipelineConfigInfo(pipelineConfig);
+	pipelineConfig.renderPass = sveSwapChain->getRenderPass();
 	pipelineConfig.pipelineLayout = pipelineLayout;
 	svePipeline = std::make_unique<SVEPipeline>(
 		sveDevice,
@@ -68,7 +95,7 @@ void SVEApp::createPipeline()
 
 void SVEApp::createCommandBuffers()
 {
-	commandBuffers.resize(sveSwapChain.imageCount());
+	commandBuffers.resize(sveSwapChain->imageCount());
 
 	VkCommandBufferAllocateInfo allocInfo{};
 	allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -81,56 +108,93 @@ void SVEApp::createCommandBuffers()
 	{
 		throw std::runtime_error("Failed to allocate command buffers!");
 	}
+}
 
-	for (int i = 0; i < commandBuffers.size(); i++)
+void SVEApp::freeCommandBuffers()
+{
+	vkFreeCommandBuffers(
+		sveDevice.device(),
+		sveDevice.getCommandPool(),
+		static_cast<uint32_t>(commandBuffers.size()),
+		commandBuffers.data());
+	commandBuffers.clear();
+}
+
+void SVEApp::recordCommandBuffer(int imageIndex)
+{
+	VkCommandBufferBeginInfo beginInfo{};
+	beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+
+	if (vkBeginCommandBuffer(commandBuffers[imageIndex], &beginInfo) != VK_SUCCESS)
 	{
-		VkCommandBufferBeginInfo beginInfo{};
-		beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+		throw std::runtime_error("Failed to begin recording command buffer!");
+	}
 
-		if (vkBeginCommandBuffer(commandBuffers[i], &beginInfo) != VK_SUCCESS)
-		{
-			throw std::runtime_error("Failed to begin recording command buffer!");
-		}
+	VkRenderPassBeginInfo renderPassInfo{};
+	renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+	renderPassInfo.renderPass = sveSwapChain->getRenderPass();
+	renderPassInfo.framebuffer = sveSwapChain->getFrameBuffer(imageIndex);
 
-		VkRenderPassBeginInfo renderPassInfo{};
-		renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-		renderPassInfo.renderPass = sveSwapChain.getRenderPass();
-		renderPassInfo.framebuffer = sveSwapChain.getFrameBuffer(i);
+	renderPassInfo.renderArea.offset = { 0, 0 };
+	renderPassInfo.renderArea.extent = sveSwapChain->getSwapChainExtent();
 
-		renderPassInfo.renderArea.offset = { 0, 0 };
-		renderPassInfo.renderArea.extent = sveSwapChain.getSwapChainExtent();
+	std::array<VkClearValue, 2> clearValues{};
+	clearValues[0].color = { 0.1f, 0.1f, 0.1f, 1.0f };
+	clearValues[1].depthStencil = { 1.0f, 0 };
+	renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
+	renderPassInfo.pClearValues = clearValues.data();
 
-		std::array<VkClearValue, 2> clearValues{};
-		clearValues[0].color = { 0.1f, 0.1f, 0.1f, 1.0f };
-		clearValues[1].depthStencil = { 1.0f, 0 };
-		renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
-		renderPassInfo.pClearValues = clearValues.data();
+	vkCmdBeginRenderPass(commandBuffers[imageIndex], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
-		vkCmdBeginRenderPass(commandBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+	VkViewport viewport{};
+	viewport.x = 0.0f;
+	viewport.y = 0.0f;
+	viewport.width = static_cast<float>(sveSwapChain->getSwapChainExtent().width);
+	viewport.height = static_cast<float>(sveSwapChain->getSwapChainExtent().height);
+	viewport.minDepth = 0.0f;
+	viewport.maxDepth = 1.0f;
+	VkRect2D scissor{ {0, 0}, sveSwapChain->getSwapChainExtent() };
+	vkCmdSetViewport(commandBuffers[imageIndex], 0, 1, &viewport);
+	vkCmdSetScissor(commandBuffers[imageIndex], 0, 1, &scissor);
 
-		svePipeline->bind(commandBuffers[i]);
-		sveModel->bind(commandBuffers[i]);
-		sveModel->draw(commandBuffers[i]);
+	svePipeline->bind(commandBuffers[imageIndex]);
+	sveModel->bind(commandBuffers[imageIndex]);
+	sveModel->draw(commandBuffers[imageIndex]);
 
-		vkCmdEndRenderPass(commandBuffers[i]);
-		if (vkEndCommandBuffer(commandBuffers[i]) != VK_SUCCESS)
-		{
-			throw std::runtime_error("Failed to record command buffer!");
-		}
+	vkCmdEndRenderPass(commandBuffers[imageIndex]);
+	if (vkEndCommandBuffer(commandBuffers[imageIndex]) != VK_SUCCESS)
+	{
+		throw std::runtime_error("Failed to record command buffer!");
 	}
 }
+
 void SVEApp::drawFrame()
 {
 	uint32_t imageIndex;
-	auto result = sveSwapChain.acquireNextImage(&imageIndex);
+	auto result = sveSwapChain->acquireNextImage(&imageIndex);
+
+	if (result == VK_ERROR_OUT_OF_DATE_KHR)
+	{
+		recreateSwapChain();
+		return;
+	}
+
 	if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
 	{
 		throw std::runtime_error("Failed to acquire swap chain image!");
 	}
 
-	result = sveSwapChain.submitCommandBuffers(&commandBuffers[imageIndex], &imageIndex);
-	if (result != VK_SUCCESS)
+	recordCommandBuffer(imageIndex);
+	result = sveSwapChain->submitCommandBuffers(&commandBuffers[imageIndex], &imageIndex);
+	if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR ||
+		sveWindow.wasWindowResized())
 	{
-		throw std::runtime_error("Failed to present swap chain image!");
+		sveWindow.resetWindowResizedFlag();
+		recreateSwapChain();
+		return;
+	}
+	else if (result != VK_SUCCESS)
+	{
+		throw std::runtime_error("failed to present swap chain image!");
 	}
 }

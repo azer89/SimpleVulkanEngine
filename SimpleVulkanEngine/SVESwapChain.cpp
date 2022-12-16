@@ -8,17 +8,22 @@
 #include <limits>
 #include <set>
 #include <stdexcept>
+#include <memory>
 
 
 SVESwapChain::SVESwapChain(SVEEngine& deviceRef, VkExtent2D extent)
 	: device{ deviceRef }, windowExtent{ extent } {
-	createSwapChain();
-	createImageViews();
-	createRenderPass();
-	createDepthResources();
-	createFramebuffers();
-	createSyncObjects();
+	init();
 }
+
+SVESwapChain::SVESwapChain(
+	SVEEngine& deviceRef, VkExtent2D extent, std::shared_ptr<SVESwapChain> previous)
+	: device{ deviceRef }, windowExtent{ extent }, oldSwapChain{ previous } 
+{
+	init();
+	oldSwapChain = nullptr; // What?
+}
+
 
 SVESwapChain::~SVESwapChain()
 {
@@ -55,6 +60,16 @@ SVESwapChain::~SVESwapChain()
 		vkDestroySemaphore(device.device(), imageAvailableSemaphores[i], nullptr);
 		vkDestroyFence(device.device(), inFlightFences[i], nullptr);
 	}
+}
+
+void SVESwapChain::init()
+{
+	createSwapChain();
+	createImageViews();
+	createRenderPass();
+	createDepthResources();
+	createFramebuffers();
+	createSyncObjects();
 }
 
 VkResult SVESwapChain::acquireNextImage(uint32_t* imageIndex)
@@ -175,7 +190,7 @@ void SVESwapChain::createSwapChain()
 	createInfo.presentMode = presentMode;
 	createInfo.clipped = VK_TRUE;
 
-	createInfo.oldSwapchain = VK_NULL_HANDLE;
+	createInfo.oldSwapchain = oldSwapChain == nullptr ? VK_NULL_HANDLE : oldSwapChain->swapChain;
 
 	if (vkCreateSwapchainKHR(device.device(), &createInfo, nullptr, &swapChain) != VK_SUCCESS)
 	{
