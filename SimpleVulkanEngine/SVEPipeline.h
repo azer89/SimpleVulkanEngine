@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SVE_PIPELINE_H
+#define SVE_PIPELINE_H
 
 #include "SVEEngine.h"
 
@@ -60,3 +61,5 @@ private:
 	VkShaderModule vertShaderModule;
 	VkShaderModule fragShaderModule;
 };
+
+#endif

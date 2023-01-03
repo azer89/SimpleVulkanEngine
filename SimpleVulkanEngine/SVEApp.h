@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SVE_APP_H
+#define SVE_APP_H
 
 #include "SVEEngine.h"
 #include "SVEModel.h"
@@ -46,3 +47,5 @@ private:
 	std::vector<VkCommandBuffer> commandBuffers;
 	std::unique_ptr<SVEModel> sveModel;
 };
+
+#endif

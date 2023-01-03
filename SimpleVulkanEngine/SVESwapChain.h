@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SVE_SWAP_CHAIN_H
+#define SVE_SWAP_CHAIN_H
 
 #include "SVEEngine.h"
 
@@ -80,3 +81,5 @@ private:
 	std::vector<VkFence> imagesInFlight;
 	size_t currentFrame = 0;
 };
+
+#endif

@@ -3,6 +3,7 @@
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #include <glm/glm.hpp>
+#include <glm/gtc/constants.hpp>
 
 #include <array>
 #include <cassert>
@@ -16,6 +17,7 @@ struct SimplePushConstantData
 
 SVEApp::SVEApp()
 {
+	//loadGameObjects();
 	loadModels();
 	createPipelineLayout();
 	recreateSwapChain();
@@ -38,6 +40,7 @@ void SVEApp::run()
 	vkDeviceWaitIdle(sveDevice.device());
 }
 
+//void SVEApp::loadGameObjects()
 void SVEApp::loadModels()
 {
 	std::vector<SVEModel::Vertex> vertices{
@@ -45,6 +48,20 @@ void SVEApp::loadModels()
 		{{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
 		{{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}} };
 	sveModel = std::make_unique<SVEModel>(sveDevice, vertices);
+	/*std::vector<SVEModel::Vertex> vertices{
+	  {{0.0f, -0.5f}, {1.0f, 0.0f, 0.0f}},
+	  {{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
+	  {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}} };
+	auto lveModel = std::make_shared<SVEModel>(sveDevice, vertices);
+
+	auto triangle = SVEGameObject::createGameObject();
+	triangle.model = lveModel;
+	triangle.color = { .1f, .8f, .1f };
+	triangle.transform2d.translation.x = .2f;
+	triangle.transform2d.scale = { 2.f, .5f };
+	triangle.transform2d.rotation = .25f * glm::two_pi<float>();
+
+	gameObjects.push_back(std::move(triangle));*/
 }
 
 void SVEApp::createPipelineLayout()

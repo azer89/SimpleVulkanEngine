@@ -166,6 +166,7 @@
   <ItemGroup>
     <ClInclude Include="SVEEngine.h" />
     <ClInclude Include="SVEApp.h" />
+    <ClInclude Include="SVEGameObject.h" />
     <ClInclude Include="SVEModel.h" />
     <ClInclude Include="SVEPipeline.h" />
     <ClInclude Include="SVESwapChain.h" />

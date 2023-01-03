@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SVE_MODEL_H
+#define SVE_MODEL_H
 
 #include "SVEEngine.h"
 
@@ -39,3 +40,5 @@ private:
 	VkDeviceMemory vertexBufferMemory;
 	uint32_t vertexCount;
 };
+
+#endif
