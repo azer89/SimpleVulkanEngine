@@ -164,6 +164,7 @@
     <ClCompile Include="SVEWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="SimplePushConstantData.h" />
     <ClInclude Include="SVEEngine.h" />
     <ClInclude Include="SVEApp.h" />
     <ClInclude Include="SVEGameObject.h" />
@@ -171,6 +172,7 @@
     <ClInclude Include="SVEPipeline.h" />
     <ClInclude Include="SVESwapChain.h" />
     <ClInclude Include="SVEWindow.h" />
+    <ClInclude Include="Transform2DComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\compile.bat" />

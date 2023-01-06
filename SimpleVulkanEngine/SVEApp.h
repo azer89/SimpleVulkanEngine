@@ -3,6 +3,7 @@
 
 #include "SVEEngine.h"
 #include "SVEModel.h"
+#include "SVEGameObject.h"
 #include "SVEPipeline.h"
 #include "SVESwapChain.h"
 #include "SVEWindow.h"
@@ -31,6 +32,7 @@ public:
 
 private:
 	void loadModels();
+	void loadGameObjects();
 	void createPipelineLayout();
 	void createPipeline();
 	void createCommandBuffers();
@@ -38,6 +40,7 @@ private:
 	void drawFrame();
 	void recreateSwapChain();
 	void recordCommandBuffer(int imageIndex);
+	void renderGameObjects(VkCommandBuffer commandBuffer);
 
 	SVEWindow sveWindow{ WIDTH, HEIGHT, TITLE };
 	SVEEngine sveDevice{ sveWindow };
@@ -46,6 +49,7 @@ private:
 	VkPipelineLayout pipelineLayout;
 	std::vector<VkCommandBuffer> commandBuffers;
 	std::unique_ptr<SVEModel> sveModel;
+	std::vector<SVEGameObject> gameObjects;
 };
 
 #endif

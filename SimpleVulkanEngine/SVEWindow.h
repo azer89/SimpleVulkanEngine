@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SVE_WINDOW_H
+#define SVE_WINDOW_H
 
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
@@ -32,3 +33,5 @@ private:
 	std::string windowName;
 	GLFWwindow* window;
 };
+
+#endif
