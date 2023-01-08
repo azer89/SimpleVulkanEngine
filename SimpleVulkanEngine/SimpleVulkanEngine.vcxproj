@@ -156,7 +156,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="SVEEngine.cpp" />
+    <ClCompile Include="SVEDevice.cpp" />
     <ClCompile Include="SVEApp.cpp" />
     <ClCompile Include="SVEModel.cpp" />
     <ClCompile Include="SVEPipeline.cpp" />
@@ -166,7 +166,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SimplePushConstantData.h" />
-    <ClInclude Include="SVEEngine.h" />
+    <ClInclude Include="SVEDevice.h" />
     <ClInclude Include="SVEApp.h" />
     <ClInclude Include="SVEGameObject.h" />
     <ClInclude Include="SVEModel.h" />

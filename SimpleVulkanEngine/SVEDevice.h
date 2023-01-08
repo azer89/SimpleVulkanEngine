@@ -1,5 +1,5 @@
-#ifndef SVE_ENGINE_H
-#define SVE_ENGINE_H
+#ifndef SVE_DEVICE_H
+#define SVE_DEVICE_H
 
 #include "SVEWindow.h"
 
@@ -24,7 +24,7 @@ struct QueueFamilyIndices
 	bool isComplete() { return graphicsFamilyHasValue && presentFamilyHasValue; }
 };
 
-class SVEEngine
+class SVEDevice
 {
 public:
 #ifdef NDEBUG
@@ -33,14 +33,14 @@ public:
 	const bool enableValidationLayers = true;
 #endif
 
-	SVEEngine(SVEWindow& window);
-	~SVEEngine();
+	SVEDevice(SVEWindow& window);
+	~SVEDevice();
 
 	// Not copyable or movable
-	SVEEngine(const SVEEngine&) = delete;
-	SVEEngine& operator=(const SVEEngine&) = delete;
-	SVEEngine(SVEEngine&&) = delete;
-	SVEEngine& operator=(SVEEngine&&) = delete;
+	SVEDevice(const SVEDevice&) = delete;
+	SVEDevice& operator=(const SVEDevice&) = delete;
+	SVEDevice(SVEDevice&&) = delete;
+	SVEDevice& operator=(SVEDevice&&) = delete;
 
 	VkCommandPool getCommandPool() { return commandPool; }
 	VkDevice device() { return device_; }

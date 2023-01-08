@@ -11,13 +11,13 @@
 #include <memory>
 
 
-SVESwapChain::SVESwapChain(SVEEngine& deviceRef, VkExtent2D extent)
+SVESwapChain::SVESwapChain(SVEDevice& deviceRef, VkExtent2D extent)
 	: device{ deviceRef }, windowExtent{ extent } {
 	init();
 }
 
 SVESwapChain::SVESwapChain(
-	SVEEngine& deviceRef, VkExtent2D extent, std::shared_ptr<SVESwapChain> previous)
+	SVEDevice& deviceRef, VkExtent2D extent, std::shared_ptr<SVESwapChain> previous)
 	: device{ deviceRef }, windowExtent{ extent }, oldSwapChain{ previous } 
 {
 	init();

@@ -1,7 +1,7 @@
 #ifndef SVE_SWAP_CHAIN_H
 #define SVE_SWAP_CHAIN_H
 
-#include "SVEEngine.h"
+#include "SVEDevice.h"
 
 // vulkan headers
 #include <vulkan/vulkan.h>
@@ -16,12 +16,12 @@ class SVESwapChain
 public:
 	static constexpr int MAX_FRAMES_IN_FLIGHT = 2;
 
-	SVESwapChain(SVEEngine& deviceRef, VkExtent2D windowExtent);
-	SVESwapChain(SVEEngine& deviceRef, VkExtent2D windowExtent, std::shared_ptr<SVESwapChain> previous);
+	SVESwapChain(SVEDevice& deviceRef, VkExtent2D windowExtent);
+	SVESwapChain(SVEDevice& deviceRef, VkExtent2D windowExtent, std::shared_ptr<SVESwapChain> previous);
 	~SVESwapChain();
 
 	SVESwapChain(const SVESwapChain&) = delete;
-	SVEEngine operator=(const SVESwapChain&) = delete;
+	SVEDevice operator=(const SVESwapChain&) = delete;
 
 	VkFramebuffer getFrameBuffer(int index) { return swapChainFramebuffers[index]; }
 	VkRenderPass getRenderPass() { return renderPass; }
@@ -69,7 +69,7 @@ private:
 	std::vector<VkImage> swapChainImages;
 	std::vector<VkImageView> swapChainImageViews;
 
-	SVEEngine& device;
+	SVEDevice& device;
 	VkExtent2D windowExtent;
 
 	VkSwapchainKHR swapChain;

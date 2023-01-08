@@ -1,7 +1,7 @@
 #ifndef SVE_APP_H
 #define SVE_APP_H
 
-#include "SVEEngine.h"
+#include "SVEDevice.h"
 #include "SVEModel.h"
 #include "SVEGameObject.h"
 #include "SVEPipeline.h"
@@ -43,7 +43,7 @@ private:
 	void renderGameObjects(VkCommandBuffer commandBuffer);
 
 	SVEWindow sveWindow{ WIDTH, HEIGHT, TITLE };
-	SVEEngine sveDevice{ sveWindow };
+	SVEDevice sveDevice{ sveWindow };
 	std::unique_ptr<SVESwapChain> sveSwapChain;
 	std::unique_ptr<SVEPipeline> svePipeline;
 	VkPipelineLayout pipelineLayout;

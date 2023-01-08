@@ -1,7 +1,7 @@
 #ifndef SVE_MODEL_H
 #define SVE_MODEL_H
 
-#include "SVEEngine.h"
+#include "SVEDevice.h"
 
 // libs
 #define GLM_FORCE_RADIANS
@@ -23,7 +23,7 @@ public:
 		static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions();
 	};
 
-	SVEModel(SVEEngine& device, const std::vector<Vertex>& vertices);
+	SVEModel(SVEDevice& device, const std::vector<Vertex>& vertices);
 	~SVEModel();
 
 	SVEModel(const SVEModel&) = delete;
@@ -35,7 +35,7 @@ public:
 private:
 	void createVertexBuffers(const std::vector<Vertex>& vertices);
 
-	SVEEngine& sveDevice;
+	SVEDevice& sveDevice;
 	VkBuffer vertexBuffer;
 	VkDeviceMemory vertexBufferMemory;
 	uint32_t vertexCount;

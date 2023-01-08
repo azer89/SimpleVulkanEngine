@@ -27,7 +27,7 @@
     <ClCompile Include="SVEPipeline.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SVEEngine.cpp">
+    <ClCompile Include="SVEDevice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SVESwapChain.cpp">
@@ -50,7 +50,7 @@
     <ClInclude Include="SVEPipeline.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SVEEngine.h">
+    <ClInclude Include="SVEDevice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SVESwapChain.h">

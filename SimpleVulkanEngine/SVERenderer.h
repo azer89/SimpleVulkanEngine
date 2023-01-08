@@ -1,7 +1,7 @@
 #ifndef SVE_RENDERER_H
 #define SVE_RENDERER_H
 
-#include "SVEEngine.h"
+#include "SVEDevice.h"
 #include "SVESwapChain.h"
 #include "SVEWindow.h"
 
@@ -13,7 +13,7 @@
 class SVERenderer
 {
 public:
-	SVERenderer(SVEWindow& window, SVEEngine& device);
+	SVERenderer(SVEWindow& window, SVEDevice& device);
 	~SVERenderer();
 
 	SVERenderer(const SVERenderer&) = delete;
@@ -45,7 +45,7 @@ private:
 	void recreateSwapChain();
 
 	SVEWindow& sveWindow;
-	SVEEngine& sveDevice;
+	SVEDevice& sveDevice;
 	std::unique_ptr<SVESwapChain> sveSwapChain;
 	std::vector<VkCommandBuffer> commandBuffers;
 

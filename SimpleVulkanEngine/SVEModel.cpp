@@ -5,7 +5,7 @@
 #include <cstring>
 
 
-SVEModel::SVEModel(SVEEngine& device, const std::vector<Vertex>& vertices) : sveDevice{ device }
+SVEModel::SVEModel(SVEDevice& device, const std::vector<Vertex>& vertices) : sveDevice{ device }
 {
 	createVertexBuffers(vertices);
 }

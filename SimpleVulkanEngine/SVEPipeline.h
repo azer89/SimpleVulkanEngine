@@ -1,7 +1,7 @@
 #ifndef SVE_PIPELINE_H
 #define SVE_PIPELINE_H
 
-#include "SVEEngine.h"
+#include "SVEDevice.h"
 
 // std
 #include <string>
@@ -32,7 +32,7 @@ class SVEPipeline
 {
 public:
 	SVEPipeline(
-		SVEEngine& device,
+		SVEDevice& device,
 		const std::string& vertFilepath,
 		const std::string& fragFilepath,
 		const PipelineConfigInfo& configInfo);
@@ -56,7 +56,7 @@ private:
 
 	void createShaderModule(const std::vector<char>& code, VkShaderModule* shaderModule);
 
-	SVEEngine& sveDevice;
+	SVEDevice& sveDevice;
 	VkPipeline graphicsPipeline;
 	VkShaderModule vertShaderModule;
 	VkShaderModule fragShaderModule;
