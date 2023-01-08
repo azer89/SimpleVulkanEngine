@@ -46,8 +46,8 @@ void SVEApp::loadGameObjects()
 	auto triangle = SVEGameObject::createGameObject();
 	triangle.model = lveModel;
 	triangle.color = { .1f, .8f, .1f };
-	triangle.transform2d.translation.x = .2f;
-	triangle.transform2d.scale = { 2.f, .5f };
+	triangle.transform2d.translation.x = 0.0f;
+	triangle.transform2d.scale = { 1.f, 1.f };
 	triangle.transform2d.rotation = .25f * glm::two_pi<float>();
 
 	gameObjects.push_back(std::move(triangle));
@@ -267,7 +267,7 @@ void SVEApp::renderGameObjects(VkCommandBuffer commandBuffer)
 
 	for (auto& obj : gameObjects)
 	{
-		obj.transform2d.rotation = glm::mod(obj.transform2d.rotation + 0.01f, glm::two_pi<float>());
+		obj.transform2d.rotation = glm::mod(obj.transform2d.rotation + 0.0001f, glm::two_pi<float>());
 
 		SimplePushConstantData push{};
 		push.offset = obj.transform2d.translation;

@@ -160,6 +160,7 @@
     <ClCompile Include="SVEApp.cpp" />
     <ClCompile Include="SVEModel.cpp" />
     <ClCompile Include="SVEPipeline.cpp" />
+    <ClCompile Include="SVERenderer.cpp" />
     <ClCompile Include="SVESwapChain.cpp" />
     <ClCompile Include="SVEWindow.cpp" />
   </ItemGroup>
@@ -170,6 +171,7 @@
     <ClInclude Include="SVEGameObject.h" />
     <ClInclude Include="SVEModel.h" />
     <ClInclude Include="SVEPipeline.h" />
+    <ClInclude Include="SVERenderer.h" />
     <ClInclude Include="SVESwapChain.h" />
     <ClInclude Include="SVEWindow.h" />
     <ClInclude Include="Transform2DComponent.h" />
