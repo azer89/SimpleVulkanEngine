@@ -2,11 +2,10 @@
 #define SVE_APP_H
 
 #include "SVEDevice.h"
-#include "SVEModel.h"
+#include "SVEModel.h" // not used
 #include "SVEGameObject.h"
-#include "SVEPipeline.h"
-#include "SVESwapChain.h"
-#include "SVEWindow.h"
+#include "SVERenderer.h"
+#include "SVEWindow.h" 
 
 // std
 #include <memory>
@@ -28,27 +27,15 @@ public:
 	SVEApp& operator=(const SVEApp&) = delete;
 
 	void run();
-	
 
 private:
-	void loadModels();
+	void loadModels(); // not used
 	void loadGameObjects();
-	void createPipelineLayout();
-	void createPipeline();
-	void createCommandBuffers();
-	void freeCommandBuffers();
-	void drawFrame();
-	void recreateSwapChain();
-	void recordCommandBuffer(int imageIndex);
-	void renderGameObjects(VkCommandBuffer commandBuffer);
 
 	SVEWindow sveWindow{ WIDTH, HEIGHT, TITLE };
 	SVEDevice sveDevice{ sveWindow };
-	std::unique_ptr<SVESwapChain> sveSwapChain;
-	std::unique_ptr<SVEPipeline> svePipeline;
-	VkPipelineLayout pipelineLayout;
-	std::vector<VkCommandBuffer> commandBuffers;
-	std::unique_ptr<SVEModel> sveModel;
+	SVERenderer sveRenderer{sveWindow, sveDevice};
+	std::unique_ptr<SVEModel> sveModel; // not used
 	std::vector<SVEGameObject> gameObjects;
 };
 
