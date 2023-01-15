@@ -6,8 +6,7 @@
 
 struct SimplePushConstantData
 {
-	glm::mat2 transform{ 1.f }; // 4 x 4 bytes = 16 bytes
-	glm::vec2 offset;
+	glm::mat4 transform{ 1.f }; // 64 bytes
 	alignas(16) glm::vec3 color;
 };
 

@@ -65,7 +65,7 @@
     <ClInclude Include="SVEGameObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Transform2DComponent.h">
+    <ClInclude Include="TransformComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SimplePushConstantData.h">

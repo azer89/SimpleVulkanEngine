@@ -2,7 +2,7 @@
 #define SVE_GAME_OBJECT_H
 
 #include "SVEModel.h"
-#include "Transform2DComponent.h"
+#include "TransformComponent.h"
 
 #include <memory>
 
@@ -26,7 +26,7 @@ public:
 
 	std::shared_ptr<SVEModel> model{};
 	glm::vec3 color{};
-	Transform2dComponent transform2d{};
+	TransformComponent transform{};
 
 private:
 	SVEGameObject(id_t objId) : id{ objId } {}

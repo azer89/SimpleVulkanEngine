@@ -176,7 +176,7 @@
     <ClInclude Include="SVERenderer.h" />
     <ClInclude Include="SVESwapChain.h" />
     <ClInclude Include="SVEWindow.h" />
-    <ClInclude Include="Transform2DComponent.h" />
+    <ClInclude Include="TransformComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\compile.bat" />
