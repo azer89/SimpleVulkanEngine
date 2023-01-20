@@ -157,6 +157,7 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SimpleRenderSystem.cpp" />
+    <ClCompile Include="SVECamera.cpp" />
     <ClCompile Include="SVEDevice.cpp" />
     <ClCompile Include="SVEApp.cpp" />
     <ClCompile Include="SVEModel.cpp" />
@@ -168,6 +169,7 @@
   <ItemGroup>
     <ClInclude Include="SimplePushConstantData.h" />
     <ClInclude Include="SimpleRenderSystem.h" />
+    <ClInclude Include="SVECamera.h" />
     <ClInclude Include="SVEDevice.h" />
     <ClInclude Include="SVEApp.h" />
     <ClInclude Include="SVEGameObject.h" />

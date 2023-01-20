@@ -1,5 +1,6 @@
 #include "SVEApp.h"
 #include "SimpleRenderSystem.h"
+#include "SVECamera.h"
 
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
@@ -23,13 +24,19 @@ SVEApp::~SVEApp()
 void SVEApp::run()
 {
 	SimpleRenderSystem simpleRenderSystem{ sveDevice, sveRenderer.getSwapChainRenderPass() };
+	SVECamera camera{};
 	while (!sveWindow.shouldClose())
 	{
 		glfwPollEvents();
+
+		float aspect = sveRenderer.getAspectRatio();
+		// camera.setOrthographicProjection(-aspect, aspect, -1, 1, -1, 1);
+		camera.setPerspectiveProjection(glm::radians(50.f), aspect, 0.1f, 10.f);
+
 		if (auto commandBuffer = sveRenderer.beginFrame())
 		{
 			sveRenderer.beginSwapChainRenderPass(commandBuffer);
-			simpleRenderSystem.renderGameObjects(commandBuffer, gameObjects);
+			simpleRenderSystem.renderGameObjects(commandBuffer, gameObjects, camera);
 			sveRenderer.endSwapChainRenderPass(commandBuffer);
 			sveRenderer.endFrame();
 		}
@@ -116,7 +123,7 @@ void SVEApp::loadGameObjects()
 	std::shared_ptr<SVEModel> sveModel = createCubeModel(sveDevice, { .0f, .0f, .0f });
 	auto cube = SVEGameObject::createGameObject();
 	cube.model = sveModel;
-	cube.transform.translation = { .0f, .0f, .5f };
+	cube.transform.translation = { .0f, .0f, 2.5f };
 	cube.transform.scale = { .5f, .5f, .5f };
 	gameObjects.push_back(std::move(cube));
 }
