@@ -1,6 +1,7 @@
 #include "SVEApp.h"
-#include "SimpleRenderSystem.h"
+#include "KeyboardMovementController.h"
 #include "SVECamera.h"
+#include "SimpleRenderSystem.h"
 
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
@@ -9,6 +10,7 @@
 
 #include <array>
 #include <cassert>
+#include <chrono>
 #include <stdexcept>
 
 SVEApp::SVEApp()
@@ -26,10 +28,22 @@ void SVEApp::run()
 	SimpleRenderSystem simpleRenderSystem{ sveDevice, sveRenderer.getSwapChainRenderPass() };
 	SVECamera camera{};
 	// camera.setViewDirection(glm::vec3(0.f), glm::vec3(0.5f, 0.f, 1.f));
-	camera.setViewTarget(glm::vec3(-1.f, -2.f, -2.f), glm::vec3(0.f, 0.f, 2.5f));
+	//camera.setViewTarget(glm::vec3(-1.f, -2.f, -2.f), glm::vec3(0.f, 0.f, 2.5f));
+	auto viewerObject = SVEGameObject::createGameObject();
+	KeyboardMovementController cameraController{};
+	auto currentTime = std::chrono::high_resolution_clock::now();
+
 	while (!sveWindow.shouldClose())
 	{
 		glfwPollEvents();
+
+		auto newTime = std::chrono::high_resolution_clock::now();
+		float frameTime =
+			std::chrono::duration<float, std::chrono::seconds::period>(newTime - currentTime).count();
+		currentTime = newTime;
+
+		cameraController.moveInPlaneXZ(sveWindow.getGLFWwindow(), frameTime, viewerObject);
+		camera.setViewYXZ(viewerObject.transform.translation, viewerObject.transform.rotation);
 
 		float aspect = sveRenderer.getAspectRatio();
 		// camera.setOrthographicProjection(-aspect, aspect, -1, 1, -1, 1);

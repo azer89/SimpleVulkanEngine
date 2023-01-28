@@ -23,19 +23,15 @@ public:
 	SVESwapChain(const SVESwapChain&) = delete;
 	SVEDevice operator=(const SVESwapChain&) = delete;
 
-	VkFramebuffer getFrameBuffer(int index) { return swapChainFramebuffers[index]; }
-	VkRenderPass getRenderPass() { return renderPass; }
-	VkImageView getImageView(int index) { return swapChainImageViews[index]; }
-	size_t imageCount() { return swapChainImages.size(); }
-	VkFormat getSwapChainImageFormat() { return swapChainImageFormat; }
-	VkExtent2D getSwapChainExtent() { return swapChainExtent; }
-	uint32_t width() { return swapChainExtent.width; }
-	uint32_t height() { return swapChainExtent.height; }
-
-	float extentAspectRatio()
-	{
-		return static_cast<float>(swapChainExtent.width) / static_cast<float>(swapChainExtent.height);
-	}
+	VkFramebuffer getFrameBuffer(int index) const { return swapChainFramebuffers[index]; }
+	VkRenderPass getRenderPass() const { return renderPass; }
+	VkImageView getImageView(int index) const { return swapChainImageViews[index]; }
+	size_t imageCount() const { return swapChainImages.size(); }
+	VkFormat getSwapChainImageFormat() const { return swapChainImageFormat; }
+	VkExtent2D getSwapChainExtent() const { return swapChainExtent; }
+	uint32_t width() const { return swapChainExtent.width; }
+	uint32_t height() const { return swapChainExtent.height; }
+	float extentAspectRatio() const { return static_cast<float>(swapChainExtent.width) / static_cast<float>(swapChainExtent.height); }
 	VkFormat findDepthFormat();
 
 	VkResult acquireNextImage(uint32_t* imageIndex);
