@@ -23,7 +23,13 @@ public:
 		static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions();
 	};
 
-	SVEModel(SVEDevice& device, const std::vector<Vertex>& vertices);
+	struct Builder
+	{
+		std::vector<Vertex> vertices{};
+		std::vector<uint32_t> indices{};
+	};
+
+	SVEModel(SVEDevice& device, const SVEModel::Builder& builder);
 	~SVEModel();
 
 	SVEModel(const SVEModel&) = delete;
@@ -34,11 +40,20 @@ public:
 
 private:
 	void createVertexBuffers(const std::vector<Vertex>& vertices);
+	void createIndexBuffers(const std::vector<uint32_t>& indices);
 
 	SVEDevice& sveDevice;
+
+	// vertex buffer
 	VkBuffer vertexBuffer;
 	VkDeviceMemory vertexBufferMemory;
 	uint32_t vertexCount;
+
+	// index buffer
+	bool hasIndexBuffer = false;
+	VkBuffer indexBuffer;
+	VkDeviceMemory indexBufferMemory;
+	uint32_t indexCount;
 };
 
 #endif

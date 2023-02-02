@@ -17,6 +17,7 @@ SVERenderer::~SVERenderer()
 	freeCommandBuffers(); 
 }
 
+// Recreate a swapchain if the window is resized
 void SVERenderer::recreateSwapChain()
 {
 	auto extent = sveWindow.getExtent();
@@ -108,8 +109,7 @@ void SVERenderer::endFrame()
 	}
 
 	auto result = sveSwapChain->submitCommandBuffers(&commandBuffer, &currentImageIndex);
-	if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR ||
-		sveWindow.wasWindowResized())
+	if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || sveWindow.wasWindowResized())
 	{
 		sveWindow.resetWindowResizedFlag();
 		recreateSwapChain();
@@ -126,8 +126,7 @@ void SVERenderer::endFrame()
 void SVERenderer::beginSwapChainRenderPass(VkCommandBuffer commandBuffer)
 {
 	assert(isFrameStarted && "Can't call beginSwapChainRenderPass if frame is not in progress");
-	assert(
-		commandBuffer == getCurrentCommandBuffer() &&
+	assert( commandBuffer == getCurrentCommandBuffer() &&
 		"Can't begin render pass on command buffer from a different frame");
 
 	VkRenderPassBeginInfo renderPassInfo{};

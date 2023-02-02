@@ -578,6 +578,7 @@ void SVEDevice::copyBufferToImage(
 	endSingleTimeCommands(commandBuffer);
 }
 
+// For creating a depth image
 void SVEDevice::createImageWithInfo(
 	const VkImageCreateInfo& imageInfo,
 	VkMemoryPropertyFlags properties,
