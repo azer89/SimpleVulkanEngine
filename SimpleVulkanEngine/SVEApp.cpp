@@ -129,12 +129,22 @@ void SVEApp::loadGameObjects()
 	triangle.transform2d.rotation = .25f * glm::two_pi<float>();
 
 	gameObjects.push_back(std::move(triangle));*/
-	std::shared_ptr<SVEModel> sveModel = createCubeModel(sveDevice, { .0f, .0f, .0f });
+
+
+	/*std::shared_ptr<SVEModel> sveModel = createCubeModel(sveDevice, {.0f, .0f, .0f});
 	auto cube = SVEGameObject::createGameObject();
 	cube.model = sveModel;
 	cube.transform.translation = { .0f, .0f, 2.5f };
 	cube.transform.scale = { .5f, .5f, .5f };
-	gameObjects.push_back(std::move(cube));
+	gameObjects.push_back(std::move(cube));*/
+
+	std::shared_ptr<SVEModel> lveModel =
+		SVEModel::createModelFromFile(sveDevice, MODEL_PATH);
+	auto gameObj = SVEGameObject::createGameObject();
+	gameObj.model = lveModel;
+	gameObj.transform.translation = { .0f, .0f, 2.5f };
+	gameObj.transform.scale = glm::vec3(3.f);
+	gameObjects.push_back(std::move(gameObj));
 }
 
 void SVEApp::loadModels()
