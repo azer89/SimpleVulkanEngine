@@ -30,6 +30,7 @@ void SVEApp::run()
 	// camera.setViewDirection(glm::vec3(0.f), glm::vec3(0.5f, 0.f, 1.f));
 	//camera.setViewTarget(glm::vec3(-1.f, -2.f, -2.f), glm::vec3(0.f, 0.f, 2.5f));
 	auto viewerObject = SVEGameObject::createGameObject();
+	viewerObject.transform.translation = { 0, -0.5f, -2.0f };
 	KeyboardMovementController cameraController{};
 	auto currentTime = std::chrono::high_resolution_clock::now();
 
@@ -38,8 +39,7 @@ void SVEApp::run()
 		glfwPollEvents();
 
 		auto newTime = std::chrono::high_resolution_clock::now();
-		float frameTime =
-			std::chrono::duration<float, std::chrono::seconds::period>(newTime - currentTime).count();
+		float frameTime = std::chrono::duration<float, std::chrono::seconds::period>(newTime - currentTime).count();
 		currentTime = newTime;
 
 		cameraController.moveInPlaneXZ(sveWindow.getGLFWwindow(), frameTime, viewerObject);
@@ -138,10 +138,10 @@ void SVEApp::loadGameObjects()
 	cube.transform.scale = { .5f, .5f, .5f };
 	gameObjects.push_back(std::move(cube));*/
 
-	std::shared_ptr<SVEModel> sveModel = SVEModel::createModelFromFile(sveDevice, MODEL_PATH);
+	std::shared_ptr<SVEModel> sveModel = SVEModel::createModelFromFile(sveDevice, SMOOTH_VASE_MODEL_PATH);
 	auto flatVase = SVEGameObject::createGameObject();
 	flatVase.model = sveModel;
-	flatVase.transform.translation = { -.5f, .5f, 2.5f };
+	flatVase.transform.translation = { .0f, .0f, .0f };
 	flatVase.transform.scale = { 3.f, 1.5f, 3.f };
 	gameObjects.push_back(std::move(flatVase));
 
@@ -153,8 +153,8 @@ void SVEApp::loadGameObjects()
 	gameObjects.push_back(std::move(smoothVase));*/
 }
 
-void SVEApp::loadModels()
-{
+//void SVEApp::loadModels()
+//{
 	/*std::vector<SVEModel::Vertex> vertices{
 		{{0.0f, -0.5f}, {1.0f, 0.0f, 0.0f}},
 		{{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
@@ -175,4 +175,4 @@ void SVEApp::loadModels()
 	triangle.transform2d.rotation = .25f * glm::two_pi<float>();
 
 	gameObjects.push_back(std::move(triangle));*/
-}
+//}

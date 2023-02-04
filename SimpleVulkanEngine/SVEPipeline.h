@@ -2,31 +2,11 @@
 #define SVE_PIPELINE_H
 
 #include "SVEDevice.h"
+#include "PipelineConfigInfo.h"
 
 // std
 #include <string>
 #include <vector>
-
-
-struct PipelineConfigInfo
-{
-	PipelineConfigInfo() = default;
-	PipelineConfigInfo(const PipelineConfigInfo&) = delete;
-	PipelineConfigInfo& operator=(const PipelineConfigInfo&) = delete;
-
-	VkPipelineViewportStateCreateInfo viewportInfo;
-	VkPipelineInputAssemblyStateCreateInfo inputAssemblyInfo;
-	VkPipelineRasterizationStateCreateInfo rasterizationInfo;
-	VkPipelineMultisampleStateCreateInfo multisampleInfo;
-	VkPipelineColorBlendAttachmentState colorBlendAttachment;
-	VkPipelineColorBlendStateCreateInfo colorBlendInfo;
-	VkPipelineDepthStencilStateCreateInfo depthStencilInfo;
-	std::vector<VkDynamicState> dynamicStateEnables;
-	VkPipelineDynamicStateCreateInfo dynamicStateInfo;
-	VkPipelineLayout pipelineLayout = nullptr;
-	VkRenderPass renderPass = nullptr;
-	uint32_t subpass = 0;
-};
 
 class SVEPipeline
 {
@@ -42,9 +22,7 @@ public:
 	void operator=(const SVEPipeline&) = delete;
 
 	void bind(VkCommandBuffer commandBuffer);
-
-	static void defaultPipelineConfigInfo(
-		PipelineConfigInfo& configInfo);
+	static void defaultPipelineConfigInfo(PipelineConfigInfo& configInfo);
 
 private:
 	static std::vector<char> readFile(const std::string& filepath);

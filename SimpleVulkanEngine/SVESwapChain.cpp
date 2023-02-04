@@ -39,7 +39,7 @@ SVESwapChain::~SVESwapChain()
 		swapChain = nullptr;
 	}
 
-	for (int i = 0; i < depthImages.size(); i++)
+	for (int i = 0; i < depthImages.size(); ++i)
 	{
 		vkDestroyImageView(device.device(), depthImageViews[i], nullptr);
 		vkDestroyImage(device.device(), depthImages[i], nullptr);
@@ -54,7 +54,7 @@ SVESwapChain::~SVESwapChain()
 	vkDestroyRenderPass(device.device(), renderPass, nullptr);
 
 	// cleanup synchronization objects
-	for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
+	for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
 	{
 		vkDestroySemaphore(device.device(), renderFinishedSemaphores[i], nullptr);
 		vkDestroySemaphore(device.device(), imageAvailableSemaphores[i], nullptr);
@@ -211,7 +211,7 @@ void SVESwapChain::createSwapChain()
 void SVESwapChain::createImageViews()
 {
 	swapChainImageViews.resize(swapChainImages.size());
-	for (size_t i = 0; i < swapChainImages.size(); i++)
+	for (size_t i = 0; i < swapChainImages.size(); ++i)
 	{
 		VkImageViewCreateInfo viewInfo{};
 		viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
@@ -298,7 +298,7 @@ void SVESwapChain::createRenderPass()
 void SVESwapChain::createFramebuffers()
 {
 	swapChainFramebuffers.resize(imageCount());
-	for (size_t i = 0; i < imageCount(); i++)
+	for (size_t i = 0; i < imageCount(); ++i)
 	{
 		std::array<VkImageView, 2> attachments = { swapChainImageViews[i], depthImageViews[i] };
 
@@ -333,7 +333,7 @@ void SVESwapChain::createDepthResources()
 	depthImageMemorys.resize(imageCount());
 	depthImageViews.resize(imageCount());
 
-	for (int i = 0; i < depthImages.size(); i++)
+	for (int i = 0; i < depthImages.size(); ++i)
 	{
 		VkImageCreateInfo imageInfo{};
 		imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
@@ -389,7 +389,7 @@ void SVESwapChain::createSyncObjects()
 	fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
 	fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
 
-	for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
+	for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
 	{
 		if (vkCreateSemaphore(device.device(), &semaphoreInfo, nullptr, &imageAvailableSemaphores[i]) != VK_SUCCESS ||
 			vkCreateSemaphore(device.device(), &semaphoreInfo, nullptr, &renderFinishedSemaphores[i]) != VK_SUCCESS ||

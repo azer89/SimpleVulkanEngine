@@ -36,7 +36,6 @@ SVEModel::~SVEModel()
 {
 	vkDestroyBuffer(sveDevice.device(), vertexBuffer, nullptr);
 	vkFreeMemory(sveDevice.device(), vertexBufferMemory, nullptr);
-
 	if (hasIndexBuffer)
 	{
 		vkDestroyBuffer(sveDevice.device(), indexBuffer, nullptr);

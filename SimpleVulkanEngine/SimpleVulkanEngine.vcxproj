@@ -170,6 +170,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="KeyboardMovementController.h" />
+    <ClInclude Include="PipelineConfigInfo.h" />
     <ClInclude Include="SimplePushConstantData.h" />
     <ClInclude Include="SimpleRenderSystem.h" />
     <ClInclude Include="SVECamera.h" />
@@ -182,7 +183,6 @@
     <ClInclude Include="SVESwapChain.h" />
     <ClInclude Include="SVEUtils.h" />
     <ClInclude Include="SVEWindow.h" />
-    <ClInclude Include="tiny_obj_loader.h" />
     <ClInclude Include="TransformComponent.h" />
   </ItemGroup>
   <ItemGroup>

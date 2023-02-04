@@ -6,7 +6,6 @@
 #include <set>
 #include <unordered_set>
 
-
 // local callback functions
 static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
 	VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
@@ -14,7 +13,6 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
 	const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
 	void* pUserData)
 {
-
 	if (messageSeverity >= VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT)
 	{
 		std::cerr << "Validation layer: " << pCallbackData->pMessage << "\n\n";
@@ -216,8 +214,7 @@ void SVEDevice::createCommandPool()
 	VkCommandPoolCreateInfo poolInfo = {};
 	poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
 	poolInfo.queueFamilyIndex = queueFamilyIndices.graphicsFamily;
-	poolInfo.flags =
-		VK_COMMAND_POOL_CREATE_TRANSIENT_BIT | VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+	poolInfo.flags = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT | VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
 
 	if (vkCreateCommandPool(device_, &poolInfo, nullptr, &commandPool) != VK_SUCCESS)
 	{
@@ -225,14 +222,15 @@ void SVEDevice::createCommandPool()
 	}
 }
 
-void SVEDevice::createSurface() { window.createWindowSurface(instance, &surface_); }
+void SVEDevice::createSurface() 
+{ 
+	window.createWindowSurface(instance, &surface_); 
+}
 
 bool SVEDevice::isDeviceSuitable(VkPhysicalDevice device)
 {
 	QueueFamilyIndices indices = findQueueFamilies(device);
-
 	bool extensionsSupported = checkDeviceExtensionSupport(device);
-
 	bool swapChainAdequate = false;
 	if (extensionsSupported)
 	{
@@ -243,8 +241,8 @@ bool SVEDevice::isDeviceSuitable(VkPhysicalDevice device)
 	VkPhysicalDeviceFeatures supportedFeatures;
 	vkGetPhysicalDeviceFeatures(device, &supportedFeatures);
 
-	return indices.isComplete() && extensionsSupported && swapChainAdequate &&
-		supportedFeatures.samplerAnisotropy;
+	return indices.isComplete() && extensionsSupported && 
+		swapChainAdequate && supportedFeatures.samplerAnisotropy;
 }
 
 void SVEDevice::populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo)
@@ -263,7 +261,10 @@ void SVEDevice::populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfo
 
 void SVEDevice::setupDebugMessenger()
 {
-	if (!enableValidationLayers) return;
+	if (!enableValidationLayers)
+	{
+		return;
+	}
 	VkDebugUtilsMessengerCreateInfoEXT createInfo;
 	populateDebugMessengerCreateInfo(createInfo);
 	if (CreateDebugUtilsMessengerEXT(instance, &createInfo, nullptr, &debugMessenger) != VK_SUCCESS)
@@ -325,7 +326,7 @@ void SVEDevice::hasGflwRequiredInstanceExtensions()
 	std::vector<VkExtensionProperties> extensions(extensionCount);
 	vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, extensions.data());
 
-	std::cout << "available extensions:" << std::endl;
+	std::cout << "Available extensions:" << std::endl;
 	std::unordered_set<std::string> available;
 	for (const auto& extension : extensions)
 	{
@@ -333,7 +334,7 @@ void SVEDevice::hasGflwRequiredInstanceExtensions()
 		available.insert(extension.extensionName);
 	}
 
-	std::cout << "required extensions:" << std::endl;
+	std::cout << "Required extensions:" << std::endl;
 	auto requiredExtensions = getRequiredExtensions();
 	for (const auto& required : requiredExtensions)
 	{
@@ -397,7 +398,7 @@ QueueFamilyIndices SVEDevice::findQueueFamilies(VkPhysicalDevice device)
 			break;
 		}
 
-		i++;
+		++i;
 	}
 
 	return indices;
@@ -433,7 +434,9 @@ SwapChainSupportDetails SVEDevice::querySwapChainSupport(VkPhysicalDevice device
 }
 
 VkFormat SVEDevice::findSupportedFormat(
-	const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features)
+	const std::vector<VkFormat>& candidates, 
+	VkImageTiling tiling, 
+	VkFormatFeatureFlags features)
 {
 	for (VkFormat format : candidates)
 	{
@@ -444,8 +447,7 @@ VkFormat SVEDevice::findSupportedFormat(
 		{
 			return format;
 		}
-		else if (
-			tiling == VK_IMAGE_TILING_OPTIMAL && (props.optimalTilingFeatures & features) == features)
+		else if ( tiling == VK_IMAGE_TILING_OPTIMAL && (props.optimalTilingFeatures & features) == features)
 		{
 			return format;
 		}
@@ -457,7 +459,7 @@ uint32_t SVEDevice::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags pr
 {
 	VkPhysicalDeviceMemoryProperties memProperties;
 	vkGetPhysicalDeviceMemoryProperties(physicalDevice, &memProperties);
-	for (uint32_t i = 0; i < memProperties.memoryTypeCount; i++)
+	for (uint32_t i = 0; i < memProperties.memoryTypeCount; ++i)
 	{
 		if ((typeFilter & (1 << i)) &&
 			(memProperties.memoryTypes[i].propertyFlags & properties) == properties)

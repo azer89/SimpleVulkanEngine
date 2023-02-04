@@ -7,6 +7,7 @@
 class KeyboardMovementController
 {
 public:
+	// Probably can be changed to an enum
 	struct KeyMappings
 	{
 		int moveLeft = GLFW_KEY_A;

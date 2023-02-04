@@ -95,7 +95,7 @@
     <ClInclude Include="SVEUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="tiny_obj_loader.h">
+    <ClInclude Include="PipelineConfigInfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -30,7 +30,6 @@ private:
 	void createPipeline(VkRenderPass renderPass);
 
 	SVEDevice& sveDevice;
-
 	std::unique_ptr<SVEPipeline> svePipeline;
 	VkPipelineLayout pipelineLayout;
 };
