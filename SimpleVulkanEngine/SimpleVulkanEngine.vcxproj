@@ -166,6 +166,7 @@
     <ClCompile Include="SVERenderer.cpp" />
     <ClCompile Include="SVESwapChain.cpp" />
     <ClCompile Include="SVEWindow.cpp" />
+    <ClCompile Include="TransformComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="KeyboardMovementController.h" />

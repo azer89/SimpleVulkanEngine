@@ -38,8 +38,7 @@ void SimpleRenderSystem::createPipelineLayout()
 	pipelineLayoutInfo.pSetLayouts = nullptr;
 	pipelineLayoutInfo.pushConstantRangeCount = 1;
 	pipelineLayoutInfo.pPushConstantRanges = &pushConstantRange;
-	if (vkCreatePipelineLayout(sveDevice.device(), &pipelineLayoutInfo, nullptr, &pipelineLayout) !=
-		VK_SUCCESS)
+	if (vkCreatePipelineLayout(sveDevice.device(), &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS)
 	{
 		throw std::runtime_error("Failed to create pipeline layout!");
 	}
@@ -68,12 +67,11 @@ void SimpleRenderSystem::renderGameObjects(VkCommandBuffer commandBuffer, std::v
 
 	for (auto& obj : gameObjects)
 	{
-		//obj.transform.rotation.y = glm::mod(obj.transform.rotation.y + 0.01f, glm::two_pi<float>());
-		//obj.transform.rotation.x = glm::mod(obj.transform.rotation.x + 0.005f, glm::two_pi<float>());
-
 		SimplePushConstantData push{};
-		push.color = obj.color;
-		push.transform = projectionView * obj.transform.mat4();
+		//push.color = obj.color;
+		auto modelMatrix = obj.transform.mat4();
+		push.transform = projectionView * modelMatrix;
+		push.normalMatrix = obj.transform.normalMatrix();
 
 		vkCmdPushConstants(
 			commandBuffer,

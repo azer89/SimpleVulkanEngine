@@ -138,13 +138,19 @@ void SVEApp::loadGameObjects()
 	cube.transform.scale = { .5f, .5f, .5f };
 	gameObjects.push_back(std::move(cube));*/
 
-	std::shared_ptr<SVEModel> lveModel =
-		SVEModel::createModelFromFile(sveDevice, MODEL_PATH);
-	auto gameObj = SVEGameObject::createGameObject();
-	gameObj.model = lveModel;
-	gameObj.transform.translation = { .0f, .0f, 2.5f };
-	gameObj.transform.scale = glm::vec3(3.f);
-	gameObjects.push_back(std::move(gameObj));
+	std::shared_ptr<SVEModel> sveModel = SVEModel::createModelFromFile(sveDevice, MODEL_PATH);
+	auto flatVase = SVEGameObject::createGameObject();
+	flatVase.model = sveModel;
+	flatVase.transform.translation = { -.5f, .5f, 2.5f };
+	flatVase.transform.scale = { 3.f, 1.5f, 3.f };
+	gameObjects.push_back(std::move(flatVase));
+
+	/*sveModel = SVEModel::createModelFromFile(sveDevice, "models/smooth_vase.obj");
+	auto smoothVase = SVEGameObject::createGameObject();
+	smoothVase.model = sveModel;
+	smoothVase.transform.translation = { .5f, .5f, 2.5f };
+	smoothVase.transform.scale = { 3.f, 1.5f, 3.f };
+	gameObjects.push_back(std::move(smoothVase));*/
 }
 
 void SVEApp::loadModels()
