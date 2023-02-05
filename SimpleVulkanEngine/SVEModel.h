@@ -2,6 +2,7 @@
 #define SVE_MODEL_H
 
 #include "SVEDevice.h"
+#include "SVEBuffer.h"
 
 // libs
 #define GLM_FORCE_RADIANS
@@ -60,14 +61,12 @@ private:
 	SVEDevice& sveDevice;
 
 	// vertex buffer
-	VkBuffer vertexBuffer;
-	VkDeviceMemory vertexBufferMemory;
+	std::unique_ptr<SVEBuffer> vertexBuffer;
 	uint32_t vertexCount;
 
 	// index buffer
 	bool hasIndexBuffer = false;
-	VkBuffer indexBuffer;
-	VkDeviceMemory indexBufferMemory;
+	std::unique_ptr<SVEBuffer> indexBuffer;
 	uint32_t indexCount;
 };
 

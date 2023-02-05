@@ -25,6 +25,16 @@ SVEApp::~SVEApp()
 
 void SVEApp::run()
 {
+	SVEBuffer globalUboBuffer{
+		sveDevice,
+		sizeof(GlobalUbo),
+		SVESwapChain::MAX_FRAMES_IN_FLIGHT,
+		VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
+		VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT,
+		sveDevice.properties.limits.minUniformBufferOffsetAlignment,
+	};
+	globalUboBuffer.map();
+
 	SimpleRenderSystem simpleRenderSystem{ sveDevice, sveRenderer.getSwapChainRenderPass() };
 	SVECamera camera{};
 	// camera.setViewDirection(glm::vec3(0.f), glm::vec3(0.5f, 0.f, 1.f));
@@ -51,8 +61,18 @@ void SVEApp::run()
 
 		if (auto commandBuffer = sveRenderer.beginFrame())
 		{
+			int frameIndex = sveRenderer.getFrameIndex();
+			FrameInfo frameInfo{ frameIndex, frameTime, commandBuffer, camera };
+
+			// update
+			GlobalUbo ubo{};
+			ubo.projectionView = camera.getProjection() * camera.getView();
+			globalUboBuffer.writeToIndex(&ubo, frameIndex);
+			globalUboBuffer.flushIndex(frameIndex);
+
+			// render
 			sveRenderer.beginSwapChainRenderPass(commandBuffer);
-			simpleRenderSystem.renderGameObjects(commandBuffer, gameObjects, camera);
+			simpleRenderSystem.renderGameObjects(frameInfo, gameObjects);
 			sveRenderer.endSwapChainRenderPass(commandBuffer);
 			sveRenderer.endFrame();
 		}

@@ -5,6 +5,7 @@
 #include "SVEGameObject.h"
 #include "SVEPipeline.h"
 #include "SVECamera.h"
+#include "FrameInfo.h"
 
 // std
 #include <memory>
@@ -23,7 +24,7 @@ public:
 	SimpleRenderSystem(const SimpleRenderSystem&) = delete;
 	SimpleRenderSystem& operator=(const SimpleRenderSystem&) = delete;
 
-	void renderGameObjects(VkCommandBuffer commandBuffer, std::vector<SVEGameObject>& gameObjects, const SVECamera& camera);
+	void renderGameObjects(FrameInfo& frameInfo, std::vector<SVEGameObject>& gameObjects);
 
 private:
 	void createPipelineLayout();

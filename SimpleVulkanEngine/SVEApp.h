@@ -6,6 +6,8 @@
 #include "SVEGameObject.h"
 #include "SVERenderer.h"
 #include "SVEWindow.h" 
+#include "SVEBuffer.h"
+#include "GlobalUBO.h"
 
 // std
 #include <memory>
