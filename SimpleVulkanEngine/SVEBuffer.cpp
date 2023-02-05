@@ -59,10 +59,10 @@ SVEBuffer::~SVEBuffer()
 VkResult SVEBuffer::map(VkDeviceSize size, VkDeviceSize offset)
 {
 	assert(buffer && memory && "Called map on buffer before create");
-	if (size == VK_WHOLE_SIZE)
+	/*if (size == VK_WHOLE_SIZE)
 	{
 		return vkMapMemory(sveDevice.device(), memory, 0, bufferSize, 0, &mapped);
-	}
+	}*/
 	return vkMapMemory(sveDevice.device(), memory, offset, size, 0, &mapped);
 }
 

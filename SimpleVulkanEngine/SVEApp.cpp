@@ -25,7 +25,7 @@ SVEApp::~SVEApp()
 
 void SVEApp::run()
 {
-	SVEBuffer globalUboBuffer{
+	/*SVEBuffer globalUboBuffer{
 		sveDevice,
 		sizeof(GlobalUbo),
 		SVESwapChain::MAX_FRAMES_IN_FLIGHT,
@@ -33,7 +33,18 @@ void SVEApp::run()
 		VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT,
 		sveDevice.properties.limits.minUniformBufferOffsetAlignment,
 	};
-	globalUboBuffer.map();
+	globalUboBuffer.map();*/
+	std::vector<std::unique_ptr<SVEBuffer>> uboBuffers(SVESwapChain::MAX_FRAMES_IN_FLIGHT);
+	for (int i = 0; i < uboBuffers.size(); i++)
+	{
+		uboBuffers[i] = std::make_unique<SVEBuffer>(
+			sveDevice,
+			sizeof(GlobalUbo),
+			1,
+			VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
+			VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT);
+		uboBuffers[i]->map();
+	}
 
 	SimpleRenderSystem simpleRenderSystem{ sveDevice, sveRenderer.getSwapChainRenderPass() };
 	SVECamera camera{};
@@ -67,8 +78,10 @@ void SVEApp::run()
 			// update
 			GlobalUbo ubo{};
 			ubo.projectionView = camera.getProjection() * camera.getView();
-			globalUboBuffer.writeToIndex(&ubo, frameIndex);
-			globalUboBuffer.flushIndex(frameIndex);
+			//globalUboBuffer.writeToIndex(&ubo, frameIndex);
+			//globalUboBuffer.flushIndex(frameIndex);
+			uboBuffers[frameIndex]->writeToBuffer(&ubo);
+			uboBuffers[frameIndex]->flush();
 
 			// render
 			sveRenderer.beginSwapChainRenderPass(commandBuffer);
