@@ -18,7 +18,7 @@ public:
 	static constexpr const char* FRAGMENT_SHADER_PATH = "C:/Users/azer/workspace/SimpleVulkanEngine/Shaders/frag.spv";
 
 public:
-	SimpleRenderSystem(SVEDevice& device, VkRenderPass renderPass);
+	SimpleRenderSystem(SVEDevice& device, VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout);
 	~SimpleRenderSystem();
 
 	SimpleRenderSystem(const SimpleRenderSystem&) = delete;
@@ -27,7 +27,7 @@ public:
 	void renderGameObjects(FrameInfo& frameInfo, std::vector<SVEGameObject>& gameObjects);
 
 private:
-	void createPipelineLayout();
+	void createPipelineLayout(VkDescriptorSetLayout globalSetLayout);
 	void createPipeline(VkRenderPass renderPass);
 
 	SVEDevice& sveDevice;

@@ -160,6 +160,9 @@
     <ClCompile Include="SimpleRenderSystem.cpp" />
     <ClCompile Include="SVEBuffer.cpp" />
     <ClCompile Include="SVECamera.cpp" />
+    <ClCompile Include="SVEDescriptorPool.cpp" />
+    <ClCompile Include="SVEDescriptorSetLayout.cpp" />
+    <ClCompile Include="SVEDescriptorWriter.cpp" />
     <ClCompile Include="SVEDevice.cpp" />
     <ClCompile Include="SVEApp.cpp" />
     <ClCompile Include="SVEModel.cpp" />
@@ -177,6 +180,9 @@
     <ClInclude Include="SimpleRenderSystem.h" />
     <ClInclude Include="SVEBuffer.h" />
     <ClInclude Include="SVECamera.h" />
+    <ClInclude Include="SVEDescriptorPool.h" />
+    <ClInclude Include="SVEDescriptorSetLayout.h" />
+    <ClInclude Include="SVEDescriptorWriter.h" />
     <ClInclude Include="SVEDevice.h" />
     <ClInclude Include="SVEApp.h" />
     <ClInclude Include="FrameInfo.h" />

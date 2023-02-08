@@ -7,6 +7,7 @@
 #include "SVERenderer.h"
 #include "SVEWindow.h" 
 #include "SVEBuffer.h"
+#include "SVEDescriptorPool.h"
 #include "GlobalUBO.h"
 
 // std
@@ -41,6 +42,7 @@ private:
 	SVEDevice sveDevice{ sveWindow };
 	SVERenderer sveRenderer{sveWindow, sveDevice};
 	//std::unique_ptr<SVEModel> sveModel; // not used
+	std::unique_ptr<SVEDescriptorPool> globalPool{};
 	std::vector<SVEGameObject> gameObjects;
 };
 
