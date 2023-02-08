@@ -60,7 +60,7 @@ void SVEApp::run()
 	SimpleRenderSystem simpleRenderSystem{ sveDevice, sveRenderer.getSwapChainRenderPass(), globalSetLayout->getDescriptorSetLayout() };
 	SVECamera camera{};
 	auto viewerObject = SVEGameObject::createGameObject();
-	viewerObject.transform.translation = { 0, -0.5f, -2.0f };
+	viewerObject.transform.translation = { 0, -1.5f, -2.0f };
 	KeyboardMovementController cameraController{};
 	auto currentTime = std::chrono::high_resolution_clock::now();
 
@@ -77,7 +77,7 @@ void SVEApp::run()
 
 		float aspect = sveRenderer.getAspectRatio();
 		// camera.setOrthographicProjection(-aspect, aspect, -1, 1, -1, 1);
-		camera.setPerspectiveProjection(glm::radians(50.f), aspect, 0.1f, 10.f);
+		camera.setPerspectiveProjection(glm::radians(50.f), aspect, 0.1f, 100.f);
 
 		if (auto commandBuffer = sveRenderer.beginFrame())
 		{
@@ -190,6 +190,13 @@ void SVEApp::loadGameObjects()
 	flatVase.transform.translation = { .0f, .0f, .0f };
 	flatVase.transform.scale = { 1.f, -1.f, 1.f };
 	gameObjects.push_back(std::move(flatVase));
+
+	/*sveModel = SVEModel::createModelFromFile(sveDevice, QUAD_MODEL_PATH);
+	auto floor = SVEGameObject::createGameObject();
+	floor.model = sveModel;
+	floor.transform.translation = { 0.f, .5f, 0.f };
+	floor.transform.scale = { 3.f, 1.f, 3.f };
+	gameObjects.push_back(std::move(floor));*/
 
 	/*sveModel = SVEModel::createModelFromFile(sveDevice, "models/smooth_vase.obj");
 	auto smoothVase = SVEGameObject::createGameObject();
