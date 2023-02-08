@@ -28,6 +28,8 @@ public:
 
 	SVEDescriptorSetLayout(SVEDevice& sveDevice, std::unordered_map<uint32_t, VkDescriptorSetLayoutBinding> bindings);
 	~SVEDescriptorSetLayout();
+
+	// Non copyable
 	SVEDescriptorSetLayout(const SVEDescriptorSetLayout&) = delete;
 	SVEDescriptorSetLayout& operator=(const SVEDescriptorSetLayout&) = delete;
 

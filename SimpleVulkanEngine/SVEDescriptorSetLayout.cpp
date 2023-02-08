@@ -32,7 +32,7 @@ SVEDescriptorSetLayout::SVEDescriptorSetLayout(
 	SVEDevice& device, std::unordered_map<uint32_t, VkDescriptorSetLayoutBinding> bindings)
 	: sveDevice{ device }, bindings{ bindings } {
 	std::vector<VkDescriptorSetLayoutBinding> setLayoutBindings{};
-	for (auto kv : bindings)
+	for (auto& kv : bindings)
 	{
 		setLayoutBindings.push_back(kv.second);
 	}
@@ -48,7 +48,7 @@ SVEDescriptorSetLayout::SVEDescriptorSetLayout(
 		nullptr,
 		&descriptorSetLayout) != VK_SUCCESS)
 	{
-		throw std::runtime_error("failed to create descriptor set layout!");
+		throw std::runtime_error("Failed to create descriptor set layout!");
 	}
 }
 

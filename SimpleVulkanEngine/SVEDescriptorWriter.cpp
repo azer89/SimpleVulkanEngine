@@ -4,7 +4,9 @@
 // *************** Descriptor Writer *********************
 
 SVEDescriptorWriter::SVEDescriptorWriter(SVEDescriptorSetLayout& setLayout, SVEDescriptorPool& pool)
-	: setLayout{ setLayout }, pool{ pool } {}
+	: setLayout{ setLayout }, pool{ pool } 
+{
+}
 
 SVEDescriptorWriter& SVEDescriptorWriter::writeBuffer(
 	uint32_t binding, VkDescriptorBufferInfo* bufferInfo)

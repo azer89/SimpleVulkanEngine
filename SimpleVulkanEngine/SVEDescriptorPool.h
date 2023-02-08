@@ -35,9 +35,7 @@ public:
 	SVEDescriptorPool& operator=(const SVEDescriptorPool&) = delete;
 
 	bool allocateDescriptor(const VkDescriptorSetLayout descriptorSetLayout, VkDescriptorSet& descriptor) const;
-
 	void freeDescriptors(std::vector<VkDescriptorSet>& descriptors) const;
-
 	void resetPool();
 
 private:
