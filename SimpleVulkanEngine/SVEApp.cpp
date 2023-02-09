@@ -82,7 +82,12 @@ void SVEApp::run()
 		if (auto commandBuffer = sveRenderer.beginFrame())
 		{
 			int frameIndex = sveRenderer.getFrameIndex();
-			FrameInfo frameInfo{ frameIndex, frameTime, commandBuffer, camera, globalDescriptorSets[frameIndex] };
+			FrameInfo frameInfo{ frameIndex, 
+				frameTime, 
+				commandBuffer, 
+				camera, 
+				globalDescriptorSets[frameIndex],
+				gameObjects };
 
 			// update
 			GlobalUbo ubo{};
@@ -92,7 +97,7 @@ void SVEApp::run()
 
 			// render
 			sveRenderer.beginSwapChainRenderPass(commandBuffer);
-			simpleRenderSystem.renderGameObjects(frameInfo, gameObjects);
+			simpleRenderSystem.renderGameObjects(frameInfo);
 			sveRenderer.endSwapChainRenderPass(commandBuffer);
 			sveRenderer.endFrame();
 		}
@@ -184,19 +189,20 @@ void SVEApp::loadGameObjects()
 	flatVase.transform.translation = { .0f, .0f, .0f };
 	flatVase.transform.scale = { 3.f, 1.5f, 3.f };
 	gameObjects.push_back(std::move(flatVase));*/
+
 	std::shared_ptr<SVEModel> sveModel = SVEModel::createModelFromFile(sveDevice, DRAGON_MODEL_PATH);
-	auto flatVase = SVEGameObject::createGameObject();
-	flatVase.model = sveModel;
-	flatVase.transform.translation = { .0f, .0f, .0f };
-	flatVase.transform.scale = { 1.f, -1.f, 1.f };
-	gameObjects.push_back(std::move(flatVase));
+	auto dragon = SVEGameObject::createGameObject();
+	dragon.model = sveModel;
+	dragon.transform.translation = { .0f, .0f, .0f };
+	dragon.transform.scale = { 1.f, -1.f, 1.f };
+	gameObjects.emplace(dragon.getId(), std::move(dragon));
 
 	sveModel = SVEModel::createModelFromFile(sveDevice, QUAD_MODEL_PATH);
 	auto floor = SVEGameObject::createGameObject();
 	floor.model = sveModel;
 	floor.transform.translation = { 0.f, .5f, 0.f };
 	floor.transform.scale = { 3.f, 1.f, 3.f };
-	gameObjects.push_back(std::move(floor));
+	gameObjects.emplace(floor.getId(), std::move(floor));
 
 	/*sveModel = SVEModel::createModelFromFile(sveDevice, "models/smooth_vase.obj");
 	auto smoothVase = SVEGameObject::createGameObject();

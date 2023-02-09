@@ -5,11 +5,13 @@
 #include "TransformComponent.h"
 
 #include <memory>
+#include <unordered_map>
 
 class SVEGameObject
 {
 public:
 	using id_t = unsigned int;
+	using Map = std::unordered_map<id_t, SVEGameObject>;
 
 	static SVEGameObject createGameObject()
 	{

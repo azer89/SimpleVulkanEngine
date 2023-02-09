@@ -63,7 +63,7 @@ void SimpleRenderSystem::createPipeline(VkRenderPass renderPass)
 		pipelineConfig);
 }
 
-void SimpleRenderSystem::renderGameObjects(FrameInfo& frameInfo, std::vector<SVEGameObject>& gameObjects)
+void SimpleRenderSystem::renderGameObjects(FrameInfo& frameInfo)
 {
 	svePipeline->bind(frameInfo.commandBuffer);
 
@@ -78,12 +78,16 @@ void SimpleRenderSystem::renderGameObjects(FrameInfo& frameInfo, std::vector<SVE
 		0,
 		nullptr);
 
-	for (auto& obj : gameObjects)
+	for (auto& kvp : frameInfo.gameObjects)
 	{
+		auto& obj = kvp.second;
+		if (obj.model == nullptr)
+		{
+			continue;
+		}
+
 		SimplePushConstantData push{};
-		//push.color = obj.color;
 		auto modelMatrix = obj.transform.mat4();
-		//push.transform = projectionView * modelMatrix;
 		push.modelMatrix = obj.transform.mat4();
 		push.normalMatrix = obj.transform.normalMatrix();
 
