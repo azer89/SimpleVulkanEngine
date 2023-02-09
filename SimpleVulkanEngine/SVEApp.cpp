@@ -45,7 +45,7 @@ void SVEApp::run()
 
 	auto globalSetLayout =
 		SVEDescriptorSetLayout::Builder(sveDevice)
-		.addBinding(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT)
+		.addBinding(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT) // VK_SHADER_STAGE_ALL_GRAPHICS
 		.build();
 
 	std::vector<VkDescriptorSet> globalDescriptorSets(SVESwapChain::MAX_FRAMES_IN_FLIGHT);
@@ -191,12 +191,12 @@ void SVEApp::loadGameObjects()
 	flatVase.transform.scale = { 1.f, -1.f, 1.f };
 	gameObjects.push_back(std::move(flatVase));
 
-	/*sveModel = SVEModel::createModelFromFile(sveDevice, QUAD_MODEL_PATH);
+	sveModel = SVEModel::createModelFromFile(sveDevice, QUAD_MODEL_PATH);
 	auto floor = SVEGameObject::createGameObject();
 	floor.model = sveModel;
 	floor.transform.translation = { 0.f, .5f, 0.f };
 	floor.transform.scale = { 3.f, 1.f, 3.f };
-	gameObjects.push_back(std::move(floor));*/
+	gameObjects.push_back(std::move(floor));
 
 	/*sveModel = SVEModel::createModelFromFile(sveDevice, "models/smooth_vase.obj");
 	auto smoothVase = SVEGameObject::createGameObject();
