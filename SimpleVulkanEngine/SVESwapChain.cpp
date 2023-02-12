@@ -21,9 +21,10 @@ SVESwapChain::SVESwapChain(
 	: device{ deviceRef }, windowExtent{ extent }, oldSwapChain{ previous } 
 {
 	init();
-	oldSwapChain = nullptr; // What?
-}
 
+	// Not destroying the old swap chain as it will be provided to VkSwapchainCreateInfoKHR() when recerating a new one
+	//oldSwapChain = nullptr; // delete the old swap chain
+}
 
 SVESwapChain::~SVESwapChain()
 {

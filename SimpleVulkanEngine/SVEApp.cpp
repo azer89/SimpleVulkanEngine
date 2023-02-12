@@ -1,8 +1,10 @@
 #include "SVEApp.h"
-#include "KeyboardMovementController.h"
 #include "SVECamera.h"
-#include "SimpleRenderSystem.h"
 #include "SVEDescriptorWriter.h"
+
+#include "SimpleRenderSystem.h"
+#include "CircleBillboardRenderSystem.h"
+#include "KeyboardMovementController.h"
 
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
@@ -22,7 +24,6 @@ SVEApp::SVEApp()
 		.addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, SVESwapChain::MAX_FRAMES_IN_FLIGHT)
 		.build();
 	loadGameObjects();
-	//loadModels();
 }
 
 SVEApp::~SVEApp() 
@@ -57,7 +58,19 @@ void SVEApp::run()
 			.build(globalDescriptorSets[i]);
 	}
 
-	SimpleRenderSystem simpleRenderSystem{ sveDevice, sveRenderer.getSwapChainRenderPass(), globalSetLayout->getDescriptorSetLayout() };
+	SimpleRenderSystem simpleRenderSystem{ 
+		sveDevice, 
+		sveRenderer.getSwapChainRenderPass(), 
+		globalSetLayout->getDescriptorSetLayout() 
+	};
+
+	CircleBillboardRenderSystem cbRenderSystem
+	{
+		sveDevice,
+		sveRenderer.getSwapChainRenderPass(),
+		globalSetLayout->getDescriptorSetLayout()
+	};
+
 	SVECamera camera{};
 	auto viewerObject = SVEGameObject::createGameObject();
 	viewerObject.transform.translation = { 0, -1.5f, -2.0f };
@@ -91,13 +104,15 @@ void SVEApp::run()
 
 			// update
 			GlobalUbo ubo{};
-			ubo.projectionView = camera.getProjection() * camera.getView();
+			ubo.projection = camera.getProjection();
+			ubo.view = camera.getView();;
 			uboBuffers[frameIndex]->writeToBuffer(&ubo);
 			uboBuffers[frameIndex]->flush();
 
 			// render
 			sveRenderer.beginSwapChainRenderPass(commandBuffer);
 			simpleRenderSystem.renderGameObjects(frameInfo);
+			cbRenderSystem.render(frameInfo);
 			sveRenderer.endSwapChainRenderPass(commandBuffer);
 			sveRenderer.endFrame();
 		}
@@ -164,10 +179,10 @@ void SVEApp::loadGameObjects()
 	  {{0.0f, -0.5f}, {1.0f, 0.0f, 0.0f}},
 	  {{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
 	  {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}} };
-	auto lveModel = std::make_shared<SVEModel>(sveDevice, vertices);
+	auto sveModel = std::make_shared<SVEModel>(sveDevice, vertices);
 
 	auto triangle = SVEGameObject::createGameObject();
-	triangle.model = lveModel;
+	triangle.model = sveModel;
 	triangle.color = { .1f, .8f, .1f };
 	triangle.transform2d.translation.x = 0.0f;
 	triangle.transform2d.scale = { 1.f, 1.f };
@@ -224,10 +239,10 @@ void SVEApp::loadGameObjects()
 	  {{0.0f, -0.5f}, {1.0f, 0.0f, 0.0f}},
 	  {{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
 	  {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}} };
-	auto lveModel = std::make_shared<SVEModel>(sveDevice, vertices);
+	auto sveModel = std::make_shared<SVEModel>(sveDevice, vertices);
 
 	auto triangle = SVEGameObject::createGameObject();
-	triangle.model = lveModel;
+	triangle.model = sveModel;
 	triangle.color = { .1f, .8f, .1f };
 	triangle.transform2d.translation.x = .2f;
 	triangle.transform2d.scale = { 2.f, .5f };

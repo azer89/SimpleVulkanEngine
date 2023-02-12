@@ -13,9 +13,9 @@
 
 class SimpleRenderSystem
 {
-public:
-	static constexpr const char* VERTEX_SHADER_PATH = "C:/Users/azer/workspace/SimpleVulkanEngine/Shaders/vert.spv";
-	static constexpr const char* FRAGMENT_SHADER_PATH = "C:/Users/azer/workspace/SimpleVulkanEngine/Shaders/frag.spv";
+private:
+	static constexpr const char* VERTEX_SHADER_PATH = "C:/Users/azer/workspace/SimpleVulkanEngine/Shaders/simple_shader_vert.spv";
+	static constexpr const char* FRAGMENT_SHADER_PATH = "C:/Users/azer/workspace/SimpleVulkanEngine/Shaders/simple_shader_frag.spv";
 
 public:
 	SimpleRenderSystem(SVEDevice& device, VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout);
@@ -24,7 +24,7 @@ public:
 	SimpleRenderSystem(const SimpleRenderSystem&) = delete;
 	SimpleRenderSystem& operator=(const SimpleRenderSystem&) = delete;
 
-	void renderGameObjects(FrameInfo& frameInfo);
+	void renderGameObjects(const FrameInfo& frameInfo);
 
 private:
 	void createPipelineLayout(VkDescriptorSetLayout globalSetLayout);

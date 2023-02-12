@@ -7,24 +7,22 @@
 class KeyboardMovementController
 {
 public:
-	// Probably can be changed to an enum
-	struct KeyMappings
+	enum KeyMappings
 	{
-		int moveLeft = GLFW_KEY_A;
-		int moveRight = GLFW_KEY_D;
-		int moveForward = GLFW_KEY_W;
-		int moveBackward = GLFW_KEY_S;
-		int moveUp = GLFW_KEY_E;
-		int moveDown = GLFW_KEY_Q;
-		int lookLeft = GLFW_KEY_LEFT;
-		int lookRight = GLFW_KEY_RIGHT;
-		int lookUp = GLFW_KEY_UP;
-		int lookDown = GLFW_KEY_DOWN;
+		moveLeft = GLFW_KEY_A,
+		moveRight = GLFW_KEY_D,
+		moveForward = GLFW_KEY_W,
+		moveBackward = GLFW_KEY_S,
+		moveUp = GLFW_KEY_E,
+		moveDown = GLFW_KEY_Q,
+		lookLeft = GLFW_KEY_LEFT,
+		lookRight = GLFW_KEY_RIGHT,
+		lookUp = GLFW_KEY_UP,
+		lookDown = GLFW_KEY_DOWN,
 	};
 
 	void moveInPlaneXZ(GLFWwindow* window, float dt, SVEGameObject& gameObject);
 
-	KeyMappings keys{};
 	float moveSpeed{ 3.f };
 	float lookSpeed{ 1.5f };
 };
