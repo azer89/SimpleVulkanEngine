@@ -1,8 +1,10 @@
 #include "SVEApp.h"
-#include "KeyboardMovementController.h"
 #include "SVECamera.h"
-#include "SimpleRenderSystem.h"
 #include "SVEDescriptorWriter.h"
+
+#include "SimpleRenderSystem.h"
+#include "CircleBillboardRenderSystem.h"
+#include "KeyboardMovementController.h"
 
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
@@ -22,7 +24,6 @@ SVEApp::SVEApp()
 		.addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, SVESwapChain::MAX_FRAMES_IN_FLIGHT)
 		.build();
 	loadGameObjects();
-	//loadModels();
 }
 
 SVEApp::~SVEApp() 
@@ -57,7 +58,19 @@ void SVEApp::run()
 			.build(globalDescriptorSets[i]);
 	}
 
-	SimpleRenderSystem simpleRenderSystem{ sveDevice, sveRenderer.getSwapChainRenderPass(), globalSetLayout->getDescriptorSetLayout() };
+	SimpleRenderSystem simpleRenderSystem{ 
+		sveDevice, 
+		sveRenderer.getSwapChainRenderPass(), 
+		globalSetLayout->getDescriptorSetLayout() 
+	};
+
+	CircleBillboardRenderSystem cbRenderSystem
+	{
+		sveDevice,
+		sveRenderer.getSwapChainRenderPass(),
+		globalSetLayout->getDescriptorSetLayout()
+	};
+
 	SVECamera camera{};
 	auto viewerObject = SVEGameObject::createGameObject();
 	viewerObject.transform.translation = { 0, -1.5f, -2.0f };
@@ -99,6 +112,7 @@ void SVEApp::run()
 			// render
 			sveRenderer.beginSwapChainRenderPass(commandBuffer);
 			simpleRenderSystem.renderGameObjects(frameInfo);
+			cbRenderSystem.render(frameInfo);
 			sveRenderer.endSwapChainRenderPass(commandBuffer);
 			sveRenderer.endFrame();
 		}

@@ -163,6 +163,7 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CircleBillboardRenderSystem.cpp" />
     <ClCompile Include="KeyboardMovementController.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SimpleRenderSystem.cpp" />
@@ -181,6 +182,7 @@
     <ClCompile Include="TransformComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CircleBillboardRenderSystem.h" />
     <ClInclude Include="GlobalUBO.h" />
     <ClInclude Include="KeyboardMovementController.h" />
     <ClInclude Include="PipelineConfigInfo.h" />

@@ -76,5 +76,6 @@ void CircleBillboardRenderSystem::render(FrameInfo& frameInfo)
 		0,
 		nullptr);
 
+	// TODO need to create a separate frameInfo
 	vkCmdDraw(frameInfo.commandBuffer, 6, 1, 0, 0);
 }

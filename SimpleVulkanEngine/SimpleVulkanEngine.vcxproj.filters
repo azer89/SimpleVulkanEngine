@@ -13,6 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Descriptors">
+      <UniqueIdentifier>{4e6d0f76-2bba-41e6-b39a-f34051492ff6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Descriptors">
+      <UniqueIdentifier>{e5e60995-c4b0-4b13-b6dc-1e135378a777}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\RenderSystems">
+      <UniqueIdentifier>{8cc9c4f3-efba-4199-a4f7-f1e0d30b0355}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\RenderSystems">
+      <UniqueIdentifier>{8b73853f-baec-4347-ab88-afdbfee443e3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -39,9 +51,6 @@
     <ClCompile Include="SVERenderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SimpleRenderSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SVECamera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -55,13 +64,19 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SVEDescriptorPool.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Descriptors</Filter>
     </ClCompile>
     <ClCompile Include="SVEDescriptorSetLayout.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Descriptors</Filter>
     </ClCompile>
     <ClCompile Include="SVEDescriptorWriter.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Descriptors</Filter>
+    </ClCompile>
+    <ClCompile Include="SimpleRenderSystem.cpp">
+      <Filter>Source Files\RenderSystems</Filter>
+    </ClCompile>
+    <ClCompile Include="CircleBillboardRenderSystem.cpp">
+      <Filter>Source Files\RenderSystems</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -95,9 +110,6 @@
     <ClInclude Include="SVERenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SimpleRenderSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SVECamera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -119,14 +131,20 @@
     <ClInclude Include="GlobalUBO.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SVEDescriptorSetLayout.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SVEDescriptorPool.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Descriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="SVEDescriptorSetLayout.h">
+      <Filter>Header Files\Descriptors</Filter>
     </ClInclude>
     <ClInclude Include="SVEDescriptorWriter.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Descriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleRenderSystem.h">
+      <Filter>Header Files\RenderSystems</Filter>
+    </ClInclude>
+    <ClInclude Include="CircleBillboardRenderSystem.h">
+      <Filter>Header Files\RenderSystems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
