@@ -24,7 +24,7 @@ public:
 	CircleBillboardRenderSystem(const CircleBillboardRenderSystem&) = delete;
 	CircleBillboardRenderSystem& operator=(const CircleBillboardRenderSystem&) = delete;
 
-	void render(FrameInfo& frameInfo);
+	void render(const FrameInfo& frameInfo);
 
 private:
 	void createPipelineLayout(VkDescriptorSetLayout globalSetLayout);

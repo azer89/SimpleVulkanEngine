@@ -62,7 +62,7 @@ void CircleBillboardRenderSystem::createPipeline(VkRenderPass renderPass)
 		pipelineConfig);
 }
 
-void CircleBillboardRenderSystem::render(FrameInfo& frameInfo)
+void CircleBillboardRenderSystem::render(const FrameInfo& frameInfo)
 {
 	svePipeline->bind(frameInfo.commandBuffer);
 
