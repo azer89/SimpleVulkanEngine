@@ -91,7 +91,8 @@ void SVEApp::run()
 
 			// update
 			GlobalUbo ubo{};
-			ubo.projectionView = camera.getProjection() * camera.getView();
+			ubo.projection = camera.getProjection();
+			ubo.view = camera.getView();;
 			uboBuffers[frameIndex]->writeToBuffer(&ubo);
 			uboBuffers[frameIndex]->flush();
 
@@ -164,10 +165,10 @@ void SVEApp::loadGameObjects()
 	  {{0.0f, -0.5f}, {1.0f, 0.0f, 0.0f}},
 	  {{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
 	  {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}} };
-	auto lveModel = std::make_shared<SVEModel>(sveDevice, vertices);
+	auto sveModel = std::make_shared<SVEModel>(sveDevice, vertices);
 
 	auto triangle = SVEGameObject::createGameObject();
-	triangle.model = lveModel;
+	triangle.model = sveModel;
 	triangle.color = { .1f, .8f, .1f };
 	triangle.transform2d.translation.x = 0.0f;
 	triangle.transform2d.scale = { 1.f, 1.f };
@@ -224,10 +225,10 @@ void SVEApp::loadGameObjects()
 	  {{0.0f, -0.5f}, {1.0f, 0.0f, 0.0f}},
 	  {{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
 	  {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}} };
-	auto lveModel = std::make_shared<SVEModel>(sveDevice, vertices);
+	auto sveModel = std::make_shared<SVEModel>(sveDevice, vertices);
 
 	auto triangle = SVEGameObject::createGameObject();
-	triangle.model = lveModel;
+	triangle.model = sveModel;
 	triangle.color = { .1f, .8f, .1f };
 	triangle.transform2d.translation.x = .2f;
 	triangle.transform2d.scale = { 2.f, .5f };

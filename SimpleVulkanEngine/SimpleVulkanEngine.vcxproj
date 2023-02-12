@@ -125,7 +125,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.224.1\Include;C:\Users\azer\workspace\glm;C:\Users\azer\workspace\glfw-3.3.6.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.224.1\Include;C:\Users\azer\workspace\glm;C:\Users\azer\workspace\glfw-3.3.6.bin.WIN64\include;C:\Users\azer\workspace\SimpleVulkanEngine\Libraries;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -133,6 +133,10 @@
       <AdditionalLibraryDirectories>C:\Users\azer\workspace\glfw-3.3.6.bin.WIN64\lib-vc2019;C:\VulkanSDK\1.3.224.1\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>vulkan-1.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>cd C:\\Users\\azer\\workspace\\SimpleVulkanEngine\\Shaders
+./compile.bat</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -143,7 +147,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.224.1\Include;C:\Users\azer\workspace\glm;C:\Users\azer\workspace\glfw-3.3.6.bin.WIN64\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.224.1\Include;C:\Users\azer\workspace\glm;C:\Users\azer\workspace\glfw-3.3.6.bin.WIN64\include;C:\Users\azer\workspace\SimpleVulkanEngine\Libraries;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -153,6 +157,10 @@
       <AdditionalLibraryDirectories>C:\Users\azer\workspace\glfw-3.3.6.bin.WIN64\lib-vc2019;C:\VulkanSDK\1.3.224.1\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>vulkan-1.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>cd C:\\Users\\azer\\workspace\\SimpleVulkanEngine\\Shaders
+./compile.bat</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="KeyboardMovementController.cpp" />
@@ -196,9 +204,11 @@
     <ClInclude Include="TransformComponent.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Shaders\circle_billboard.frag" />
+    <None Include="..\Shaders\circle_billboard.vert" />
     <None Include="..\Shaders\compile.bat" />
-    <None Include="..\Shaders\shader.frag" />
-    <None Include="..\Shaders\shader.vert" />
+    <None Include="..\Shaders\simple_shader.frag" />
+    <None Include="..\Shaders\simple_shader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

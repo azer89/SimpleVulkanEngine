@@ -6,19 +6,19 @@
 void KeyboardMovementController::moveInPlaneXZ(GLFWwindow* window, float dt, SVEGameObject& gameObject)
 {
 	glm::vec3 rotate{ 0 };
-	if (glfwGetKey(window, keys.lookRight) == GLFW_PRESS)
+	if (glfwGetKey(window, KeyMappings::lookRight) == GLFW_PRESS)
 	{
 		rotate.y += 1.f;
 	}
-	if (glfwGetKey(window, keys.lookLeft) == GLFW_PRESS)
+	if (glfwGetKey(window, KeyMappings::lookLeft) == GLFW_PRESS)
 	{
 		rotate.y -= 1.f;
 	}
-	if (glfwGetKey(window, keys.lookUp) == GLFW_PRESS)
+	if (glfwGetKey(window, KeyMappings::lookUp) == GLFW_PRESS)
 	{
 		rotate.x += 1.f;
 	}
-	if (glfwGetKey(window, keys.lookDown) == GLFW_PRESS)
+	if (glfwGetKey(window, KeyMappings::lookDown) == GLFW_PRESS)
 	{
 		rotate.x -= 1.f;
 	}
@@ -38,27 +38,27 @@ void KeyboardMovementController::moveInPlaneXZ(GLFWwindow* window, float dt, SVE
 	const glm::vec3 upDir{ 0.f, -1.f, 0.f };
 
 	glm::vec3 moveDir{ 0.f };
-	if (glfwGetKey(window, keys.moveForward) == GLFW_PRESS)
+	if (glfwGetKey(window, KeyMappings::moveForward) == GLFW_PRESS)
 	{
 		moveDir += forwardDir;
 	}
-	if (glfwGetKey(window, keys.moveBackward) == GLFW_PRESS)
+	if (glfwGetKey(window, KeyMappings::moveBackward) == GLFW_PRESS)
 	{
 		moveDir -= forwardDir;
 	}
-	if (glfwGetKey(window, keys.moveRight) == GLFW_PRESS)
+	if (glfwGetKey(window, KeyMappings::moveRight) == GLFW_PRESS)
 	{
 		moveDir += rightDir;
 	}
-	if (glfwGetKey(window, keys.moveLeft) == GLFW_PRESS)
+	if (glfwGetKey(window, KeyMappings::moveLeft) == GLFW_PRESS)
 	{
 		moveDir -= rightDir;
 	}
-	if (glfwGetKey(window, keys.moveUp) == GLFW_PRESS)
+	if (glfwGetKey(window, KeyMappings::moveUp) == GLFW_PRESS)
 	{
 		moveDir += upDir;
 	}
-	if (glfwGetKey(window, keys.moveDown) == GLFW_PRESS)
+	if (glfwGetKey(window, KeyMappings::moveDown) == GLFW_PRESS)
 	{
 		moveDir -= upDir;
 	}

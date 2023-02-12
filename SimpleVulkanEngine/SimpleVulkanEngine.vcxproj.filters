@@ -133,10 +133,16 @@
     <None Include="..\Shaders\compile.bat">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="..\Shaders\shader.frag">
+    <None Include="..\Shaders\circle_billboard.frag">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="..\Shaders\shader.vert">
+    <None Include="..\Shaders\circle_billboard.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\Shaders\simple_shader.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\Shaders\simple_shader.vert">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
