@@ -1,6 +1,5 @@
 
 #include "SVETexture.h"
-#include "ImageLoader.h"
 
 #ifndef STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
@@ -11,7 +10,6 @@
 
 SVETexture::SVETexture(SVEDevice& device) : sveDevice(device)
 {
-
 }
 
 SVETexture::~SVETexture()

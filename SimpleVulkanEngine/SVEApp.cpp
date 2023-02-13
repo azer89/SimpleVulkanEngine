@@ -202,19 +202,19 @@ void SVEApp::loadGameObjects()
 	flatVase.transform.scale = { 9.f, 5.5f, 9.f };
 	gameObjects.emplace(flatVase.getId(), std::move(flatVase));*/
 
-	std::shared_ptr<SVEModel> sveModel = SVEModel::createModelFromFile(sveDevice, DRAGON_MODEL_PATH);
+	/*std::shared_ptr<SVEModel> sveModel = SVEModel::createModelFromFile(sveDevice, DRAGON_MODEL_PATH);
 	auto dragon = SVEGameObject::createGameObject();
 	dragon.model = sveModel;
 	dragon.transform.translation = { .0f, .0f, .0f };
 	dragon.transform.scale = { 1.f, -1.f, 1.f };
-	gameObjects.emplace(dragon.getId(), std::move(dragon));
+	gameObjects.emplace(dragon.getId(), std::move(dragon));*/
 
-	/*sveModel = SVEModel::createModelFromFile(sveDevice, QUAD_MODEL_PATH);
+	std::shared_ptr<SVEModel> floorModel = SVEModel::createModelFromFile(sveDevice, QUAD_MODEL_PATH);
 	auto floor = SVEGameObject::createGameObject();
-	floor.model = sveModel;
+	floor.model = floorModel;
 	floor.transform.translation = { 0.f, .5f, 0.f };
 	floor.transform.scale = { 3.f, 1.f, 3.f };
-	gameObjects.emplace(floor.getId(), std::move(floor));*/
+	gameObjects.emplace(floor.getId(), std::move(floor));
 
 	std::vector<glm::vec3> lightColors{
 	  {1.f, .1f, .1f},
