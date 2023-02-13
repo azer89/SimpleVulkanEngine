@@ -101,6 +101,7 @@ void SVEApp::run()
 			GlobalUbo ubo{};
 			ubo.projection = camera.getProjection();
 			ubo.view = camera.getView();
+			ubo.inverseView = camera.getInverseView();
 			cbRenderSystem.update(frameInfo, ubo);
 			uboBuffers[frameIndex]->writeToBuffer(&ubo);
 			uboBuffers[frameIndex]->flush();
@@ -198,8 +199,8 @@ void SVEApp::loadGameObjects()
 	auto flatVase = SVEGameObject::createGameObject();
 	flatVase.model = sveModel;
 	flatVase.transform.translation = { .0f, .0f, .0f };
-	flatVase.transform.scale = { 3.f, 1.5f, 3.f };
-	gameObjects.push_back(std::move(flatVase));*/
+	flatVase.transform.scale = { 9.f, 5.5f, 9.f };
+	gameObjects.emplace(flatVase.getId(), std::move(flatVase));*/
 
 	std::shared_ptr<SVEModel> sveModel = SVEModel::createModelFromFile(sveDevice, DRAGON_MODEL_PATH);
 	auto dragon = SVEGameObject::createGameObject();

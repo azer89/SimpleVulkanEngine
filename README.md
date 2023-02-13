@@ -6,6 +6,7 @@ Features:
 * Uniform Buffer Objects
 * Push Constants
 * Point lights
+* Blinn-Phong shading
 * OBJ Meshes
 
 TODO:
