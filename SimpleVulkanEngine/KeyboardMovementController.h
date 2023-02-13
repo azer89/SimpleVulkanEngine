@@ -21,6 +21,8 @@ public:
 		lookDown = GLFW_KEY_DOWN,
 	};
 
+	KeyboardMovementController(GLFWwindow* window);
+
 	void moveInPlaneXZ(GLFWwindow* window, float dt, SVEGameObject& gameObject);
 
 	float moveSpeed{ 3.f };

@@ -1,6 +1,20 @@
 #include "KeyboardMovementController.h"
 
 #include <limits>
+#include <iostream>
+
+// https://www.glfw.org/docs/3.3/input_guide.html
+void scrollCallback(GLFWwindow* window, double xOffset, double yOffset)
+{
+	std::cout << "scrollCallback xOffset=" << xOffset << ", yOffset=" << yOffset << "\n";
+	// zoom in yOffset -1
+	// zoom out yOffset +1
+}
+
+KeyboardMovementController::KeyboardMovementController(GLFWwindow* window)
+{
+	glfwSetScrollCallback(window, scrollCallback);
+}
 
 // TODO gameObject can be a member
 void KeyboardMovementController::moveInPlaneXZ(GLFWwindow* window, float dt, SVEGameObject& gameObject)

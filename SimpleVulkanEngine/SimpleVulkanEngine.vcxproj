@@ -174,6 +174,7 @@
     <ClCompile Include="SVEDescriptorWriter.cpp" />
     <ClCompile Include="SVEDevice.cpp" />
     <ClCompile Include="SVEApp.cpp" />
+    <ClCompile Include="SVEGameObject.cpp" />
     <ClCompile Include="SVEModel.cpp" />
     <ClCompile Include="SVEPipeline.cpp" />
     <ClCompile Include="SVERenderer.cpp" />
@@ -186,6 +187,7 @@
     <ClInclude Include="GlobalUBO.h" />
     <ClInclude Include="KeyboardMovementController.h" />
     <ClInclude Include="PipelineConfigInfo.h" />
+    <ClInclude Include="PointLight.h" />
     <ClInclude Include="SimplePushConstantData.h" />
     <ClInclude Include="SimpleRenderSystem.h" />
     <ClInclude Include="SVEBuffer.h" />
