@@ -46,6 +46,7 @@ public:
 	VkSurfaceKHR surface() const { return surface_; }
 	VkQueue graphicsQueue() const { return graphicsQueue_; }
 	VkQueue presentQueue() const { return presentQueue_; }
+	VkPhysicalDeviceProperties physicalDeviceProperties() const { return properties_; }
 
 	SwapChainSupportDetails getSwapChainSupport() { return querySwapChainSupport(physicalDevice); }
 	uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
@@ -66,13 +67,21 @@ public:
 	void copyBufferToImage(
 		VkBuffer buffer, VkImage image, uint32_t width, uint32_t height, uint32_t layerCount);
 
+	// TODO functions can be combined
+	void createImage(uint32_t width, 
+		uint32_t height, 
+		VkFormat format, 
+		VkImageTiling tiling, 
+		VkImageUsageFlags usage, 
+		VkMemoryPropertyFlags properties, 
+		VkImage& image, 
+		VkDeviceMemory& imageMemory);
 	void createImageWithInfo(
 		const VkImageCreateInfo& imageInfo,
 		VkMemoryPropertyFlags properties,
 		VkImage& image,
 		VkDeviceMemory& imageMemory);
-
-	VkPhysicalDeviceProperties properties;
+	VkImageView createImageView(VkImage image, VkFormat format);
 
 private:
 	void createInstance();
@@ -102,6 +111,7 @@ private:
 	VkSurfaceKHR surface_;
 	VkQueue graphicsQueue_;
 	VkQueue presentQueue_;
+	VkPhysicalDeviceProperties properties_;
 
 	const std::vector<const char*> validationLayers = { "VK_LAYER_KHRONOS_validation" };
 	const std::vector<const char*> deviceExtensions = { VK_KHR_SWAPCHAIN_EXTENSION_NAME };

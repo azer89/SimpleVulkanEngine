@@ -16,6 +16,8 @@ private:
 	void createTextureImageView();
 	void createTextureSampler();
 
+	void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout);
+
 private:
 	SVEDevice& sveDevice;
 

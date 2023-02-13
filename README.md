@@ -10,5 +10,7 @@ Features:
 * OBJ Meshes
 
 TODO:
+* Texture
+* Shadow mapping
 * imgui
 * Vulkan Memory Allocator
