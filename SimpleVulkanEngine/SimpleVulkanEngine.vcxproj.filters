@@ -54,7 +54,7 @@
     <ClCompile Include="SVECamera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="KeyboardMovementController.cpp">
+    <ClCompile Include="UserInputController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TransformComponent.cpp">
@@ -116,7 +116,7 @@
     <ClInclude Include="SVECamera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="KeyboardMovementController.h">
+    <ClInclude Include="UserInputController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SVEUtils.h">
@@ -167,6 +167,9 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="..\Shaders\simple_shader.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\README.md">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

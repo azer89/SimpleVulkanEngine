@@ -4,7 +4,7 @@
 
 #include "SimpleRenderSystem.h"
 #include "CircleBillboardRenderSystem.h"
-#include "KeyboardMovementController.h"
+#include "UserInputController.h"
 
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
@@ -75,29 +75,23 @@ void SVEApp::run()
 	SVECamera camera{};
 	auto viewerObject = SVEGameObject::createGameObject();
 	viewerObject.transform.translation = { 0, -1.5f, -2.0f };
-	KeyboardMovementController cameraController{ sveWindow.getGLFWwindow() };
-	auto currentTime = std::chrono::high_resolution_clock::now();
+	UserInputController cameraController{ sveWindow.getGLFWwindow() };
 
 	while (!sveWindow.shouldClose())
 	{
 		glfwPollEvents();
 
-		auto newTime = std::chrono::high_resolution_clock::now();
-		float frameTime = std::chrono::duration<float, std::chrono::seconds::period>(newTime - currentTime).count();
-		currentTime = newTime;
-
-		cameraController.moveInPlaneXZ(sveWindow.getGLFWwindow(), frameTime, viewerObject);
+		cameraController.update(sveWindow.getGLFWwindow(), viewerObject);
 		camera.setViewYXZ(viewerObject.transform.translation, viewerObject.transform.rotation);
 
 		float aspect = sveRenderer.getAspectRatio();
-		// camera.setOrthographicProjection(-aspect, aspect, -1, 1, -1, 1);
 		camera.setPerspectiveProjection(glm::radians(50.f), aspect, 0.1f, 100.f);
 
 		if (auto commandBuffer = sveRenderer.beginFrame())
 		{
 			int frameIndex = sveRenderer.getFrameIndex();
 			FrameInfo frameInfo{ frameIndex, 
-				frameTime, 
+				cameraController.getDeltaTime(),
 				commandBuffer, 
 				camera, 
 				globalDescriptorSets[frameIndex],
@@ -214,12 +208,12 @@ void SVEApp::loadGameObjects()
 	dragon.transform.scale = { 1.f, -1.f, 1.f };
 	gameObjects.emplace(dragon.getId(), std::move(dragon));
 
-	sveModel = SVEModel::createModelFromFile(sveDevice, QUAD_MODEL_PATH);
+	/*sveModel = SVEModel::createModelFromFile(sveDevice, QUAD_MODEL_PATH);
 	auto floor = SVEGameObject::createGameObject();
 	floor.model = sveModel;
 	floor.transform.translation = { 0.f, .5f, 0.f };
 	floor.transform.scale = { 3.f, 1.f, 3.f };
-	gameObjects.emplace(floor.getId(), std::move(floor));
+	gameObjects.emplace(floor.getId(), std::move(floor));*/
 
 	std::vector<glm::vec3> lightColors{
 	  {1.f, .1f, .1f},

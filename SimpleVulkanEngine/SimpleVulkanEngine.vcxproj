@@ -164,7 +164,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CircleBillboardRenderSystem.cpp" />
-    <ClCompile Include="KeyboardMovementController.cpp" />
+    <ClCompile Include="UserInputController.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SimpleRenderSystem.cpp" />
     <ClCompile Include="SVEBuffer.cpp" />
@@ -185,7 +185,7 @@
   <ItemGroup>
     <ClInclude Include="CircleBillboardRenderSystem.h" />
     <ClInclude Include="GlobalUBO.h" />
-    <ClInclude Include="KeyboardMovementController.h" />
+    <ClInclude Include="UserInputController.h" />
     <ClInclude Include="PipelineConfigInfo.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="SimplePushConstantData.h" />
@@ -208,6 +208,7 @@
     <ClInclude Include="TransformComponent.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\README.md" />
     <None Include="..\Shaders\circle_billboard.frag" />
     <None Include="..\Shaders\circle_billboard.vert" />
     <None Include="..\Shaders\compile.bat" />

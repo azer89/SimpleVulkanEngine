@@ -1,7 +1,16 @@
-#include "KeyboardMovementController.h"
+#include "UserInputController.h"
 
 #include <limits>
 #include <iostream>
+
+UserInputController::UserInputController()
+{
+	updateTime();
+}
+
+UserInputController::~UserInputController()
+{
+}
 
 // https://www.glfw.org/docs/3.3/input_guide.html
 void scrollCallback(GLFWwindow* window, double xOffset, double yOffset)
@@ -11,14 +20,16 @@ void scrollCallback(GLFWwindow* window, double xOffset, double yOffset)
 	// zoom out yOffset +1
 }
 
-KeyboardMovementController::KeyboardMovementController(GLFWwindow* window)
+UserInputController::UserInputController(GLFWwindow* window)
 {
 	glfwSetScrollCallback(window, scrollCallback);
 }
 
 // TODO gameObject can be a member
-void KeyboardMovementController::moveInPlaneXZ(GLFWwindow* window, float dt, SVEGameObject& gameObject)
+void UserInputController::update(GLFWwindow* window, SVEGameObject& gameObject)
 {
+	updateTime();
+
 	glm::vec3 rotate{ 0 };
 	if (glfwGetKey(window, KeyMappings::lookRight) == GLFW_PRESS)
 	{
@@ -39,7 +50,7 @@ void KeyboardMovementController::moveInPlaneXZ(GLFWwindow* window, float dt, SVE
 
 	if (glm::dot(rotate, rotate) > std::numeric_limits<float>::epsilon())
 	{
-		gameObject.transform.rotation += lookSpeed * dt * glm::normalize(rotate);
+		gameObject.transform.rotation += lookSpeed * deltaTime * glm::normalize(rotate);
 	}
 
 	// limit pitch values between about +/- 85ish degrees
@@ -79,6 +90,13 @@ void KeyboardMovementController::moveInPlaneXZ(GLFWwindow* window, float dt, SVE
 
 	if (glm::dot(moveDir, moveDir) > std::numeric_limits<float>::epsilon())
 	{
-		gameObject.transform.translation += moveSpeed * dt * glm::normalize(moveDir);
+		gameObject.transform.translation += moveSpeed * deltaTime * glm::normalize(moveDir);
 	}
+}
+
+void UserInputController::updateTime()
+{
+	auto newTime = std::chrono::high_resolution_clock::now();
+	deltaTime = std::chrono::duration<float, std::chrono::seconds::period>(newTime - currentTime).count();
+	currentTime = newTime;
 }
