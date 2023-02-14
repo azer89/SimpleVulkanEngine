@@ -34,7 +34,6 @@ layout(push_constant) uniform Push
 
 void main() 
 {
-	/*
 	vec3 diffuseLight = ubo.ambientLightColor.xyz * ubo.ambientLightColor.w;
 	vec3 specularLight = vec3(0.0);
 	vec3 surfaceNormal = normalize(fragNormalWorld);
@@ -61,7 +60,6 @@ void main()
 		specularLight += intensity * blinnTerm;
 	}
 
-	outColor = vec4((diffuseLight + specularLight) * fragColor, 1.0);
-	*/
-	outColor = texture(texSampler, inTexCoord);
+	vec4 textureColor = texture(texSampler, inTexCoord);
+	outColor = vec4((diffuseLight + textureColor.xyz) + specularLight, 1.0);
 }
