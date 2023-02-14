@@ -1,6 +1,7 @@
 #include "SVEApp.h"
 #include "SVECamera.h"
 #include "SVEDescriptorWriter.h"
+#include "SVETexture.h"
 
 #include "SimpleRenderSystem.h"
 #include "CircleBillboardRenderSystem.h"
@@ -22,7 +23,10 @@ SVEApp::SVEApp()
 	globalPool =
 		SVEDescriptorPool::Builder(sveDevice)
 		.setMaxSets(SVESwapChain::MAX_FRAMES_IN_FLIGHT)
+		// UBO
 		.addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, SVESwapChain::MAX_FRAMES_IN_FLIGHT)
+		// Image Sampler
+		.addPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, SVESwapChain::MAX_FRAMES_IN_FLIGHT)
 		.build();
 	loadGameObjects();
 }
@@ -47,15 +51,28 @@ void SVEApp::run()
 
 	auto globalSetLayout =
 		SVEDescriptorSetLayout::Builder(sveDevice)
-		.addBinding(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT) // VK_SHADER_STAGE_ALL_GRAPHICS
+		// UBO
+		.addBinding(
+			0, 
+			VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 
+			VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT) // VK_SHADER_STAGE_ALL_GRAPHICS
+		// Image Sampler
+		.addBinding(
+			1, 
+			VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+			VK_SHADER_STAGE_FRAGMENT_BIT)
 		.build();
 
 	std::vector<VkDescriptorSet> globalDescriptorSets(SVESwapChain::MAX_FRAMES_IN_FLIGHT);
+	SVETexture simpleTexture{sveDevice};
+	VkDescriptorImageInfo imageInfo = simpleTexture.descriptorImageInfo();
+
 	for (int i = 0; i < globalDescriptorSets.size(); i++)
 	{
 		auto bufferInfo = uboBuffers[i]->descriptorInfo();
 		SVEDescriptorWriter(*globalSetLayout, *globalPool)
 			.writeBuffer(0, &bufferInfo)
+			.writeImage(1, &imageInfo)
 			.build(globalDescriptorSets[i]);
 	}
 

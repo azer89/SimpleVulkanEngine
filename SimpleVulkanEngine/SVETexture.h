@@ -8,8 +8,11 @@
 
 class SVETexture
 {
+public:
 	SVETexture(SVEDevice& device);
 	~SVETexture();
+
+	VkDescriptorImageInfo descriptorImageInfo();
 
 private:
 	void createTextureImage();

@@ -10,6 +10,9 @@
 
 SVETexture::SVETexture(SVEDevice& device) : sveDevice(device)
 {
+	createTextureImage();
+	createTextureImageView();
+	createTextureSampler();
 }
 
 SVETexture::~SVETexture()
@@ -20,12 +23,21 @@ SVETexture::~SVETexture()
 	vkFreeMemory(sveDevice.device(), textureImageMemory, nullptr);
 }
 
+VkDescriptorImageInfo SVETexture::descriptorImageInfo()
+{
+	VkDescriptorImageInfo imageInfo{};
+	imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+	imageInfo.imageView = textureImageView;
+	imageInfo.sampler = textureSampler;
+	return imageInfo;
+}
+
 void SVETexture::createTextureImage()
 {
 	int texWidth, texHeight, texChannels;
 	// TODO
 	stbi_uc* pixels = stbi_load(
-		"textures/texture.jpg", 
+		"C:/Users/azer/workspace/SimpleVulkanEngine/Textures/texture.jpg", 
 		&texWidth, 
 		&texHeight, 
 		&texChannels, 
