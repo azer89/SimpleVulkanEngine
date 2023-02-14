@@ -21,6 +21,9 @@ struct PipelineConfigInfo
 	VkPipelineLayout pipelineLayout = nullptr;
 	VkRenderPass renderPass = nullptr;
 	uint32_t subpass = 0;
+	
+	// specialization constant
+	uint32_t numPointLight = 0;
 };
 
 #endif

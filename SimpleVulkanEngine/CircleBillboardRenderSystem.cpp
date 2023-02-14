@@ -1,4 +1,5 @@
 #include "CircleBillboardRenderSystem.h"
+#include "GlobalUBO.h"
 
 // libs
 #define GLM_FORCE_RADIANS
@@ -55,6 +56,7 @@ void CircleBillboardRenderSystem::createPipeline(VkRenderPass renderPass)
 	pipelineConfig.bindingDescriptions.clear();
 	pipelineConfig.renderPass = renderPass;
 	pipelineConfig.pipelineLayout = pipelineLayout;
+	pipelineConfig.numPointLight = MAX_LIGHTS;
 	svePipeline = std::make_unique<SVEPipeline>(
 		sveDevice,
 		VERTEX_SHADER_PATH,
@@ -85,7 +87,6 @@ void CircleBillboardRenderSystem::update(FrameInfo& frameInfo, GlobalUbo& ubo)
 
 		lightIndex += 1;
 	}
-	ubo.numLights = lightIndex;
 }
 
 void CircleBillboardRenderSystem::render(const FrameInfo& frameInfo)

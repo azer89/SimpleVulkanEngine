@@ -244,7 +244,7 @@ void SVEApp::loadGameObjects()
 
 	for (int i = 0; i < lightColors.size(); i++)
 	{
-		auto pointLight = SVEGameObject::makePointLight(0.2f);
+		auto pointLight = SVEGameObject::makePointLight(2.2f);
 		pointLight.color = lightColors[i];
 		auto rotateLight = glm::rotate(
 			glm::mat4(1.f),

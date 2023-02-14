@@ -1,5 +1,7 @@
 #version 450
 
+layout (constant_id = 0) const int NUM_LIGHT = 1;
+
 const vec2 OFFSETS[6] = vec2[](
 	vec2(-1.0, -1.0),
 	vec2(-1.0, 1.0),
@@ -23,8 +25,7 @@ layout(set = 0, binding = 0) uniform GlobalUbo
 	mat4 view;
 	mat4 inverseView;
 	vec4 ambientLightColor; // w is intensity
-	PointLight pointLights[10];
-	int numLights;
+	PointLight pointLights[NUM_LIGHT];
 } ubo;
 
 layout(push_constant) uniform Push 

@@ -62,6 +62,24 @@ void SVEPipeline::createGraphicsPipeline(
 	createShaderModule(vertCode, &vertShaderModule);
 	createShaderModule(fragCode, &fragShaderModule);
 
+	bool hasSpecializationConstants = false;
+	VkSpecializationInfo vsi;
+	if (configInfo.numPointLight > 0)
+	{
+		VkSpecializationMapEntry vsme[1]; 
+		vsme[0].constantID = 0; 
+		vsme[0].offset = 0; 
+		vsme[0].size = sizeof(configInfo.numPointLight);
+		
+		vsi.mapEntryCount = 1; 
+		vsi.pMapEntries = &vsme[0]; 
+		vsi.dataSize = sizeof(configInfo.numPointLight); 
+		vsi.pData = &configInfo.numPointLight;
+		
+		std::cout << "has specialization constant\n";
+		hasSpecializationConstants = true;
+	}
+
 	VkPipelineShaderStageCreateInfo shaderStages[2];
 	shaderStages[0].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
 	shaderStages[0].stage = VK_SHADER_STAGE_VERTEX_BIT;
@@ -76,7 +94,7 @@ void SVEPipeline::createGraphicsPipeline(
 	shaderStages[1].pName = "main";
 	shaderStages[1].flags = 0;
 	shaderStages[1].pNext = nullptr;
-	shaderStages[1].pSpecializationInfo = nullptr;
+	shaderStages[1].pSpecializationInfo = hasSpecializationConstants ? &vsi : nullptr;
 
 	//auto bindingDescriptions = SVEModel::Vertex::getBindingDescriptions();
 	//auto attributeDescriptions = SVEModel::Vertex::getAttributeDescriptions();

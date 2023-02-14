@@ -1,5 +1,6 @@
 #include "SimpleRenderSystem.h"
 #include "SimplePushConstantData.h"
+#include "GlobalUBO.h"
 
 // libs
 #define GLM_FORCE_RADIANS
@@ -56,6 +57,7 @@ void SimpleRenderSystem::createPipeline(VkRenderPass renderPass)
 	SVEPipeline::defaultPipelineConfigInfo(pipelineConfig);
 	pipelineConfig.renderPass = renderPass;
 	pipelineConfig.pipelineLayout = pipelineLayout;
+	pipelineConfig.numPointLight = MAX_LIGHTS;
 	svePipeline = std::make_unique<SVEPipeline>(
 		sveDevice,
 		VERTEX_SHADER_PATH,

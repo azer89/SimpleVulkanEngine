@@ -1,5 +1,7 @@
 #version 450
 
+layout (constant_id = 0) const int NUM_LIGHT = 1;
+
 layout (binding = 1) uniform sampler2D texSampler;
 
 layout (location = 0) in vec3 fragColor;
@@ -21,8 +23,7 @@ layout(set = 0, binding = 0) uniform GlobalUbo
 	mat4 view;
 	mat4 inverseView;
 	vec4 ambientLightColor; // w is intensity
-	PointLight pointLights[10];
-	int numLights;
+	PointLight pointLights[NUM_LIGHT];
 } ubo;
 
 // TODO change into a single descriptor set
@@ -40,7 +41,7 @@ void main()
 	vec3 cameraPosWorld = ubo.inverseView[3].xyz;
 	vec3 viewDirection = normalize(cameraPosWorld - fragPosWorld);
 
-	for (int i = 0; i < ubo.numLights; i++) 
+	for (int i = 0; i < NUM_LIGHT; i++) 
 	{
 		PointLight light = ubo.pointLights[i];
 		vec3 directionToLight = light.position.xyz - fragPosWorld;
