@@ -1,6 +1,7 @@
 #version 450
 
 layout (constant_id = 0) const int NUM_LIGHT = 1;
+layout (constant_id = 1) const int NUM_OBJECT = 1;
 
 layout (binding = 1) uniform sampler2D texSampler;
 

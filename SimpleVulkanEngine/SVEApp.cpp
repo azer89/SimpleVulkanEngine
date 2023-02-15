@@ -2,6 +2,7 @@
 #include "SVECamera.h"
 #include "SVEDescriptorWriter.h"
 #include "SVETexture.h"
+#include "SVEGAmeObject.h"
 
 #include "SimpleRenderSystem.h"
 #include "CircleBillboardRenderSystem.h"
@@ -119,7 +120,7 @@ void SVEApp::run()
 			ubo.projection = camera.getProjection();
 			ubo.view = camera.getView();
 			ubo.inverseView = camera.getInverseView();
-			cbRenderSystem.update(frameInfo, ubo);
+			updatePointLightUbo(frameInfo, ubo);
 			uboBuffers[frameIndex]->writeToBuffer(&ubo);
 			uboBuffers[frameIndex]->flush();
 
@@ -189,36 +190,6 @@ std::unique_ptr<SVEModel> createCubeModel(SVEDevice& device, glm::vec3 offset)
 
 void SVEApp::loadGameObjects()
 {
-	/*std::vector<SVEModel::Vertex> vertices{
-	  {{0.0f, -0.5f}, {1.0f, 0.0f, 0.0f}},
-	  {{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
-	  {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}} };
-	auto sveModel = std::make_shared<SVEModel>(sveDevice, vertices);
-
-	auto triangle = SVEGameObject::createGameObject();
-	triangle.model = sveModel;
-	triangle.color = { .1f, .8f, .1f };
-	triangle.transform2d.translation.x = 0.0f;
-	triangle.transform2d.scale = { 1.f, 1.f };
-	triangle.transform2d.rotation = .25f * glm::two_pi<float>();
-
-	gameObjects.push_back(std::move(triangle));*/
-
-
-	/*std::shared_ptr<SVEModel> sveModel = createCubeModel(sveDevice, {.0f, .0f, .0f});
-	auto cube = SVEGameObject::createGameObject();
-	cube.model = sveModel;
-	cube.transform.translation = { .0f, .0f, 2.5f };
-	cube.transform.scale = { .5f, .5f, .5f };
-	gameObjects.push_back(std::move(cube));*/
-
-	/*std::shared_ptr<SVEModel> sveModel = SVEModel::createModelFromFile(sveDevice, SMOOTH_VASE_MODEL_PATH);
-	auto flatVase = SVEGameObject::createGameObject();
-	flatVase.model = sveModel;
-	flatVase.transform.translation = { .0f, .0f, .0f };
-	flatVase.transform.scale = { 9.f, 5.5f, 9.f };
-	gameObjects.emplace(flatVase.getId(), std::move(flatVase));*/
-
 	/*std::shared_ptr<SVEModel> sveModel = SVEModel::createModelFromFile(sveDevice, DRAGON_MODEL_PATH);
 	auto dragon = SVEGameObject::createGameObject();
 	dragon.model = sveModel;
@@ -231,7 +202,7 @@ void SVEApp::loadGameObjects()
 	floor.model = floorModel;
 	floor.transform.translation = { 0.f, .5f, 0.f };
 	floor.transform.scale = { 3.f, 1.f, 3.f };
-	gameObjects.emplace(floor.getId(), std::move(floor));
+	addGameObjectToMap(floor);
 
 	std::vector<glm::vec3> lightColors{
 	  {1.f, .1f, .1f},
@@ -251,7 +222,7 @@ void SVEApp::loadGameObjects()
 			(i * glm::two_pi<float>()) / lightColors.size(),
 			{ 0.f, -1.f, 0.f });
 		pointLight.transform.translation = glm::vec3(rotateLight * glm::vec4(-2.f, -1.f, -2.f, 1.f));
-		gameObjects.emplace(pointLight.getId(), std::move(pointLight));
+		addGameObjectToMap(pointLight);
 	}
 
 	/*sveModel = SVEModel::createModelFromFile(sveDevice, "models/smooth_vase.obj");
@@ -260,28 +231,37 @@ void SVEApp::loadGameObjects()
 	smoothVase.transform.translation = { .5f, .5f, 2.5f };
 	smoothVase.transform.scale = { 3.f, 1.5f, 3.f };
 	gameObjects.push_back(std::move(smoothVase));*/
+
+	std::cout << "number of game objects = " << gameObjects.size() << '\n';
 }
 
-//void SVEApp::loadModels()
-//{
-	/*std::vector<SVEModel::Vertex> vertices{
-		{{0.0f, -0.5f}, {1.0f, 0.0f, 0.0f}},
-		{{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
-		{{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}} };
-	sveModel = std::make_unique<SVEModel>(sveDevice, vertices);*/
+void SVEApp::updatePointLightUbo(FrameInfo& frameInfo, GlobalUbo& ubo)
+{
+	auto rotateLight = glm::rotate(glm::mat4(1.f), 0.5f * frameInfo.deltaTime, { 0.f, -1.f, 0.f });
+	int lightIndex = 0;
+	for (auto& kv : frameInfo.gameObjects)
+	{
+		auto& obj = kv.second;
+		if (obj.pointLight == nullptr)
+		{
+			continue;
+		}
 
-	/*std::vector<SVEModel::Vertex> vertices{
-	  {{0.0f, -0.5f}, {1.0f, 0.0f, 0.0f}},
-	  {{0.5f, 0.5f}, {0.0f, 1.0f, 0.0f}},
-	  {{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}} };
-	auto sveModel = std::make_shared<SVEModel>(sveDevice, vertices);
+		assert(lightIndex < MAX_LIGHTS && "Point lights exceed maximum specified");
 
-	auto triangle = SVEGameObject::createGameObject();
-	triangle.model = sveModel;
-	triangle.color = { .1f, .8f, .1f };
-	triangle.transform2d.translation.x = .2f;
-	triangle.transform2d.scale = { 2.f, .5f };
-	triangle.transform2d.rotation = .25f * glm::two_pi<float>();
+		// update light position
+		obj.transform.translation = glm::vec3(rotateLight * glm::vec4(obj.transform.translation, 1.f));
 
-	gameObjects.push_back(std::move(triangle));*/
-//}
+		// copy light to ubo
+		ubo.pointLights[lightIndex].position = glm::vec4(obj.transform.translation, 1.f);
+		ubo.pointLights[lightIndex].color = glm::vec4(obj.color, obj.pointLight->lightIntensity);
+
+		lightIndex += 1;
+	}
+}
+
+void SVEApp::addGameObjectToMap(SVEGameObject& go)
+{
+	assert(gameObjects.size() < MAX_OBJECTS && "Cannot add game object anymore");
+	gameObjects.emplace(go.getId(), std::move(go));
+}

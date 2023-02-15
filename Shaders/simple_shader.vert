@@ -1,6 +1,7 @@
 #version 450
 
 layout (constant_id = 0) const int NUM_LIGHT = 1;
+layout (constant_id = 1) const int NUM_OBJECT = 1;
 
 layout(location = 0) in vec3 position;
 layout(location = 1) in vec3 color;

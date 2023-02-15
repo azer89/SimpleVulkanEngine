@@ -56,37 +56,12 @@ void CircleBillboardRenderSystem::createPipeline(VkRenderPass renderPass)
 	pipelineConfig.bindingDescriptions.clear();
 	pipelineConfig.renderPass = renderPass;
 	pipelineConfig.pipelineLayout = pipelineLayout;
-	pipelineConfig.numPointLight = MAX_LIGHTS;
+	pipelineConfig.constantInfo = { MAX_LIGHTS, MAX_OBJECTS };
 	svePipeline = std::make_unique<SVEPipeline>(
 		sveDevice,
 		VERTEX_SHADER_PATH,
 		FRAGMENT_SHADER_PATH,
 		pipelineConfig);
-}
-
-void CircleBillboardRenderSystem::update(FrameInfo& frameInfo, GlobalUbo& ubo)
-{
-	auto rotateLight = glm::rotate(glm::mat4(1.f), 0.5f * frameInfo.deltaTime, { 0.f, -1.f, 0.f });
-	int lightIndex = 0;
-	for (auto& kv : frameInfo.gameObjects)
-	{
-		auto& obj = kv.second;
-		if (obj.pointLight == nullptr)
-		{
-			continue;
-		}
-
-		assert(lightIndex < MAX_LIGHTS && "Point lights exceed maximum specified");
-
-		// update light position
-		obj.transform.translation = glm::vec3(rotateLight * glm::vec4(obj.transform.translation, 1.f));
-
-		// copy light to ubo
-		ubo.pointLights[lightIndex].position = glm::vec4(obj.transform.translation, 1.f);
-		ubo.pointLights[lightIndex].color = glm::vec4(obj.color, obj.pointLight->lightIntensity);
-
-		lightIndex += 1;
-	}
 }
 
 void CircleBillboardRenderSystem::render(const FrameInfo& frameInfo)

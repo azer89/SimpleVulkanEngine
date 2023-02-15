@@ -1,6 +1,7 @@
 #version 450
 
 layout (constant_id = 0) const int NUM_LIGHT = 1;
+layout (constant_id = 1) const int NUM_OBJECT = 1;
 
 const vec2 OFFSETS[6] = vec2[](
 	vec2(-1.0, -1.0),

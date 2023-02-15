@@ -57,7 +57,7 @@ void SimpleRenderSystem::createPipeline(VkRenderPass renderPass)
 	SVEPipeline::defaultPipelineConfigInfo(pipelineConfig);
 	pipelineConfig.renderPass = renderPass;
 	pipelineConfig.pipelineLayout = pipelineLayout;
-	pipelineConfig.numPointLight = MAX_LIGHTS;
+	pipelineConfig.constantInfo = { MAX_LIGHTS, MAX_OBJECTS};
 	svePipeline = std::make_unique<SVEPipeline>(
 		sveDevice,
 		VERTEX_SHADER_PATH,

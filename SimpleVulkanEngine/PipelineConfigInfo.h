@@ -1,6 +1,12 @@
 #ifndef PIPELINE_CONFIG_INFO_H
 #define PIPELINE_CONFIG_INFO_H
 
+struct SpecializationConstantInfo
+{
+	uint32_t numPointLight = 0;
+	uint32_t numObject = 0;
+};
+
 struct PipelineConfigInfo
 {
 	PipelineConfigInfo() = default;
@@ -23,7 +29,9 @@ struct PipelineConfigInfo
 	uint32_t subpass = 0;
 	
 	// specialization constant
-	uint32_t numPointLight = 0;
+	SpecializationConstantInfo constantInfo;
+	//uint32_t numPointLight = 0;
+	//uint32_t numObject = 0;
 };
 
 #endif

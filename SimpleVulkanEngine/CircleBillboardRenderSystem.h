@@ -25,7 +25,6 @@ public:
 	CircleBillboardRenderSystem(const CircleBillboardRenderSystem&) = delete;
 	CircleBillboardRenderSystem& operator=(const CircleBillboardRenderSystem&) = delete;
 
-	void update(FrameInfo& frameInfo, GlobalUbo& ubo);
 	void render(const FrameInfo& frameInfo);
 
 private:

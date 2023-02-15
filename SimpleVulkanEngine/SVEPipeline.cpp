@@ -64,19 +64,29 @@ void SVEPipeline::createGraphicsPipeline(
 
 	bool hasSpecializationConstants = false;
 	VkSpecializationInfo vsi;
-	if (configInfo.numPointLight > 0)
+	// TODO create a bool "hasSpecializationConstants"
+	if (configInfo.constantInfo.numPointLight > 0 && configInfo.constantInfo.numObject > 0)
 	{
-		VkSpecializationMapEntry vsme[1]; 
-		vsme[0].constantID = 0; 
-		vsme[0].offset = 0; 
-		vsme[0].size = sizeof(configInfo.numPointLight);
+		VkSpecializationMapEntry vsme[2] = { 
+			// constantID, offset, size
+			{
+				0, 
+				0, 
+				sizeof(configInfo.constantInfo.numPointLight)
+			},
+			// constantID, offset, size
+			{
+				1, 
+				offsetof(SpecializationConstantInfo, numObject),
+				sizeof(configInfo.constantInfo.numObject)
+			} 
+		};
 		
-		vsi.mapEntryCount = 1; 
+		vsi.mapEntryCount = 2; // length of vsme array
 		vsi.pMapEntries = &vsme[0]; 
-		vsi.dataSize = sizeof(configInfo.numPointLight); 
-		vsi.pData = &configInfo.numPointLight;
-		
-		std::cout << "has specialization constant\n";
+		vsi.dataSize = sizeof(SpecializationConstantInfo);
+		vsi.pData = &configInfo.constantInfo;
+
 		hasSpecializationConstants = true;
 	}
 
