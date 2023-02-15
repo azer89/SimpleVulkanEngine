@@ -62,28 +62,24 @@ void SVEPipeline::createGraphicsPipeline(
 	createShaderModule(vertCode, &vertShaderModule);
 	createShaderModule(fragCode, &fragShaderModule);
 
+	// TODO These specialization constants need a bit of refactoring
 	bool hasSpecializationConstants = false;
-	VkSpecializationInfo vsi;
-	// TODO create a bool "hasSpecializationConstants"
+	VkSpecializationInfo vsi{};
+	std::vector<VkSpecializationMapEntry> vsme;
 	if (configInfo.constantInfo.numPointLight > 0 && configInfo.constantInfo.numObject > 0)
 	{
-		VkSpecializationMapEntry vsme[2] = { 
-			// constantID, offset, size
-			{
-				0, 
-				0, 
-				sizeof(configInfo.constantInfo.numPointLight)
-			},
-			// constantID, offset, size
-			{
-				1, 
-				offsetof(SpecializationConstantInfo, numObject),
-				sizeof(configInfo.constantInfo.numObject)
-			} 
-		};
+		vsme.resize(2);
+
+		vsme[0].constantID = 0;
+		vsme[0].size = sizeof(configInfo.constantInfo.numPointLight);
+		vsme[0].offset = offsetof(SpecializationConstantInfo, numPointLight);
+
+		vsme[1].constantID = 1;
+		vsme[1].size = sizeof(configInfo.constantInfo.numObject);
+		vsme[1].offset = offsetof(SpecializationConstantInfo, numObject);
 		
-		vsi.mapEntryCount = 2; // length of vsme array
-		vsi.pMapEntries = &vsme[0]; 
+		vsi.mapEntryCount = static_cast<uint32_t>(vsme.size());
+		vsi.pMapEntries = vsme.data();
 		vsi.dataSize = sizeof(SpecializationConstantInfo);
 		vsi.pData = &configInfo.constantInfo;
 
@@ -97,7 +93,7 @@ void SVEPipeline::createGraphicsPipeline(
 	shaderStages[0].pName = "main";
 	shaderStages[0].flags = 0;
 	shaderStages[0].pNext = nullptr;
-	shaderStages[0].pSpecializationInfo = nullptr;
+	shaderStages[0].pSpecializationInfo = hasSpecializationConstants ? &vsi : nullptr;
 	shaderStages[1].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
 	shaderStages[1].stage = VK_SHADER_STAGE_FRAGMENT_BIT;
 	shaderStages[1].module = fragShaderModule;
@@ -106,8 +102,6 @@ void SVEPipeline::createGraphicsPipeline(
 	shaderStages[1].pNext = nullptr;
 	shaderStages[1].pSpecializationInfo = hasSpecializationConstants ? &vsi : nullptr;
 
-	//auto bindingDescriptions = SVEModel::Vertex::getBindingDescriptions();
-	//auto attributeDescriptions = SVEModel::Vertex::getAttributeDescriptions();
 	auto& bindingDescriptions = configInfo.bindingDescriptions;
 	auto& attributeDescriptions = configInfo.attributeDescriptions;
 	VkPipelineVertexInputStateCreateInfo vertexInputInfo{};

@@ -5,6 +5,7 @@
 
 #include "PointLight.h"
 
+// TODO don't have to be constants
 #define MAX_LIGHTS 10
 #define MAX_OBJECTS 20
 

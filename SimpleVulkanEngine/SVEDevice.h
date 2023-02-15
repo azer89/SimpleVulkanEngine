@@ -26,11 +26,11 @@ struct QueueFamilyIndices
 class SVEDevice
 {
 public:
-#ifdef NDEBUG
-	const bool enableValidationLayers = false;
-#else
+//#ifdef NDEBUG
+//	const bool enableValidationLayers = false;
+//#else
 	const bool enableValidationLayers = true;
-#endif
+//#endif
 
 	SVEDevice(SVEWindow& window);
 	~SVEDevice();
