@@ -1,5 +1,8 @@
 #version 450
 
+layout (constant_id = 0) const int NUM_LIGHT = 1;
+layout (constant_id = 1) const int NUM_OBJECT = 1;
+
 layout (location = 0) in vec2 fragOffset;
 layout (location = 0) out vec4 outColor;
 
@@ -15,8 +18,7 @@ layout(set = 0, binding = 0) uniform GlobalUbo
 	mat4 view;
 	mat4 inverseView;
 	vec4 ambientLightColor; // w is intensity
-	PointLight pointLights[10];
-	int numLights;
+	PointLight pointLights[NUM_LIGHT];
 } ubo;
 
 layout(push_constant) uniform Push 

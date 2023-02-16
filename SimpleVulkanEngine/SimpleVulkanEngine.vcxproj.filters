@@ -81,6 +81,9 @@
     <ClCompile Include="SVEGameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SVETexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SVEApp.h">
@@ -150,6 +153,9 @@
       <Filter>Header Files\RenderSystems</Filter>
     </ClInclude>
     <ClInclude Include="PointLight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SVETexture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

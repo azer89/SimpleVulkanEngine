@@ -9,6 +9,7 @@
 #include "SVEBuffer.h"
 #include "SVEDescriptorPool.h"
 #include "GlobalUBO.h"
+#include "FrameInfo.h"
 
 // std
 #include <memory>
@@ -39,6 +40,8 @@ public:
 private:
 	//void loadModels(); // not used
 	void loadGameObjects();
+	GlobalUbo createUbo(const FrameInfo& frameInfo, const SVECamera& camera);
+	void addGameObjectToMap(SVEGameObject& go);
 
 	SVEWindow sveWindow{ WIDTH, HEIGHT, TITLE };
 	SVEDevice sveDevice{ sveWindow };

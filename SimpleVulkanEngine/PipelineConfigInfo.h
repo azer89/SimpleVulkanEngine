@@ -1,6 +1,12 @@
 #ifndef PIPELINE_CONFIG_INFO_H
 #define PIPELINE_CONFIG_INFO_H
 
+struct SpecializationConstantInfo
+{
+	uint32_t numPointLight = 0;
+	uint32_t numObject = 0;
+};
+
 struct PipelineConfigInfo
 {
 	PipelineConfigInfo() = default;
@@ -21,6 +27,11 @@ struct PipelineConfigInfo
 	VkPipelineLayout pipelineLayout = nullptr;
 	VkRenderPass renderPass = nullptr;
 	uint32_t subpass = 0;
+	
+	// specialization constant
+	SpecializationConstantInfo constantInfo;
+	//uint32_t numPointLight = 0;
+	//uint32_t numObject = 0;
 };
 
 #endif
