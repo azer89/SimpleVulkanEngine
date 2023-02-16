@@ -115,18 +115,14 @@ void SVEApp::run()
 				globalDescriptorSets[frameIndex],
 				gameObjects };
 
-			// update
-			GlobalUbo ubo{};
-			ubo.projection = camera.getProjection();
-			ubo.view = camera.getView();
-			ubo.inverseView = camera.getInverseView();
-			updatePointLightUbo(frameInfo, ubo);
+			// ubo
+			GlobalUbo ubo = createUbo(frameInfo, camera);
 			uboBuffers[frameIndex]->writeToBuffer(&ubo);
 			uboBuffers[frameIndex]->flush();
 
 			// render
 			sveRenderer.beginSwapChainRenderPass(commandBuffer);
-			simpleRenderSystem.renderGameObjects(frameInfo);
+			simpleRenderSystem.render(frameInfo);
 			cbRenderSystem.render(frameInfo);
 			sveRenderer.endSwapChainRenderPass(commandBuffer);
 			sveRenderer.endFrame();
@@ -235,8 +231,14 @@ void SVEApp::loadGameObjects()
 	std::cout << "number of game objects = " << gameObjects.size() << '\n';
 }
 
-void SVEApp::updatePointLightUbo(FrameInfo& frameInfo, GlobalUbo& ubo)
+GlobalUbo SVEApp::createUbo(const FrameInfo& frameInfo, const SVECamera& camera)
 {
+	GlobalUbo ubo;
+
+	ubo.projection = camera.getProjection();
+	ubo.view = camera.getView();
+	ubo.inverseView = camera.getInverseView();
+
 	auto rotateLight = glm::rotate(glm::mat4(1.f), 0.5f * frameInfo.deltaTime, { 0.f, -1.f, 0.f });
 	int lightIndex = 0;
 	for (auto& kv : frameInfo.gameObjects)
@@ -258,6 +260,8 @@ void SVEApp::updatePointLightUbo(FrameInfo& frameInfo, GlobalUbo& ubo)
 
 		lightIndex += 1;
 	}
+
+	return ubo;
 }
 
 void SVEApp::addGameObjectToMap(SVEGameObject& go)

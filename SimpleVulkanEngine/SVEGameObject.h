@@ -35,7 +35,7 @@ public:
 private:
 	SVEGameObject(id_t objId) : id{ objId } {}
 
-	id_t id;
+	id_t id = -1;
 };
 
 #endif

@@ -65,7 +65,7 @@ void SimpleRenderSystem::createPipeline(VkRenderPass renderPass)
 		pipelineConfig);
 }
 
-void SimpleRenderSystem::renderGameObjects(const FrameInfo& frameInfo)
+void SimpleRenderSystem::render(const FrameInfo& frameInfo)
 {
 	svePipeline->bind(frameInfo.commandBuffer);
 

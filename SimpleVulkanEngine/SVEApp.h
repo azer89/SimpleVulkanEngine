@@ -40,7 +40,7 @@ public:
 private:
 	//void loadModels(); // not used
 	void loadGameObjects();
-	void updatePointLightUbo(FrameInfo& frameInfo, GlobalUbo& ubo);
+	GlobalUbo createUbo(const FrameInfo& frameInfo, const SVECamera& camera);
 	void addGameObjectToMap(SVEGameObject& go);
 
 	SVEWindow sveWindow{ WIDTH, HEIGHT, TITLE };
