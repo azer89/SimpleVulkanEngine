@@ -1,10 +1,11 @@
 Features:
-* Uniform Buffer Objects
-* Push Constants
 * Point lights
 * Blinn-Phong shading
-* OBJ Meshes
+* OBJ meshes
 * Textures
+* Uniform Buffer Objects
+* Push constants
+* Specialization constants
 
 [<img src="https://raw.githubusercontent.com/azer89/SimpleVulkanEngine/main/Results/dragon.png">](https://raw.githubusercontent.com/azer89/SimpleVulkanEngine/main/Results/dragon.png)
 
