@@ -63,5 +63,5 @@ void main()
 	}
 
 	vec4 textureColor = texture(texSampler, inTexCoord);
-	outColor = vec4((diffuseLight + textureColor.xyz) + specularLight, 1.0);
+	outColor = vec4((diffuseLight * textureColor.xyz) + specularLight, 1.0);
 }

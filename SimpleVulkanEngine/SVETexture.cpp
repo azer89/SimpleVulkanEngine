@@ -8,7 +8,9 @@
 
 #include <stdexcept>
 
-SVETexture::SVETexture(SVEDevice& device) : sveDevice(device)
+SVETexture::SVETexture(SVEDevice& device, const char* path) :
+	sveDevice(device), 
+	imagePath(path)
 {
 	createTextureImage();
 	createTextureImageView();
@@ -37,7 +39,7 @@ void SVETexture::createTextureImage()
 	int texWidth, texHeight, texChannels;
 	// TODO
 	stbi_uc* pixels = stbi_load(
-		"C:/Users/azer/workspace/SimpleVulkanEngine/Textures/texture.jpg", 
+		imagePath,
 		&texWidth, 
 		&texHeight, 
 		&texChannels, 

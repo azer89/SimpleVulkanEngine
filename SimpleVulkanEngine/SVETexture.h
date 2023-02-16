@@ -9,7 +9,7 @@
 class SVETexture
 {
 public:
-	SVETexture(SVEDevice& device);
+	SVETexture(SVEDevice& device, const char* path);
 	~SVETexture();
 
 	VkDescriptorImageInfo descriptorImageInfo();
@@ -22,6 +22,8 @@ private:
 	void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout);
 
 private:
+	const char* imagePath;
+
 	SVEDevice& sveDevice;
 
 	VkImage textureImage;

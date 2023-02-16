@@ -65,7 +65,7 @@ void SVEApp::run()
 		.build();
 
 	std::vector<VkDescriptorSet> globalDescriptorSets(SVESwapChain::MAX_FRAMES_IN_FLIGHT);
-	SVETexture simpleTexture{sveDevice};
+	SVETexture simpleTexture{sveDevice, TEXTURE_PATH};
 	VkDescriptorImageInfo imageInfo = simpleTexture.descriptorImageInfo();
 
 	for (int i = 0; i < globalDescriptorSets.size(); i++)
@@ -186,19 +186,19 @@ std::unique_ptr<SVEModel> createCubeModel(SVEDevice& device, glm::vec3 offset)
 
 void SVEApp::loadGameObjects()
 {
-	/*std::shared_ptr<SVEModel> sveModel = SVEModel::createModelFromFile(sveDevice, DRAGON_MODEL_PATH);
+	std::shared_ptr<SVEModel> sveModel = SVEModel::createModelFromFile(sveDevice, DRAGON_MODEL_PATH);
 	auto dragon = SVEGameObject::createGameObject();
 	dragon.model = sveModel;
 	dragon.transform.translation = { .0f, .0f, .0f };
 	dragon.transform.scale = { 1.f, -1.f, 1.f };
-	gameObjects.emplace(dragon.getId(), std::move(dragon));*/
+	gameObjects.emplace(dragon.getId(), std::move(dragon));
 
-	std::shared_ptr<SVEModel> floorModel = SVEModel::createModelFromFile(sveDevice, QUAD_MODEL_PATH);
+	/*std::shared_ptr<SVEModel> floorModel = SVEModel::createModelFromFile(sveDevice, QUAD_MODEL_PATH);
 	auto floor = SVEGameObject::createGameObject();
 	floor.model = floorModel;
 	floor.transform.translation = { 0.f, .5f, 0.f };
 	floor.transform.scale = { 3.f, 1.f, 3.f };
-	addGameObjectToMap(floor);
+	addGameObjectToMap(floor);*/
 
 	std::vector<glm::vec3> lightColors{
 	  {1.f, .1f, .1f},
