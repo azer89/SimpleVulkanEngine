@@ -1,0 +1,4 @@
+#ifndef OFFLINE_RENDER_SYSTEM_H
+#define OFFLINE_RENDER_SYSTEM_H
+
+#endif

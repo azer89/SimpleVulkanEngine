@@ -28,8 +28,6 @@ public:
 	UserInputController();
 	~UserInputController();
 
-	UserInputController(GLFWwindow* window);
-
 	void update(GLFWwindow* window, SVEGameObject& gameObject);
 
 	float getDeltaTime() const
@@ -46,6 +44,8 @@ private:
 
 	Time currentTime;
 	float deltaTime;
+
+	bool leftMouseButtonPressed = false;
 };
 
 #endif

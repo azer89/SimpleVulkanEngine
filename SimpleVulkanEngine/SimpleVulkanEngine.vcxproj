@@ -186,6 +186,7 @@
   <ItemGroup>
     <ClInclude Include="CircleBillboardRenderSystem.h" />
     <ClInclude Include="GlobalUBO.h" />
+    <ClInclude Include="OfflineRenderSystem.h" />
     <ClInclude Include="SVETexture.h" />
     <ClInclude Include="UserInputController.h" />
     <ClInclude Include="PipelineConfigInfo.h" />

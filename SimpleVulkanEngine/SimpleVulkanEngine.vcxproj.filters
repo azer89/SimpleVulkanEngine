@@ -158,6 +158,9 @@
     <ClInclude Include="SVETexture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="OfflineRenderSystem.h">
+      <Filter>Header Files\RenderSystems</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\compile.bat">

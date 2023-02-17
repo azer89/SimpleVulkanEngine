@@ -12,19 +12,6 @@ UserInputController::~UserInputController()
 {
 }
 
-// https://www.glfw.org/docs/3.3/input_guide.html
-void scrollCallback(GLFWwindow* window, double xOffset, double yOffset)
-{
-	std::cout << "scrollCallback xOffset=" << xOffset << ", yOffset=" << yOffset << "\n";
-	// zoom in yOffset -1
-	// zoom out yOffset +1
-}
-
-UserInputController::UserInputController(GLFWwindow* window)
-{
-	glfwSetScrollCallback(window, scrollCallback);
-}
-
 // TODO gameObject can be a member
 void UserInputController::update(GLFWwindow* window, SVEGameObject& gameObject)
 {

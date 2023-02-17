@@ -92,8 +92,9 @@ void SVEApp::run()
 
 	SVECamera camera{};
 	auto viewerObject = SVEGameObject::createGameObject();
-	viewerObject.transform.translation = { 0, -1.5f, -2.0f };
-	UserInputController cameraController{ sveWindow.getGLFWwindow() };
+	viewerObject.transform.translation = { -3.39563,-3.55833,-0.955367 };
+	viewerObject.transform.rotation = { -0.703289,1.1799,0 };
+	UserInputController cameraController{};
 
 	while (!sveWindow.shouldClose())
 	{
