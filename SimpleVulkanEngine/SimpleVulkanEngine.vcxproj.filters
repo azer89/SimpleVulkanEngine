@@ -84,6 +84,9 @@
     <ClCompile Include="SVETexture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="OffscreenRenderSystem.cpp">
+      <Filter>Source Files\RenderSystems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SVEApp.h">
@@ -158,7 +161,7 @@
     <ClInclude Include="SVETexture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="OfflineRenderSystem.h">
+    <ClInclude Include="OffscreenRenderSystem.h">
       <Filter>Header Files\RenderSystems</Filter>
     </ClInclude>
   </ItemGroup>

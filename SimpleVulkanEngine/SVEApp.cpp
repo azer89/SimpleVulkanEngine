@@ -229,7 +229,7 @@ void SVEApp::loadGameObjects()
 	smoothVase.transform.scale = { 3.f, 1.5f, 3.f };
 	gameObjects.push_back(std::move(smoothVase));*/
 
-	std::cout << "number of game objects = " << gameObjects.size() << '\n';
+	std::cout << "Number of game objects = " << gameObjects.size() << '\n';
 }
 
 GlobalUbo SVEApp::createUbo(const FrameInfo& frameInfo, const SVECamera& camera)
