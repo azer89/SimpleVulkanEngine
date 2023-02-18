@@ -87,6 +87,9 @@
     <ClCompile Include="OffscreenRenderSystem.cpp">
       <Filter>Source Files\RenderSystems</Filter>
     </ClCompile>
+    <ClCompile Include="SVERenderPass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SVEApp.h">
@@ -163,6 +166,12 @@
     </ClInclude>
     <ClInclude Include="OffscreenRenderSystem.h">
       <Filter>Header Files\RenderSystems</Filter>
+    </ClInclude>
+    <ClInclude Include="SVERenderPass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SVEFrameBuffer.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

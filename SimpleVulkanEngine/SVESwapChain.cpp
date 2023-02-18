@@ -145,8 +145,8 @@ VkResult SVESwapChain::submitCommandBuffers(const VkCommandBuffer* buffers, uint
 void SVESwapChain::createSwapChain()
 {
 	SwapChainSupportDetails swapChainSupport = device.getSwapChainSupport();
+	VkSurfaceFormatKHR surfaceFormat = device.chooseSwapSurfaceFormat(swapChainSupport.formats);
 
-	VkSurfaceFormatKHR surfaceFormat = chooseSwapSurfaceFormat(swapChainSupport.formats);
 	VkPresentModeKHR presentMode = chooseSwapPresentMode(swapChainSupport.presentModes);
 	VkExtent2D extent = chooseSwapExtent(swapChainSupport.capabilities);
 
@@ -237,7 +237,7 @@ void SVESwapChain::createImageViews()
 void SVESwapChain::createRenderPass()
 {
 	VkAttachmentDescription depthAttachment{};
-	depthAttachment.format = findDepthFormat();
+	depthAttachment.format = device.getDepthFormat();
 	depthAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
 	depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
 	depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
@@ -327,7 +327,7 @@ void SVESwapChain::createFramebuffers()
 
 void SVESwapChain::createDepthResources()
 {
-	VkFormat depthFormat = findDepthFormat();
+	VkFormat depthFormat = device.getDepthFormat();
 	swapChainDepthFormat = depthFormat;
 	VkExtent2D swapChainExtent = getSwapChainExtent();
 
@@ -402,21 +402,6 @@ void SVESwapChain::createSyncObjects()
 	}
 }
 
-VkSurfaceFormatKHR SVESwapChain::chooseSwapSurfaceFormat(
-	const std::vector<VkSurfaceFormatKHR>& availableFormats)
-{
-	for (const auto& availableFormat : availableFormats)
-	{
-		if (availableFormat.format == VK_FORMAT_B8G8R8A8_SRGB &&
-			availableFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
-		{
-			return availableFormat;
-		}
-	}
-
-	return availableFormats[0];
-}
-
 VkPresentModeKHR SVESwapChain::chooseSwapPresentMode(
 	const std::vector<VkPresentModeKHR>& availablePresentModes)
 {
@@ -458,12 +443,4 @@ VkExtent2D SVESwapChain::chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabi
 
 		return actualExtent;
 	}
-}
-
-VkFormat SVESwapChain::findDepthFormat()
-{
-	return device.findSupportedFormat(
-		{ VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT },
-		VK_IMAGE_TILING_OPTIMAL,
-		VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT);
 }

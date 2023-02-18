@@ -54,6 +54,10 @@ public:
 	VkFormat findSupportedFormat(
 		const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
 
+	VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
+	VkFormat getImageFormat();
+	VkFormat getDepthFormat();
+
 	// Buffer Helper Functions
 	void createBuffer(
 		VkDeviceSize size,

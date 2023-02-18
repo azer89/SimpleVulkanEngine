@@ -165,6 +165,7 @@
   <ItemGroup>
     <ClCompile Include="CircleBillboardRenderSystem.cpp" />
     <ClCompile Include="OffscreenRenderSystem.cpp" />
+    <ClCompile Include="SVERenderPass.cpp" />
     <ClCompile Include="SVETexture.cpp" />
     <ClCompile Include="UserInputController.cpp" />
     <ClCompile Include="main.cpp" />
@@ -188,6 +189,8 @@
     <ClInclude Include="CircleBillboardRenderSystem.h" />
     <ClInclude Include="GlobalUBO.h" />
     <ClInclude Include="OffscreenRenderSystem.h" />
+    <ClInclude Include="SVEFrameBuffer.h" />
+    <ClInclude Include="SVERenderPass.h" />
     <ClInclude Include="SVETexture.h" />
     <ClInclude Include="UserInputController.h" />
     <ClInclude Include="PipelineConfigInfo.h" />

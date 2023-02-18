@@ -32,7 +32,6 @@ public:
 	uint32_t width() const { return swapChainExtent.width; }
 	uint32_t height() const { return swapChainExtent.height; }
 	float extentAspectRatio() const { return static_cast<float>(swapChainExtent.width) / static_cast<float>(swapChainExtent.height); }
-	VkFormat findDepthFormat();
 
 	VkResult acquireNextImage(uint32_t* imageIndex);
 	VkResult submitCommandBuffers(const VkCommandBuffer* buffers, uint32_t* imageIndex);
@@ -53,7 +52,6 @@ private:
 	void createSyncObjects();
 
 	// Helper functions
-	VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
 	VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
 	VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
 

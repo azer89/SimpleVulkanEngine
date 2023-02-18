@@ -12,8 +12,13 @@ public:
 	SVERenderPass(const SVERenderPass&) = delete;
 	SVERenderPass operator=(const SVERenderPass&) = delete;
 
+	VkRenderPass getRenderPass() { return renderPass; }
+
 private:
+	void init();
+
 	SVEDevice& sveDevice;
+	VkRenderPass renderPass;
 };
 
 #endif
