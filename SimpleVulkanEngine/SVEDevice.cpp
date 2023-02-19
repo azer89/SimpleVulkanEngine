@@ -1,9 +1,12 @@
 #include "SVEDevice.h"
+#include "SVERenderPass.h"
 
 // std headers
+
+#include <set>
+#include <array>
 #include <cstring>
 #include <iostream>
-#include <set>
 #include <unordered_set>
 
 // local callback functions
@@ -669,4 +672,65 @@ VkImageView SVEDevice::createImageView(VkImage image, VkFormat format)
 		throw std::runtime_error("Failed to create texture image view");
 	}
 	return imageView;
+}
+
+VkFramebuffer SVEDevice::createFrameBuffer(
+	VkRenderPass renderPass,
+	VkImageView swapChainImageView,
+	VkImageView depthImageView,
+	uint32_t width,
+	uint32_t height)
+{
+	std::array<VkImageView, 2> attachments = { swapChainImageView, depthImageView };
+
+	VkFramebufferCreateInfo framebufferInfo = {};
+	framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+	framebufferInfo.renderPass = renderPass;
+	framebufferInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
+	framebufferInfo.pAttachments = attachments.data();
+	framebufferInfo.width = width;
+	framebufferInfo.height = height;
+	framebufferInfo.layers = 1;
+
+	VkFramebuffer frameBuffer;
+	if (vkCreateFramebuffer(
+		device_,
+		&framebufferInfo,
+		nullptr,
+		&frameBuffer) != VK_SUCCESS)
+	{
+		throw std::runtime_error("Failed to create framebuffer");
+	}
+	return frameBuffer;
+}
+
+VkSurfaceFormatKHR SVEDevice::chooseSwapSurfaceFormat(
+	const std::vector<VkSurfaceFormatKHR>& availableFormats)
+{
+	for (const auto& availableFormat : availableFormats)
+	{
+		if (availableFormat.format == VK_FORMAT_B8G8R8A8_SRGB &&
+			availableFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
+		{
+			return availableFormat;
+		}
+	}
+
+	return availableFormats[0];
+}
+
+VkFormat SVEDevice::getImageFormat()
+{
+	SwapChainSupportDetails swapChainSupport = getSwapChainSupport();
+	VkSurfaceFormatKHR surfaceFormat = chooseSwapSurfaceFormat(swapChainSupport.formats);
+	return surfaceFormat.format;
+
+}
+
+VkFormat SVEDevice::getDepthFormat()
+{
+	return findSupportedFormat(
+		{ VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT },
+		VK_IMAGE_TILING_OPTIMAL,
+		VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT);
 }

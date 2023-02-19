@@ -2,6 +2,7 @@
 #define SVE_SWAP_CHAIN_H
 
 #include "SVEDevice.h"
+#include "SVERenderPass.h"
 
 // vulkan headers
 #include <vulkan/vulkan.h>
@@ -23,8 +24,10 @@ public:
 	SVESwapChain(const SVESwapChain&) = delete;
 	SVEDevice operator=(const SVESwapChain&) = delete;
 
+	// TODO change the return type
 	VkFramebuffer getFrameBuffer(int index) const { return swapChainFramebuffers[index]; }
-	VkRenderPass getRenderPass() const { return renderPass; }
+	VkRenderPass getRenderPass() { return renderPass.getRenderPass(); }
+
 	VkImageView getImageView(int index) const { return swapChainImageViews[index]; }
 	size_t imageCount() const { return swapChainImages.size(); }
 	VkFormat getSwapChainImageFormat() const { return swapChainImageFormat; }
@@ -32,7 +35,6 @@ public:
 	uint32_t width() const { return swapChainExtent.width; }
 	uint32_t height() const { return swapChainExtent.height; }
 	float extentAspectRatio() const { return static_cast<float>(swapChainExtent.width) / static_cast<float>(swapChainExtent.height); }
-	VkFormat findDepthFormat();
 
 	VkResult acquireNextImage(uint32_t* imageIndex);
 	VkResult submitCommandBuffers(const VkCommandBuffer* buffers, uint32_t* imageIndex);
@@ -48,12 +50,10 @@ private:
 	void createSwapChain();
 	void createImageViews();
 	void createDepthResources();
-	void createRenderPass();
 	void createFramebuffers();
 	void createSyncObjects();
 
 	// Helper functions
-	VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
 	VkPresentModeKHR chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes);
 	VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
 
@@ -62,7 +62,7 @@ private:
 	VkExtent2D swapChainExtent;
 
 	std::vector<VkFramebuffer> swapChainFramebuffers;
-	VkRenderPass renderPass;
+	SVERenderPass renderPass;
 
 	std::vector<VkImage> depthImages;
 	std::vector<VkDeviceMemory> depthImageMemories;

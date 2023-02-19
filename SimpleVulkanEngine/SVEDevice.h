@@ -54,6 +54,10 @@ public:
 	VkFormat findSupportedFormat(
 		const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
 
+	VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
+	VkFormat getImageFormat();
+	VkFormat getDepthFormat();
+
 	// Buffer Helper Functions
 	void createBuffer(
 		VkDeviceSize size,
@@ -82,6 +86,13 @@ public:
 		VkImage& image,
 		VkDeviceMemory& imageMemory);
 	VkImageView createImageView(VkImage image, VkFormat format);
+
+	VkFramebuffer createFrameBuffer(
+		VkRenderPass renderPass,
+		VkImageView swapChainImageView,
+		VkImageView depthImageView,
+		uint32_t width,
+		uint32_t height);
 
 private:
 	void createInstance();
