@@ -62,7 +62,6 @@ private:
 	VkExtent2D swapChainExtent;
 
 	std::vector<VkFramebuffer> swapChainFramebuffers;
-	//VkRenderPass renderPass;
 	SVERenderPass renderPass;
 
 	std::vector<VkImage> depthImages;
