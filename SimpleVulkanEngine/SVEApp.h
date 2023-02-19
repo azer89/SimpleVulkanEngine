@@ -27,6 +27,7 @@ public:
 	// Models
 	static constexpr const char* SMOOTH_VASE_MODEL_PATH = "C:/Users/azer/workspace/SimpleVulkanEngine/Models/smooth_vase.obj";
 	static constexpr const char* DRAGON_MODEL_PATH = "C:/Users/azer/workspace/SimpleVulkanEngine/Models/dragon.obj";
+	static constexpr const char* KITTEN_MODEL_PATH = "C:/Users/azer/workspace/SimpleVulkanEngine/Models/kitten.obj";
 	static constexpr const char* QUAD_MODEL_PATH = "C:/Users/azer/workspace/SimpleVulkanEngine/Models/quad.obj";
 
 	// Texture, only supports a single image for now
@@ -49,7 +50,6 @@ private:
 	SVEWindow sveWindow{ WIDTH, HEIGHT, TITLE };
 	SVEDevice sveDevice{ sveWindow };
 	SVERenderer sveRenderer{sveWindow, sveDevice};
-	//std::unique_ptr<SVEModel> sveModel; // not used
 	std::unique_ptr<SVEDescriptorPool> globalPool{};
 	SVEGameObject::Map gameObjects;
 };
