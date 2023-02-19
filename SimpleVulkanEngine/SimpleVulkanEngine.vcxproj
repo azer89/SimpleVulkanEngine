@@ -189,7 +189,6 @@
     <ClInclude Include="CircleBillboardRenderSystem.h" />
     <ClInclude Include="GlobalUBO.h" />
     <ClInclude Include="OffscreenRenderSystem.h" />
-    <ClInclude Include="SVEFrameBuffer.h" />
     <ClInclude Include="SVERenderPass.h" />
     <ClInclude Include="SVETexture.h" />
     <ClInclude Include="UserInputController.h" />

@@ -5,12 +5,12 @@
 
 SVERenderPass::SVERenderPass(SVEDevice& device) : sveDevice(device)
 {
-
+	init();
 }
 
 SVERenderPass::~SVERenderPass()
 {
-
+	vkDestroyRenderPass(sveDevice.device(), renderPass, nullptr);
 }
 
 void SVERenderPass::init()

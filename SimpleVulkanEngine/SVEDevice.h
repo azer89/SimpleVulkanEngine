@@ -87,6 +87,13 @@ public:
 		VkDeviceMemory& imageMemory);
 	VkImageView createImageView(VkImage image, VkFormat format);
 
+	VkFramebuffer createFrameBuffer(
+		VkRenderPass renderPass,
+		VkImageView swapChainImageView,
+		VkImageView depthImageView,
+		uint32_t width,
+		uint32_t height);
+
 private:
 	void createInstance();
 	void setupDebugMessenger();

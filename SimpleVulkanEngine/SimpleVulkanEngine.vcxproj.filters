@@ -170,9 +170,6 @@
     <ClInclude Include="SVERenderPass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SVEFrameBuffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\compile.bat">

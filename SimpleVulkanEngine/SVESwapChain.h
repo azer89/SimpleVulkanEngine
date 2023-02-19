@@ -2,6 +2,7 @@
 #define SVE_SWAP_CHAIN_H
 
 #include "SVEDevice.h"
+#include "SVERenderPass.h"
 
 // vulkan headers
 #include <vulkan/vulkan.h>
@@ -23,8 +24,10 @@ public:
 	SVESwapChain(const SVESwapChain&) = delete;
 	SVEDevice operator=(const SVESwapChain&) = delete;
 
+	// TODO change the return type
 	VkFramebuffer getFrameBuffer(int index) const { return swapChainFramebuffers[index]; }
-	VkRenderPass getRenderPass() const { return renderPass; }
+	VkRenderPass getRenderPass() { return renderPass.getRenderPass(); }
+
 	VkImageView getImageView(int index) const { return swapChainImageViews[index]; }
 	size_t imageCount() const { return swapChainImages.size(); }
 	VkFormat getSwapChainImageFormat() const { return swapChainImageFormat; }
@@ -47,7 +50,6 @@ private:
 	void createSwapChain();
 	void createImageViews();
 	void createDepthResources();
-	void createRenderPass();
 	void createFramebuffers();
 	void createSyncObjects();
 
@@ -60,7 +62,8 @@ private:
 	VkExtent2D swapChainExtent;
 
 	std::vector<VkFramebuffer> swapChainFramebuffers;
-	VkRenderPass renderPass;
+	//VkRenderPass renderPass;
+	SVERenderPass renderPass;
 
 	std::vector<VkImage> depthImages;
 	std::vector<VkDeviceMemory> depthImageMemories;

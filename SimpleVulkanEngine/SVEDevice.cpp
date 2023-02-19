@@ -1,9 +1,12 @@
 #include "SVEDevice.h"
+#include "SVERenderPass.h"
 
 // std headers
+
+#include <set>
+#include <array>
 #include <cstring>
 #include <iostream>
-#include <set>
 #include <unordered_set>
 
 // local callback functions
@@ -669,6 +672,36 @@ VkImageView SVEDevice::createImageView(VkImage image, VkFormat format)
 		throw std::runtime_error("Failed to create texture image view");
 	}
 	return imageView;
+}
+
+VkFramebuffer SVEDevice::createFrameBuffer(
+	VkRenderPass renderPass,
+	VkImageView swapChainImageView,
+	VkImageView depthImageView,
+	uint32_t width,
+	uint32_t height)
+{
+	std::array<VkImageView, 2> attachments = { swapChainImageView, depthImageView };
+
+	VkFramebufferCreateInfo framebufferInfo = {};
+	framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+	framebufferInfo.renderPass = renderPass;
+	framebufferInfo.attachmentCount = static_cast<uint32_t>(attachments.size());
+	framebufferInfo.pAttachments = attachments.data();
+	framebufferInfo.width = width;
+	framebufferInfo.height = height;
+	framebufferInfo.layers = 1;
+
+	VkFramebuffer frameBuffer;
+	if (vkCreateFramebuffer(
+		device_,
+		&framebufferInfo,
+		nullptr,
+		&frameBuffer) != VK_SUCCESS)
+	{
+		throw std::runtime_error("Failed to create framebuffer");
+	}
+	return frameBuffer;
 }
 
 VkSurfaceFormatKHR SVEDevice::chooseSwapSurfaceFormat(
