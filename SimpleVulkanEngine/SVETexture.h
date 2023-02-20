@@ -11,6 +11,9 @@ public:
 	SVETexture(const std::shared_ptr<SVEDevice>& device, const char* path);
 	~SVETexture();
 
+	SVETexture(const SVETexture&) = delete;
+	SVETexture& operator=(const SVETexture&) = delete;
+
 	VkDescriptorImageInfo descriptorImageInfo();
 
 private:

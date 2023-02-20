@@ -30,8 +30,6 @@ struct PipelineConfigInfo
 	
 	// specialization constant
 	SpecializationConstantInfo constantInfo;
-	//uint32_t numPointLight = 0;
-	//uint32_t numObject = 0;
 };
 
 #endif

@@ -12,14 +12,14 @@
 
 
 SVESwapChain::SVESwapChain(const std::shared_ptr<SVEDevice>& deviceRef, VkExtent2D extent)
-	: device(deviceRef), renderPass{deviceRef}, windowExtent{extent}
+	: device(deviceRef), windowExtent{extent}
 {
 	init();
 }
 
 SVESwapChain::SVESwapChain(
 	const std::shared_ptr<SVEDevice>& deviceRef, VkExtent2D extent, std::shared_ptr<SVESwapChain> previous)
-	: device{ deviceRef }, renderPass{ deviceRef }, windowExtent{ extent }, oldSwapChain{ previous }
+	: device{ deviceRef }, windowExtent{ extent }, oldSwapChain{ previous }
 {
 	init();
 
@@ -48,11 +48,6 @@ SVESwapChain::~SVESwapChain()
 		vkFreeMemory(device->device(), depthImageMemories[i], nullptr);
 	}
 
-	for (auto& framebuffer : swapChainFramebuffers)
-	{
-		vkDestroyFramebuffer(device->device(), framebuffer, nullptr);
-	}
-
 	// cleanup synchronization objects
 	for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; ++i)
 	{
@@ -64,6 +59,8 @@ SVESwapChain::~SVESwapChain()
 
 void SVESwapChain::init()
 {
+	renderPass = std::make_shared<SVERenderPass>(device);
+
 	createSwapChain();
 	createImageViews();
 	createDepthResources();
@@ -235,15 +232,37 @@ void SVESwapChain::createImageViews()
 void SVESwapChain::createFramebuffers()
 {
 	VkExtent2D swapChainExtent = getSwapChainExtent();
-	swapChainFramebuffers.resize(imageCount());
+	frameBuffers.resize(imageCount());
 	for (size_t i = 0; i < imageCount(); ++i)
 	{
-		swapChainFramebuffers[i] = device->createFrameBuffer(
-			renderPass.getRenderPass(),
-			swapChainImageViews[i], 
-			depthImageViews[i], 
-			swapChainExtent.width, 
-			swapChainExtent.height);
+		frameBuffers[i] = { device,
+			renderPass,
+			swapChainImageViews[i],
+			depthImageViews[i],
+			swapChainExtent.width,
+			swapChainExtent.height };
+
+		/*auto ptr = std::make_unique<SVEFrameBuffer>
+			(
+				device,
+				renderPass,
+				swapChainImageViews[i],
+				depthImageViews[i],
+				swapChainExtent.width,
+				swapChainExtent.height
+			);
+		swapChainFramebuffers.push_back(ptr);*/
+		/*swapChainFramebuffers.emplace_back(
+			std::make_unique<SVEFrameBuffer>
+			(
+				device,
+				renderPass,
+				swapChainImageViews[i],
+				depthImageViews[i],
+				swapChainExtent.width,
+				swapChainExtent.height
+			)
+		);*/
 	}
 }
 
