@@ -42,14 +42,13 @@ public:
 	void run();
 
 private:
-	//void loadModels(); // not used
 	void loadGameObjects();
 	GlobalUbo createUbo(const FrameInfo& frameInfo, const SVECamera& camera);
 	void addGameObjectToMap(SVEGameObject& go);
 
-	SVEWindow sveWindow{ WIDTH, HEIGHT, TITLE };
-	SVEDevice sveDevice{ sveWindow };
-	SVERenderer sveRenderer{sveWindow, sveDevice};
+	std::shared_ptr<SVEWindow> sveWindow;
+	std::shared_ptr<SVEDevice> sveDevice;
+	std::unique_ptr<SVERenderer> sveRenderer;
 	std::unique_ptr<SVEDescriptorPool> globalPool{};
 	SVEGameObject::Map gameObjects;
 };

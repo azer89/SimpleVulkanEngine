@@ -27,7 +27,7 @@ namespace std
 	};
 }  // namespace std
 
-SVEModel::SVEModel(SVEDevice& device, const SVEModel::Builder& builder) : sveDevice{ device }
+SVEModel::SVEModel(const std::shared_ptr<SVEDevice>& device, const SVEModel::Builder& builder) : sveDevice{ device }
 {
 	createVertexBuffers(builder.vertices);
 	createIndexBuffers(builder.indices);
@@ -62,7 +62,7 @@ void SVEModel::createVertexBuffers(const std::vector<Vertex>& vertices)
 		VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
 		VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
-	sveDevice.copyBuffer(stagingBuffer.getBuffer(), vertexBuffer->getBuffer(), bufferSize);
+	sveDevice->copyBuffer(stagingBuffer.getBuffer(), vertexBuffer->getBuffer(), bufferSize);
 }
 
 void SVEModel::createIndexBuffers(const std::vector<uint32_t>& indices)
@@ -96,7 +96,7 @@ void SVEModel::createIndexBuffers(const std::vector<uint32_t>& indices)
 		VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
 		VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
 
-	sveDevice.copyBuffer(stagingBuffer.getBuffer(), indexBuffer->getBuffer(), bufferSize);
+	sveDevice->copyBuffer(stagingBuffer.getBuffer(), indexBuffer->getBuffer(), bufferSize);
 }
 
 void SVEModel::draw(VkCommandBuffer commandBuffer)
@@ -142,7 +142,7 @@ std::vector<VkVertexInputAttributeDescription> SVEModel::Vertex::getAttributeDes
 	return attributeDescriptions;
 }
 
-std::unique_ptr<SVEModel> SVEModel::createModelFromFile(SVEDevice& device, const std::string& filepath)
+std::unique_ptr<SVEModel> SVEModel::createModelFromFile(const std::shared_ptr<SVEDevice>& device, const std::string& filepath)
 {
 	Builder builder{};
 	builder.loadModel(filepath);

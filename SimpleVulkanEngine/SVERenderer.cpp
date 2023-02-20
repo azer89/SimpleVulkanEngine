@@ -5,7 +5,7 @@
 #include <cassert>
 #include <stdexcept>
 
-SVERenderer::SVERenderer(SVEWindow& window, SVEDevice& device)
+SVERenderer::SVERenderer(const std::shared_ptr<SVEWindow>& window, const std::shared_ptr<SVEDevice>& device)
 	: sveWindow{ window }, sveDevice{ device } 
 {
 	recreateSwapChain();
@@ -20,13 +20,13 @@ SVERenderer::~SVERenderer()
 // Recreate a swapchain if the window is resized
 void SVERenderer::recreateSwapChain()
 {
-	auto extent = sveWindow.getExtent();
+	auto extent = sveWindow->getExtent();
 	while (extent.width == 0 || extent.height == 0)
 	{
-		extent = sveWindow.getExtent();
+		extent = sveWindow->getExtent();
 		glfwWaitEvents();
 	}
-	vkDeviceWaitIdle(sveDevice.device());
+	vkDeviceWaitIdle(sveDevice->device());
 
 	if (sveSwapChain == nullptr)
 	{
@@ -39,7 +39,7 @@ void SVERenderer::recreateSwapChain()
 		 
 		if (!oldSwapChain->compareSwapFormats(*sveSwapChain.get()))
 		{
-			throw std::runtime_error("Swap chain image(or depth) format has changed!");
+			throw std::runtime_error("Swap chain image(or depth) format has changed");
 		}
 	}
 }
@@ -51,20 +51,20 @@ void SVERenderer::createCommandBuffers()
 	VkCommandBufferAllocateInfo allocInfo{};
 	allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
 	allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-	allocInfo.commandPool = sveDevice.getCommandPool();
+	allocInfo.commandPool = sveDevice->getCommandPool();
 	allocInfo.commandBufferCount = static_cast<uint32_t>(commandBuffers.size());
 
-	if (vkAllocateCommandBuffers(sveDevice.device(), &allocInfo, commandBuffers.data()) != VK_SUCCESS)
+	if (vkAllocateCommandBuffers(sveDevice->device(), &allocInfo, commandBuffers.data()) != VK_SUCCESS)
 	{
-		throw std::runtime_error("failed to allocate command buffers!");
+		throw std::runtime_error("Failed to allocate command buffers");
 	}
 }
 
 void SVERenderer::freeCommandBuffers()
 {
 	vkFreeCommandBuffers(
-		sveDevice.device(),
-		sveDevice.getCommandPool(),
+		sveDevice->device(),
+		sveDevice->getCommandPool(),
 		static_cast<uint32_t>(commandBuffers.size()),
 		commandBuffers.data());
 	commandBuffers.clear();
@@ -83,7 +83,7 @@ VkCommandBuffer SVERenderer::beginFrame()
 
 	if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
 	{
-		throw std::runtime_error("failed to acquire swap chain image!");
+		throw std::runtime_error("Failed to acquire swap chain image");
 	}
 
 	isFrameStarted = true;
@@ -94,7 +94,7 @@ VkCommandBuffer SVERenderer::beginFrame()
 
 	if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS)
 	{
-		throw std::runtime_error("failed to begin recording command buffer!");
+		throw std::runtime_error("Failed to begin recording command buffer");
 	}
 	return commandBuffer;
 }
@@ -105,18 +105,18 @@ void SVERenderer::endFrame()
 	auto commandBuffer = getCurrentCommandBuffer();
 	if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS)
 	{
-		throw std::runtime_error("failed to record command buffer!");
+		throw std::runtime_error("Failed to record command buffer");
 	}
 
 	auto result = sveSwapChain->submitCommandBuffers(&commandBuffer, &currentImageIndex);
-	if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || sveWindow.wasWindowResized())
+	if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || sveWindow->wasWindowResized())
 	{
-		sveWindow.resetWindowResizedFlag();
+		sveWindow->resetWindowResizedFlag();
 		recreateSwapChain();
 	}
 	else if (result != VK_SUCCESS)
 	{
-		throw std::runtime_error("failed to present swap chain image!");
+		throw std::runtime_error("Failed to present swap chain image");
 	}
 
 	isFrameStarted = false;

@@ -12,7 +12,7 @@ class SVEPipeline
 {
 public:
 	SVEPipeline(
-		SVEDevice& device,
+		const std::shared_ptr<SVEDevice>& device,
 		const std::string& vertFilepath,
 		const std::string& fragFilepath,
 		const PipelineConfigInfo& configInfo);
@@ -34,7 +34,7 @@ private:
 
 	void createShaderModule(const std::vector<char>& code, VkShaderModule* shaderModule);
 
-	SVEDevice& sveDevice;
+	std::shared_ptr<SVEDevice> sveDevice;
 	VkPipeline graphicsPipeline;
 	VkShaderModule vertShaderModule;
 	VkShaderModule fragShaderModule;

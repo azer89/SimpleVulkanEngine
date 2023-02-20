@@ -29,7 +29,7 @@ std::unique_ptr<SVEDescriptorSetLayout> SVEDescriptorSetLayout::Builder::build()
 // *************** Descriptor Set Layout *********************
 
 SVEDescriptorSetLayout::SVEDescriptorSetLayout(
-	SVEDevice& device, std::unordered_map<uint32_t, VkDescriptorSetLayoutBinding> bindings)
+	const std::shared_ptr<SVEDevice>& device, std::unordered_map<uint32_t, VkDescriptorSetLayoutBinding> bindings)
 	: sveDevice{ device }, bindings{ bindings } {
 	std::vector<VkDescriptorSetLayoutBinding> setLayoutBindings{};
 	for (auto& kv : bindings)
@@ -43,16 +43,16 @@ SVEDescriptorSetLayout::SVEDescriptorSetLayout(
 	descriptorSetLayoutInfo.pBindings = setLayoutBindings.data();
 
 	if (vkCreateDescriptorSetLayout(
-		sveDevice.device(),
+		sveDevice->device(),
 		&descriptorSetLayoutInfo,
 		nullptr,
 		&descriptorSetLayout) != VK_SUCCESS)
 	{
-		throw std::runtime_error("Failed to create descriptor set layout!");
+		throw std::runtime_error("Failed to create descriptor set layout");
 	}
 }
 
 SVEDescriptorSetLayout::~SVEDescriptorSetLayout()
 {
-	vkDestroyDescriptorSetLayout(sveDevice.device(), descriptorSetLayout, nullptr);
+	vkDestroyDescriptorSetLayout(sveDevice->device(), descriptorSetLayout, nullptr);
 }

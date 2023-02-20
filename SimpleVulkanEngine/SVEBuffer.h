@@ -7,7 +7,7 @@ class SVEBuffer
 {
 public:
 	SVEBuffer(
-		SVEDevice& device,
+		const std::shared_ptr<SVEDevice>& device,
 		VkDeviceSize instanceSize,
 		uint32_t instanceCount,
 		VkBufferUsageFlags usageFlags,
@@ -43,7 +43,7 @@ public:
 private:
 	static VkDeviceSize getAlignment(VkDeviceSize instanceSize, VkDeviceSize minOffsetAlignment);
 
-	SVEDevice& sveDevice;
+	std::shared_ptr<SVEDevice> sveDevice;
 	void* mapped = nullptr;
 	VkBuffer buffer = VK_NULL_HANDLE;
 	VkDeviceMemory memory = VK_NULL_HANDLE;

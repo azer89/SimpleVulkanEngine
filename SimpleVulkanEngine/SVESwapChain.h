@@ -17,8 +17,8 @@ class SVESwapChain
 public:
 	static constexpr int MAX_FRAMES_IN_FLIGHT = 2;
 
-	SVESwapChain(SVEDevice& deviceRef, VkExtent2D windowExtent);
-	SVESwapChain(SVEDevice& deviceRef, VkExtent2D windowExtent, std::shared_ptr<SVESwapChain> previous);
+	SVESwapChain(const std::shared_ptr<SVEDevice>& deviceRef, VkExtent2D windowExtent);
+	SVESwapChain(const std::shared_ptr<SVEDevice>& deviceRef, VkExtent2D windowExtent, std::shared_ptr<SVESwapChain> previous);
 	~SVESwapChain();
 
 	SVESwapChain(const SVESwapChain&) = delete;
@@ -26,7 +26,7 @@ public:
 
 	// TODO change the return type
 	VkFramebuffer getFrameBuffer(int index) const { return swapChainFramebuffers[index]; }
-	VkRenderPass getRenderPass() { return renderPass.getRenderPass(); }
+	VkRenderPass getRenderPass() const { return renderPass.getRenderPass(); }
 
 	VkImageView getImageView(int index) const { return swapChainImageViews[index]; }
 	size_t imageCount() const { return swapChainImages.size(); }
@@ -70,7 +70,7 @@ private:
 	std::vector<VkImage> swapChainImages;
 	std::vector<VkImageView> swapChainImageViews;
 
-	SVEDevice& device;
+	std::shared_ptr<SVEDevice> device;
 	VkExtent2D windowExtent;
 
 	VkSwapchainKHR swapChain;

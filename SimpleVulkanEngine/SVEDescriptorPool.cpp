@@ -30,7 +30,7 @@ std::unique_ptr<SVEDescriptorPool> SVEDescriptorPool::Builder::build() const
 // *************** Descriptor Pool *********************
 
 SVEDescriptorPool::SVEDescriptorPool(
-	SVEDevice& device,
+	const std::shared_ptr<SVEDevice>& device,
 	uint32_t maxSets,
 	VkDescriptorPoolCreateFlags poolFlags,
 	const std::vector<VkDescriptorPoolSize>& poolSizes)
@@ -43,15 +43,15 @@ SVEDescriptorPool::SVEDescriptorPool(
 	descriptorPoolInfo.maxSets = maxSets;
 	descriptorPoolInfo.flags = poolFlags;
 
-	if (vkCreateDescriptorPool(sveDevice.device(), &descriptorPoolInfo, nullptr, &descriptorPool) != VK_SUCCESS)
+	if (vkCreateDescriptorPool(sveDevice->device(), &descriptorPoolInfo, nullptr, &descriptorPool) != VK_SUCCESS)
 	{
-		throw std::runtime_error("Failed to create descriptor pool!");
+		throw std::runtime_error("Failed to create descriptor pool");
 	}
 }
 
 SVEDescriptorPool::~SVEDescriptorPool()
 {
-	vkDestroyDescriptorPool(sveDevice.device(), descriptorPool, nullptr);
+	vkDestroyDescriptorPool(sveDevice->device(), descriptorPool, nullptr);
 }
 
 bool SVEDescriptorPool::allocateDescriptor(
@@ -65,7 +65,7 @@ bool SVEDescriptorPool::allocateDescriptor(
 
 	// Might want to create a "DescriptorPoolManager" class that handles this case, and builds
 	// a new pool whenever an old pool fills up. But this is beyond our current scope
-	if (vkAllocateDescriptorSets(sveDevice.device(), &allocInfo, &descriptor) != VK_SUCCESS)
+	if (vkAllocateDescriptorSets(sveDevice->device(), &allocInfo, &descriptor) != VK_SUCCESS)
 	{
 		return false;
 	}
@@ -75,7 +75,7 @@ bool SVEDescriptorPool::allocateDescriptor(
 void SVEDescriptorPool::freeDescriptors(std::vector<VkDescriptorSet>& descriptors) const
 {
 	vkFreeDescriptorSets(
-		sveDevice.device(),
+		sveDevice->device(),
 		descriptorPool,
 		static_cast<uint32_t>(descriptors.size()),
 		descriptors.data());
@@ -83,5 +83,5 @@ void SVEDescriptorPool::freeDescriptors(std::vector<VkDescriptorSet>& descriptor
 
 void SVEDescriptorPool::resetPool()
 {
-	vkResetDescriptorPool(sveDevice.device(), descriptorPool, 0);
+	vkResetDescriptorPool(sveDevice->device(), descriptorPool, 0);
 }

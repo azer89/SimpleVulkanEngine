@@ -3,20 +3,20 @@
 #include <stdexcept>
 #include <array>
 
-SVERenderPass::SVERenderPass(SVEDevice& device) : sveDevice(device)
+SVERenderPass::SVERenderPass(const std::shared_ptr<SVEDevice>& device) : sveDevice(device)
 {
 	init();
 }
 
 SVERenderPass::~SVERenderPass()
 {
-	vkDestroyRenderPass(sveDevice.device(), renderPass, nullptr);
+	vkDestroyRenderPass(sveDevice->device(), renderPass, nullptr);
 }
 
 void SVERenderPass::init()
 {
 	VkAttachmentDescription depthAttachment{};
-	depthAttachment.format = sveDevice.getDepthFormat();
+	depthAttachment.format = sveDevice->getDepthFormat();
 	depthAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
 	depthAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
 	depthAttachment.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
@@ -30,7 +30,7 @@ void SVERenderPass::init()
 	depthAttachmentRef.layout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
 
 	VkAttachmentDescription colorAttachment = {};
-	colorAttachment.format = sveDevice.getImageFormat();
+	colorAttachment.format = sveDevice->getImageFormat();
 	colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
 	colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
 	colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
@@ -70,8 +70,8 @@ void SVERenderPass::init()
 	renderPassInfo.dependencyCount = 1;
 	renderPassInfo.pDependencies = &dependency;
 
-	if (vkCreateRenderPass(sveDevice.device(), &renderPassInfo, nullptr, &renderPass) != VK_SUCCESS)
+	if (vkCreateRenderPass(sveDevice->device(), &renderPassInfo, nullptr, &renderPass) != VK_SUCCESS)
 	{
-		throw std::runtime_error("Failed to create render pass!");
+		throw std::runtime_error("Failed to create render pass");
 	}
 }

@@ -43,13 +43,13 @@ public:
 		void loadModel(const std::string& filepath);
 	};
 
-	SVEModel(SVEDevice& device, const SVEModel::Builder& builder);
+	SVEModel(const std::shared_ptr<SVEDevice>& device, const SVEModel::Builder& builder);
 	~SVEModel();
 
 	SVEModel(const SVEModel&) = delete;
 	SVEModel& operator=(const SVEModel&) = delete;
 
-	static std::unique_ptr<SVEModel> createModelFromFile(SVEDevice& device, const std::string& filepath);
+	static std::unique_ptr<SVEModel> createModelFromFile(const std::shared_ptr<SVEDevice>& device, const std::string& filepath);
 
 	void bind(VkCommandBuffer commandBuffer);
 	void draw(VkCommandBuffer commandBuffer);
@@ -58,7 +58,7 @@ private:
 	void createVertexBuffers(const std::vector<Vertex>& vertices);
 	void createIndexBuffers(const std::vector<uint32_t>& indices);
 
-	SVEDevice& sveDevice;
+	std::shared_ptr<SVEDevice> sveDevice;
 
 	// vertex buffer
 	std::unique_ptr<SVEBuffer> vertexBuffer;
