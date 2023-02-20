@@ -69,5 +69,5 @@ void SVEDescriptorWriter::overwrite(VkDescriptorSet& set)
 	{
 		write.dstSet = set;
 	}
-	vkUpdateDescriptorSets(pool.sveDevice.device(), writes.size(), writes.data(), 0, nullptr);
+	vkUpdateDescriptorSets(pool.sveDevice->device(), writes.size(), writes.data(), 0, nullptr);
 }

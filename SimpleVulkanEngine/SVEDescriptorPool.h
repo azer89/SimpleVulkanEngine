@@ -11,7 +11,7 @@ public:
 	class Builder
 	{
 	public:
-		Builder(SVEDevice& sveDevice) : sveDevice{ sveDevice } {}
+		Builder(const std::shared_ptr<SVEDevice>& device) : sveDevice{ device } {}
 
 		Builder& addPoolSize(VkDescriptorType descriptorType, uint32_t count);
 		Builder& setPoolFlags(VkDescriptorPoolCreateFlags flags);
@@ -19,14 +19,14 @@ public:
 		std::unique_ptr<SVEDescriptorPool> build() const;
 
 	private:
-		SVEDevice& sveDevice;
+		std::shared_ptr<SVEDevice> sveDevice;
 		std::vector<VkDescriptorPoolSize> poolSizes{};
 		uint32_t maxSets = 1000;
 		VkDescriptorPoolCreateFlags poolFlags = 0;
 	};
 
 	SVEDescriptorPool(
-		SVEDevice& sveDevice,
+		const std::shared_ptr<SVEDevice>& device,
 		uint32_t maxSets,
 		VkDescriptorPoolCreateFlags poolFlags,
 		const std::vector<VkDescriptorPoolSize>& poolSizes);
@@ -39,7 +39,7 @@ public:
 	void resetPool();
 
 private:
-	SVEDevice& sveDevice;
+	std::shared_ptr<SVEDevice> sveDevice;
 	VkDescriptorPool descriptorPool;
 
 	friend class SVEDescriptorWriter;

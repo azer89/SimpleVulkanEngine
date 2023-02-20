@@ -58,7 +58,7 @@ void DestroyDebugUtilsMessengerEXT(
 }
 
 // class member functions
-SVEDevice::SVEDevice(SVEWindow& window) : window{ window }
+SVEDevice::SVEDevice(const std::shared_ptr<SVEWindow>& window) : sveWindow{ window }
 {
 	createInstance();
 	setupDebugMessenger();
@@ -86,7 +86,7 @@ void SVEDevice::createInstance()
 {
 	if (enableValidationLayers && !checkValidationLayerSupport())
 	{
-		throw std::runtime_error("validation layers requested, but not available!");
+		throw std::runtime_error("Validation layers requested, but not available");
 	}
 
 	VkApplicationInfo appInfo = {};
@@ -122,7 +122,7 @@ void SVEDevice::createInstance()
 
 	if (vkCreateInstance(&createInfo, nullptr, &instance) != VK_SUCCESS)
 	{
-		throw std::runtime_error("Failed to create instance!");
+		throw std::runtime_error("Failed to create instance");
 	}
 
 	hasGflwRequiredInstanceExtensions();
@@ -134,7 +134,7 @@ void SVEDevice::pickPhysicalDevice()
 	vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
 	if (deviceCount == 0)
 	{
-		throw std::runtime_error("Failed to find GPUs with Vulkan support!");
+		throw std::runtime_error("Failed to find GPUs with Vulkan support");
 	}
 	std::cout << "Device count: " << deviceCount << std::endl;
 	std::vector<VkPhysicalDevice> devices(deviceCount);
@@ -151,7 +151,7 @@ void SVEDevice::pickPhysicalDevice()
 
 	if (physicalDevice == VK_NULL_HANDLE)
 	{
-		throw std::runtime_error("Failed to find a suitable GPU!");
+		throw std::runtime_error("Failed to find a suitable GPU");
 	}
 
 	vkGetPhysicalDeviceProperties(physicalDevice, &properties_);
@@ -203,7 +203,7 @@ void SVEDevice::createLogicalDevice()
 
 	if (vkCreateDevice(physicalDevice, &createInfo, nullptr, &device_) != VK_SUCCESS)
 	{
-		throw std::runtime_error("Failed to create logical device!");
+		throw std::runtime_error("Failed to create logical device");
 	}
 
 	vkGetDeviceQueue(device_, indices.graphicsFamily, 0, &graphicsQueue_);
@@ -221,13 +221,13 @@ void SVEDevice::createCommandPool()
 
 	if (vkCreateCommandPool(device_, &poolInfo, nullptr, &commandPool) != VK_SUCCESS)
 	{
-		throw std::runtime_error("Failed to create command pool!");
+		throw std::runtime_error("Failed to create command pool");
 	}
 }
 
-void SVEDevice::createSurface() 
-{ 
-	window.createWindowSurface(instance, &surface_); 
+void SVEDevice::createSurface()
+{
+	sveWindow->createWindowSurface(instance, &surface_);
 }
 
 bool SVEDevice::isDeviceSuitable(VkPhysicalDevice device)
@@ -244,7 +244,7 @@ bool SVEDevice::isDeviceSuitable(VkPhysicalDevice device)
 	VkPhysicalDeviceFeatures supportedFeatures;
 	vkGetPhysicalDeviceFeatures(device, &supportedFeatures);
 
-	return indices.isComplete() && extensionsSupported && 
+	return indices.isComplete() && extensionsSupported &&
 		swapChainAdequate && supportedFeatures.samplerAnisotropy;
 }
 
@@ -272,7 +272,7 @@ void SVEDevice::setupDebugMessenger()
 	populateDebugMessengerCreateInfo(createInfo);
 	if (CreateDebugUtilsMessengerEXT(instance, &createInfo, nullptr, &debugMessenger) != VK_SUCCESS)
 	{
-		throw std::runtime_error("Failed to set up debug messenger!");
+		throw std::runtime_error("Failed to set up debug messenger");
 	}
 }
 
@@ -437,8 +437,8 @@ SwapChainSupportDetails SVEDevice::querySwapChainSupport(VkPhysicalDevice device
 }
 
 VkFormat SVEDevice::findSupportedFormat(
-	const std::vector<VkFormat>& candidates, 
-	VkImageTiling tiling, 
+	const std::vector<VkFormat>& candidates,
+	VkImageTiling tiling,
 	VkFormatFeatureFlags features)
 {
 	for (VkFormat format : candidates)
@@ -450,12 +450,12 @@ VkFormat SVEDevice::findSupportedFormat(
 		{
 			return format;
 		}
-		else if ( tiling == VK_IMAGE_TILING_OPTIMAL && (props.optimalTilingFeatures & features) == features)
+		else if (tiling == VK_IMAGE_TILING_OPTIMAL && (props.optimalTilingFeatures & features) == features)
 		{
 			return format;
 		}
 	}
-	throw std::runtime_error("Failed to find supported format!");
+	throw std::runtime_error("Failed to find supported format");
 }
 
 uint32_t SVEDevice::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties)
@@ -471,7 +471,7 @@ uint32_t SVEDevice::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags pr
 		}
 	}
 
-	throw std::runtime_error("Failed to find suitable memory type!");
+	throw std::runtime_error("Failed to find suitable memory type");
 }
 
 void SVEDevice::createBuffer(
@@ -489,7 +489,7 @@ void SVEDevice::createBuffer(
 
 	if (vkCreateBuffer(device_, &bufferInfo, nullptr, &buffer) != VK_SUCCESS)
 	{
-		throw std::runtime_error("Failed to create vertex buffer!");
+		throw std::runtime_error("Failed to create vertex buffer");
 	}
 
 	VkMemoryRequirements memRequirements;
@@ -502,7 +502,7 @@ void SVEDevice::createBuffer(
 
 	if (vkAllocateMemory(device_, &allocInfo, nullptr, &bufferMemory) != VK_SUCCESS)
 	{
-		throw std::runtime_error("Failed to allocate vertex buffer memory!");
+		throw std::runtime_error("Failed to allocate vertex buffer memory");
 	}
 
 	vkBindBufferMemory(device_, buffer, bufferMemory, 0);
@@ -584,13 +584,13 @@ void SVEDevice::copyBufferToImage(
 }
 
 void SVEDevice::createImage(
-	uint32_t width, 
-	uint32_t height, 
-	VkFormat format, 
-	VkImageTiling tiling, 
-	VkImageUsageFlags usage, 
-	VkMemoryPropertyFlags properties, 
-	VkImage& image, 
+	uint32_t width,
+	uint32_t height,
+	VkFormat format,
+	VkImageTiling tiling,
+	VkImageUsageFlags usage,
+	VkMemoryPropertyFlags properties,
+	VkImage& image,
 	VkDeviceMemory& imageMemory)
 {
 	VkImageCreateInfo imageInfo{};
@@ -619,7 +619,7 @@ void SVEDevice::createImage(
 	allocInfo.memoryTypeIndex = findMemoryType(memRequirements.memoryTypeBits, properties);
 	if (vkAllocateMemory(device_, &allocInfo, nullptr, &imageMemory) != VK_SUCCESS)
 	{
-		throw std::runtime_error("Failed to allocate image memory!");
+		throw std::runtime_error("Failed to allocate image memory");
 	}
 	vkBindImageMemory(device_, image, imageMemory, 0);
 }
@@ -632,7 +632,7 @@ void SVEDevice::createImageWithInfo(
 {
 	if (vkCreateImage(device_, &imageInfo, nullptr, &image) != VK_SUCCESS)
 	{
-		throw std::runtime_error("Failed to create image!");
+		throw std::runtime_error("Failed to create image");
 	}
 
 	VkMemoryRequirements memRequirements;
@@ -645,12 +645,12 @@ void SVEDevice::createImageWithInfo(
 
 	if (vkAllocateMemory(device_, &allocInfo, nullptr, &imageMemory) != VK_SUCCESS)
 	{
-		throw std::runtime_error("Failed to allocate image memory!");
+		throw std::runtime_error("Failed to allocate image memory");
 	}
 
 	if (vkBindImageMemory(device_, image, imageMemory, 0) != VK_SUCCESS)
 	{
-		throw std::runtime_error("Failed to bind image memory!");
+		throw std::runtime_error("Failed to bind image memory");
 	}
 }
 
@@ -724,7 +724,6 @@ VkFormat SVEDevice::getImageFormat()
 	SwapChainSupportDetails swapChainSupport = getSwapChainSupport();
 	VkSurfaceFormatKHR surfaceFormat = chooseSwapSurfaceFormat(swapChainSupport.formats);
 	return surfaceFormat.format;
-
 }
 
 VkFormat SVEDevice::getDepthFormat()

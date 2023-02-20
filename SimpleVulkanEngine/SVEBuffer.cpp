@@ -23,7 +23,7 @@ VkDeviceSize SVEBuffer::getAlignment(VkDeviceSize instanceSize, VkDeviceSize min
 }
 
 SVEBuffer::SVEBuffer(
-	SVEDevice& device,
+	const std::shared_ptr<SVEDevice>& device,
 	VkDeviceSize instanceSize,
 	uint32_t instanceCount,
 	VkBufferUsageFlags usageFlags,
@@ -37,14 +37,14 @@ SVEBuffer::SVEBuffer(
 {
 	alignmentSize = getAlignment(instanceSize, minOffsetAlignment);
 	bufferSize = alignmentSize * instanceCount;
-	device.createBuffer(bufferSize, usageFlags, memoryPropertyFlags, buffer, memory);
+	device->createBuffer(bufferSize, usageFlags, memoryPropertyFlags, buffer, memory);
 }
 
 SVEBuffer::~SVEBuffer()
 {
 	unmap();
-	vkDestroyBuffer(sveDevice.device(), buffer, nullptr);
-	vkFreeMemory(sveDevice.device(), memory, nullptr);
+	vkDestroyBuffer(sveDevice->device(), buffer, nullptr);
+	vkFreeMemory(sveDevice->device(), memory, nullptr);
 }
 
 /**
@@ -63,7 +63,7 @@ VkResult SVEBuffer::map(VkDeviceSize size, VkDeviceSize offset)
 	{
 		return vkMapMemory(sveDevice.device(), memory, 0, bufferSize, 0, &mapped);
 	}*/
-	return vkMapMemory(sveDevice.device(), memory, offset, size, 0, &mapped);
+	return vkMapMemory(sveDevice->device(), memory, offset, size, 0, &mapped);
 }
 
 /**
@@ -75,7 +75,7 @@ void SVEBuffer::unmap()
 {
 	if (mapped)
 	{
-		vkUnmapMemory(sveDevice.device(), memory);
+		vkUnmapMemory(sveDevice->device(), memory);
 		mapped = nullptr;
 	}
 }
@@ -123,7 +123,7 @@ VkResult SVEBuffer::flush(VkDeviceSize size, VkDeviceSize offset)
 	mappedRange.memory = memory;
 	mappedRange.offset = offset;
 	mappedRange.size = size;
-	return vkFlushMappedMemoryRanges(sveDevice.device(), 1, &mappedRange);
+	return vkFlushMappedMemoryRanges(sveDevice->device(), 1, &mappedRange);
 }
 
 /**
@@ -144,7 +144,7 @@ VkResult SVEBuffer::invalidate(VkDeviceSize size, VkDeviceSize offset)
 	mappedRange.memory = memory;
 	mappedRange.offset = offset;
 	mappedRange.size = size;
-	return vkInvalidateMappedMemoryRanges(sveDevice.device(), 1, &mappedRange);
+	return vkInvalidateMappedMemoryRanges(sveDevice->device(), 1, &mappedRange);
 }
 
 /**

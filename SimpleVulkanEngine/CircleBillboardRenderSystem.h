@@ -19,7 +19,7 @@ private:
 	static constexpr const char* FRAGMENT_SHADER_PATH = "C:/Users/azer/workspace/SimpleVulkanEngine/Shaders/circle_billboard_frag.spv";
 
 public:
-	CircleBillboardRenderSystem(SVEDevice& device, VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout);
+	CircleBillboardRenderSystem(const std::shared_ptr<SVEDevice>& device, VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout);
 	~CircleBillboardRenderSystem();
 
 	CircleBillboardRenderSystem(const CircleBillboardRenderSystem&) = delete;
@@ -31,7 +31,7 @@ private:
 	void createPipelineLayout(VkDescriptorSetLayout globalSetLayout);
 	void createPipeline(VkRenderPass renderPass);
 
-	SVEDevice& sveDevice;
+	std::shared_ptr<SVEDevice> sveDevice;
 
 	std::unique_ptr<SVEPipeline> svePipeline;
 	VkPipelineLayout pipelineLayout;

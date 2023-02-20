@@ -9,7 +9,7 @@
 
 
 SVEPipeline::SVEPipeline(
-	SVEDevice& device,
+	const std::shared_ptr<SVEDevice>& device,
 	const std::string& vertFilepath,
 	const std::string& fragFilepath,
 	const PipelineConfigInfo& configInfo)
@@ -20,9 +20,9 @@ SVEPipeline::SVEPipeline(
 
 SVEPipeline::~SVEPipeline()
 {
-	vkDestroyShaderModule(sveDevice.device(), vertShaderModule, nullptr);
-	vkDestroyShaderModule(sveDevice.device(), fragShaderModule, nullptr);
-	vkDestroyPipeline(sveDevice.device(), graphicsPipeline, nullptr);
+	vkDestroyShaderModule(sveDevice->device(), vertShaderModule, nullptr);
+	vkDestroyShaderModule(sveDevice->device(), fragShaderModule, nullptr);
+	vkDestroyPipeline(sveDevice->device(), graphicsPipeline, nullptr);
 }
 
 std::vector<char> SVEPipeline::readFile(const std::string& filepath)
@@ -132,7 +132,7 @@ void SVEPipeline::createGraphicsPipeline(
 	pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
 	if (vkCreateGraphicsPipelines(
-		sveDevice.device(),
+		sveDevice->device(),
 		VK_NULL_HANDLE,
 		1,
 		&pipelineInfo,
@@ -150,7 +150,7 @@ void SVEPipeline::createShaderModule(const std::vector<char>& code, VkShaderModu
 	createInfo.codeSize = code.size();
 	createInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
 
-	if (vkCreateShaderModule(sveDevice.device(), &createInfo, nullptr, shaderModule) != VK_SUCCESS)
+	if (vkCreateShaderModule(sveDevice->device(), &createInfo, nullptr, shaderModule) != VK_SUCCESS)
 	{
 		throw std::runtime_error("Failed to create shader module");
 	}

@@ -6,6 +6,7 @@
 // std lib headers
 #include <string>
 #include <vector>
+#include <memory>
 
 struct SwapChainSupportDetails
 {
@@ -26,13 +27,13 @@ struct QueueFamilyIndices
 class SVEDevice
 {
 public:
-//#ifdef NDEBUG
-//	const bool enableValidationLayers = false;
-//#else
+	//#ifdef NDEBUG
+	//	const bool enableValidationLayers = false;
+	//#else
 	const bool enableValidationLayers = true;
-//#endif
+	//#endif
 
-	SVEDevice(SVEWindow& window);
+	SVEDevice(const std::shared_ptr<SVEWindow>& window);
 	~SVEDevice();
 
 	// Not copyable or movable
@@ -72,13 +73,13 @@ public:
 		VkBuffer buffer, VkImage image, uint32_t width, uint32_t height, uint32_t layerCount);
 
 	// TODO functions can be combined
-	void createImage(uint32_t width, 
-		uint32_t height, 
-		VkFormat format, 
-		VkImageTiling tiling, 
-		VkImageUsageFlags usage, 
-		VkMemoryPropertyFlags properties, 
-		VkImage& image, 
+	void createImage(uint32_t width,
+		uint32_t height,
+		VkFormat format,
+		VkImageTiling tiling,
+		VkImageUsageFlags usage,
+		VkMemoryPropertyFlags properties,
+		VkImage& image,
 		VkDeviceMemory& imageMemory);
 	void createImageWithInfo(
 		const VkImageCreateInfo& imageInfo,
@@ -115,7 +116,7 @@ private:
 	VkInstance instance;
 	VkDebugUtilsMessengerEXT debugMessenger;
 	VkPhysicalDevice physicalDevice = VK_NULL_HANDLE;
-	SVEWindow& window;
+	std::shared_ptr<SVEWindow> sveWindow;
 	VkCommandPool commandPool;
 
 	VkDevice device_;

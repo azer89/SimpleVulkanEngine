@@ -13,7 +13,7 @@
 class SVERenderer
 {
 public:
-	SVERenderer(SVEWindow& window, SVEDevice& device);
+	SVERenderer(const std::shared_ptr<SVEWindow>& window, const std::shared_ptr<SVEDevice>& device);
 	~SVERenderer();
 
 	SVERenderer(const SVERenderer&) = delete;
@@ -45,8 +45,8 @@ private:
 	void freeCommandBuffers();
 	void recreateSwapChain();
 
-	SVEWindow& sveWindow;
-	SVEDevice& sveDevice;
+	std::shared_ptr<SVEWindow> sveWindow;
+	std::shared_ptr<SVEDevice> sveDevice;
 	std::unique_ptr<SVESwapChain> sveSwapChain;
 	std::vector<VkCommandBuffer> commandBuffers;
 

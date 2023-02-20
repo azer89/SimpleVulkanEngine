@@ -6,18 +6,18 @@
 class SVERenderPass
 {
 public:
-	SVERenderPass(SVEDevice& device);
+	SVERenderPass(const std::shared_ptr<SVEDevice>& device);
 	~SVERenderPass();
 
 	SVERenderPass(const SVERenderPass&) = delete;
 	SVERenderPass operator=(const SVERenderPass&) = delete;
 
-	VkRenderPass getRenderPass() { return renderPass; }
+	VkRenderPass getRenderPass() const { return renderPass; }
 
 private:
 	void init();
 
-	SVEDevice& sveDevice;
+	std::shared_ptr<SVEDevice> sveDevice;
 	VkRenderPass renderPass;
 };
 

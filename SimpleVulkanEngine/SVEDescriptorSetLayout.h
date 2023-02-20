@@ -12,7 +12,7 @@ public:
 	class Builder
 	{
 	public:
-		Builder(SVEDevice& sveDevice) : sveDevice{ sveDevice } {}
+		Builder(const std::shared_ptr<SVEDevice>& device) : sveDevice{ device } {}
 
 		Builder& addBinding(
 			uint32_t binding,
@@ -22,11 +22,11 @@ public:
 		std::unique_ptr<SVEDescriptorSetLayout> build() const;
 
 	private:
-		SVEDevice& sveDevice;
+		std::shared_ptr<SVEDevice> sveDevice;
 		std::unordered_map<uint32_t, VkDescriptorSetLayoutBinding> bindings{};
 	};
 
-	SVEDescriptorSetLayout(SVEDevice& sveDevice, std::unordered_map<uint32_t, VkDescriptorSetLayoutBinding> bindings);
+	SVEDescriptorSetLayout(const std::shared_ptr<SVEDevice>& device, std::unordered_map<uint32_t, VkDescriptorSetLayoutBinding> bindings);
 	~SVEDescriptorSetLayout();
 
 	// Non copyable
@@ -36,7 +36,7 @@ public:
 	VkDescriptorSetLayout getDescriptorSetLayout() const { return descriptorSetLayout; }
 
 private:
-	SVEDevice& sveDevice;
+	std::shared_ptr<SVEDevice> sveDevice;
 	VkDescriptorSetLayout descriptorSetLayout;
 	std::unordered_map<uint32_t, VkDescriptorSetLayoutBinding> bindings;
 

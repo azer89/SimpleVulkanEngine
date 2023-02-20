@@ -8,7 +8,7 @@
 
 #include <stdexcept>
 
-SVETexture::SVETexture(SVEDevice& device, const char* path) :
+SVETexture::SVETexture(const std::shared_ptr<SVEDevice>& device, const char* path) :
 	sveDevice(device), 
 	imagePath(path)
 {
@@ -19,10 +19,10 @@ SVETexture::SVETexture(SVEDevice& device, const char* path) :
 
 SVETexture::~SVETexture()
 {
-	vkDestroySampler(sveDevice.device(), textureSampler, nullptr);
-	vkDestroyImageView(sveDevice.device(), textureImageView, nullptr);
-	vkDestroyImage(sveDevice.device(), textureImage, nullptr);
-	vkFreeMemory(sveDevice.device(), textureImageMemory, nullptr);
+	vkDestroySampler(sveDevice->device(), textureSampler, nullptr);
+	vkDestroyImageView(sveDevice->device(), textureImageView, nullptr);
+	vkDestroyImage(sveDevice->device(), textureImage, nullptr);
+	vkFreeMemory(sveDevice->device(), textureImageMemory, nullptr);
 }
 
 VkDescriptorImageInfo SVETexture::descriptorImageInfo()
@@ -47,22 +47,22 @@ void SVETexture::createTextureImage()
 	VkDeviceSize imageSize = texWidth * texHeight * 4;
 	if (!pixels)
 	{
-		throw std::runtime_error("failed to load texture image!");
+		throw std::runtime_error("Failed to load texture image");
 	}
 	VkBuffer stagingBuffer;
 	VkDeviceMemory stagingBufferMemory;
-	sveDevice.createBuffer(
+	sveDevice->createBuffer(
 		imageSize, 
 		VK_BUFFER_USAGE_TRANSFER_SRC_BIT, 
 		VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, 
 		stagingBuffer, 
 		stagingBufferMemory);
 	void* data;
-	vkMapMemory(sveDevice.device(), stagingBufferMemory, 0, imageSize, 0, &data);
+	vkMapMemory(sveDevice->device(), stagingBufferMemory, 0, imageSize, 0, &data);
 	memcpy(data, pixels, static_cast<size_t>(imageSize));
-	vkUnmapMemory(sveDevice.device(), stagingBufferMemory);
+	vkUnmapMemory(sveDevice->device(), stagingBufferMemory);
 	stbi_image_free(pixels);
-	sveDevice.createImage(
+	sveDevice->createImage(
 		texWidth, 
 		texHeight, 
 		VK_FORMAT_R8G8B8A8_SRGB, 
@@ -73,7 +73,7 @@ void SVETexture::createTextureImage()
 		textureImage, 
 		VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_UNDEFINED, 
 		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-	sveDevice.copyBufferToImage(
+	sveDevice->copyBufferToImage(
 		stagingBuffer, 
 		textureImage, 
 		static_cast<uint32_t>(texWidth), 
@@ -83,20 +83,20 @@ void SVETexture::createTextureImage()
 		VK_FORMAT_R8G8B8A8_SRGB, 
 		VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 
 		VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-	vkDestroyBuffer(sveDevice.device(), stagingBuffer, nullptr);
-	vkFreeMemory(sveDevice.device(), stagingBufferMemory, nullptr);
+	vkDestroyBuffer(sveDevice->device(), stagingBuffer, nullptr);
+	vkFreeMemory(sveDevice->device(), stagingBufferMemory, nullptr);
 }
 
 void SVETexture::createTextureImageView()
 {
-	textureImageView = sveDevice.createImageView(textureImage, VK_FORMAT_R8G8B8A8_SRGB);
+	textureImageView = sveDevice->createImageView(textureImage, VK_FORMAT_R8G8B8A8_SRGB);
 }
 
 void SVETexture::createTextureSampler()
 {
 	//VkPhysicalDeviceProperties properties{};
 	//vkGetPhysicalDeviceProperties(physicalDevice, &properties);
-	auto properties = sveDevice.physicalDeviceProperties();
+	auto properties = sveDevice->physicalDeviceProperties();
 	VkSamplerCreateInfo samplerInfo{};
 	samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
 	samplerInfo.magFilter = VK_FILTER_LINEAR;
@@ -111,7 +111,7 @@ void SVETexture::createTextureSampler()
 	samplerInfo.compareEnable = VK_FALSE;
 	samplerInfo.compareOp = VK_COMPARE_OP_ALWAYS;
 	samplerInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
-	if (vkCreateSampler(sveDevice.device(), &samplerInfo, nullptr, &textureSampler) != VK_SUCCESS)
+	if (vkCreateSampler(sveDevice->device(), &samplerInfo, nullptr, &textureSampler) != VK_SUCCESS)
 	{
 		throw std::runtime_error("Failed to create texture sampler");
 	}
@@ -119,7 +119,7 @@ void SVETexture::createTextureSampler()
 
 void SVETexture::transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout)
 {
-	VkCommandBuffer commandBuffer = sveDevice.beginSingleTimeCommands();
+	VkCommandBuffer commandBuffer = sveDevice->beginSingleTimeCommands();
 	VkImageMemoryBarrier barrier{};
 	barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
 	barrier.oldLayout = oldLayout;
@@ -160,5 +160,5 @@ void SVETexture::transitionImageLayout(VkImage image, VkFormat format, VkImageLa
 		0, nullptr,
 		1, &barrier
 	);
-	sveDevice.endSingleTimeCommands(commandBuffer);
+	sveDevice->endSingleTimeCommands(commandBuffer);
 }

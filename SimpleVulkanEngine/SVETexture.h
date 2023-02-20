@@ -3,13 +3,12 @@
 
 #include "SVEDevice.h"
 
-// vulkan headers
-#include <vulkan/vulkan.h>
+#include <memory>
 
 class SVETexture
 {
 public:
-	SVETexture(SVEDevice& device, const char* path);
+	SVETexture(const std::shared_ptr<SVEDevice>& device, const char* path);
 	~SVETexture();
 
 	VkDescriptorImageInfo descriptorImageInfo();
@@ -24,7 +23,7 @@ private:
 private:
 	const char* imagePath;
 
-	SVEDevice& sveDevice;
+	std::shared_ptr<SVEDevice> sveDevice;
 
 	VkImage textureImage;
 	VkDeviceMemory textureImageMemory;

@@ -21,6 +21,10 @@
 
 SVEApp::SVEApp()
 {
+	sveWindow = std::make_shared<SVEWindow>(WIDTH, HEIGHT, TITLE);
+	sveDevice = std::make_shared<SVEDevice>(sveWindow);
+	sveRenderer = std::make_unique<SVERenderer>(sveWindow, sveDevice);
+
 	globalPool =
 		SVEDescriptorPool::Builder(sveDevice)
 		.setMaxSets(SVESwapChain::MAX_FRAMES_IN_FLIGHT)
@@ -32,8 +36,8 @@ SVEApp::SVEApp()
 	loadGameObjects();
 }
 
-SVEApp::~SVEApp() 
-{ 
+SVEApp::~SVEApp()
+{
 }
 
 void SVEApp::run()
@@ -54,18 +58,18 @@ void SVEApp::run()
 		SVEDescriptorSetLayout::Builder(sveDevice)
 		// UBO
 		.addBinding(
-			0, 
-			VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 
+			0,
+			VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
 			VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT) // VK_SHADER_STAGE_ALL_GRAPHICS
 		// Image Sampler
 		.addBinding(
-			1, 
+			1,
 			VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
 			VK_SHADER_STAGE_FRAGMENT_BIT)
 		.build();
 
 	std::vector<VkDescriptorSet> globalDescriptorSets(SVESwapChain::MAX_FRAMES_IN_FLIGHT);
-	SVETexture simpleTexture{sveDevice, TEXTURE_PATH};
+	SVETexture simpleTexture{ sveDevice, TEXTURE_PATH };
 	VkDescriptorImageInfo imageInfo = simpleTexture.descriptorImageInfo();
 
 	for (int i = 0; i < globalDescriptorSets.size(); i++)
@@ -77,16 +81,16 @@ void SVEApp::run()
 			.build(globalDescriptorSets[i]);
 	}
 
-	SimpleRenderSystem simpleRenderSystem{ 
-		sveDevice, 
-		sveRenderer.getSwapChainRenderPass(), 
-		globalSetLayout->getDescriptorSetLayout() 
+	SimpleRenderSystem simpleRenderSystem{
+		sveDevice,
+		sveRenderer->getSwapChainRenderPass(),
+		globalSetLayout->getDescriptorSetLayout()
 	};
 
 	CircleBillboardRenderSystem cbRenderSystem
 	{
 		sveDevice,
-		sveRenderer.getSwapChainRenderPass(),
+		sveRenderer->getSwapChainRenderPass(),
 		globalSetLayout->getDescriptorSetLayout()
 	};
 
@@ -96,23 +100,23 @@ void SVEApp::run()
 	viewerObject.transform.rotation = { -0.703289,1.1799,0 };
 	UserInputController cameraController{};
 
-	while (!sveWindow.shouldClose())
+	while (!sveWindow->shouldClose())
 	{
 		glfwPollEvents();
 
-		cameraController.update(sveWindow.getGLFWwindow(), viewerObject);
+		cameraController.update(sveWindow->getGLFWwindow(), viewerObject);
 		camera.setViewYXZ(viewerObject.transform.translation, viewerObject.transform.rotation);
 
-		float aspect = sveRenderer.getAspectRatio();
+		float aspect = sveRenderer->getAspectRatio();
 		camera.setPerspectiveProjection(glm::radians(50.f), aspect, 0.1f, 100.f);
 
-		if (auto commandBuffer = sveRenderer.beginFrame())
+		if (auto commandBuffer = sveRenderer->beginFrame())
 		{
-			int frameIndex = sveRenderer.getFrameIndex();
-			FrameInfo frameInfo{ frameIndex, 
+			int frameIndex = sveRenderer->getFrameIndex();
+			FrameInfo frameInfo{ frameIndex,
 				cameraController.getDeltaTime(),
-				commandBuffer, 
-				camera, 
+				commandBuffer,
+				camera,
 				globalDescriptorSets[frameIndex],
 				gameObjects };
 
@@ -122,67 +126,15 @@ void SVEApp::run()
 			uboBuffers[frameIndex]->flush();
 
 			// render
-			sveRenderer.beginSwapChainRenderPass(commandBuffer);
+			sveRenderer->beginSwapChainRenderPass(commandBuffer);
 			simpleRenderSystem.render(frameInfo);
 			cbRenderSystem.render(frameInfo);
-			sveRenderer.endSwapChainRenderPass(commandBuffer);
-			sveRenderer.endFrame();
+			sveRenderer->endSwapChainRenderPass(commandBuffer);
+			sveRenderer->endFrame();
 		}
 	}
 
-	vkDeviceWaitIdle(sveDevice.device());
-}
-
-// temporary helper function, creates a 1x1x1 cube centered at offset with an index buffer
-std::unique_ptr<SVEModel> createCubeModel(SVEDevice& device, glm::vec3 offset)
-{
-	SVEModel::Builder modelBuilder{};
-	modelBuilder.vertices = {
-		// left face (white)
-		{{-.5f, -.5f, -.5f}, {.9f, .9f, .9f}},
-		{{-.5f, .5f, .5f}, {.9f, .9f, .9f}},
-		{{-.5f, -.5f, .5f}, {.9f, .9f, .9f}},
-		{{-.5f, .5f, -.5f}, {.9f, .9f, .9f}},
-
-		// right face (yellow)
-		{{.5f, -.5f, -.5f}, {.8f, .8f, .1f}},
-		{{.5f, .5f, .5f}, {.8f, .8f, .1f}},
-		{{.5f, -.5f, .5f}, {.8f, .8f, .1f}},
-		{{.5f, .5f, -.5f}, {.8f, .8f, .1f}},
-
-		// top face (orange, remember y axis points down)
-		{{-.5f, -.5f, -.5f}, {.9f, .6f, .1f}},
-		{{.5f, -.5f, .5f}, {.9f, .6f, .1f}},
-		{{-.5f, -.5f, .5f}, {.9f, .6f, .1f}},
-		{{.5f, -.5f, -.5f}, {.9f, .6f, .1f}},
-
-		// bottom face (red)
-		{{-.5f, .5f, -.5f}, {.8f, .1f, .1f}},
-		{{.5f, .5f, .5f}, {.8f, .1f, .1f}},
-		{{-.5f, .5f, .5f}, {.8f, .1f, .1f}},
-		{{.5f, .5f, -.5f}, {.8f, .1f, .1f}},
-
-		// nose face (blue)
-		{{-.5f, -.5f, 0.5f}, {.1f, .1f, .8f}},
-		{{.5f, .5f, 0.5f}, {.1f, .1f, .8f}},
-		{{-.5f, .5f, 0.5f}, {.1f, .1f, .8f}},
-		{{.5f, -.5f, 0.5f}, {.1f, .1f, .8f}},
-
-		// tail face (green)
-		{{-.5f, -.5f, -0.5f}, {.1f, .8f, .1f}},
-		{{.5f, .5f, -0.5f}, {.1f, .8f, .1f}},
-		{{-.5f, .5f, -0.5f}, {.1f, .8f, .1f}},
-		{{.5f, -.5f, -0.5f}, {.1f, .8f, .1f}},
-	};
-	for (auto& v : modelBuilder.vertices)
-	{
-		v.position += offset;
-	}
-
-	modelBuilder.indices = { 0,  1,  2,  0,  3,  1,  4,  5,  6,  4,  7,  5,  8,  9,  10, 8,  11, 9,
-							12, 13, 14, 12, 15, 13, 16, 17, 18, 16, 19, 17, 20, 21, 22, 20, 23, 21 };
-
-	return std::make_unique<SVEModel>(device, modelBuilder);
+	vkDeviceWaitIdle(sveDevice->device());
 }
 
 void SVEApp::loadGameObjects()

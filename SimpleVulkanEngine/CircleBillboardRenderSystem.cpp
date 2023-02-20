@@ -13,7 +13,7 @@
 #include <stdexcept>
 
 CircleBillboardRenderSystem::CircleBillboardRenderSystem(
-	SVEDevice& device, VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout)
+	const std::shared_ptr<SVEDevice>& device, VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout)
 	: sveDevice{ device }
 {
 	createPipelineLayout(globalSetLayout);
@@ -22,7 +22,7 @@ CircleBillboardRenderSystem::CircleBillboardRenderSystem(
 
 CircleBillboardRenderSystem::~CircleBillboardRenderSystem()
 {
-	vkDestroyPipelineLayout(sveDevice.device(), pipelineLayout, nullptr);
+	vkDestroyPipelineLayout(sveDevice->device(), pipelineLayout, nullptr);
 }
 
 void CircleBillboardRenderSystem::createPipelineLayout(VkDescriptorSetLayout globalSetLayout)
@@ -40,9 +40,9 @@ void CircleBillboardRenderSystem::createPipelineLayout(VkDescriptorSetLayout glo
 	pipelineLayoutInfo.pSetLayouts = descriptorSetLayouts.data();
 	pipelineLayoutInfo.pushConstantRangeCount = 1;
 	pipelineLayoutInfo.pPushConstantRanges = &pushConstantRange;
-	if (vkCreatePipelineLayout(sveDevice.device(), &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS)
+	if (vkCreatePipelineLayout(sveDevice->device(), &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS)
 	{
-		throw std::runtime_error("Failed to create pipeline layout!");
+		throw std::runtime_error("Failed to create pipeline layout");
 	}
 }
 

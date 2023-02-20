@@ -14,7 +14,7 @@
 #include <stdexcept>
 #include <memory>
 
-SimpleRenderSystem::SimpleRenderSystem(SVEDevice& device, VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout)
+SimpleRenderSystem::SimpleRenderSystem(const std::shared_ptr<SVEDevice>& device, VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout)
 	: sveDevice{ device }
 {
 	createPipelineLayout(globalSetLayout);
@@ -23,7 +23,7 @@ SimpleRenderSystem::SimpleRenderSystem(SVEDevice& device, VkRenderPass renderPas
 
 SimpleRenderSystem::~SimpleRenderSystem()
 {
-	vkDestroyPipelineLayout(sveDevice.device(), pipelineLayout, nullptr);
+	vkDestroyPipelineLayout(sveDevice->device(), pipelineLayout, nullptr);
 }
 
 void SimpleRenderSystem::createPipelineLayout(VkDescriptorSetLayout globalSetLayout)
@@ -43,7 +43,7 @@ void SimpleRenderSystem::createPipelineLayout(VkDescriptorSetLayout globalSetLay
 	pipelineLayoutInfo.pSetLayouts = descriptorSetLayouts.data();
 	pipelineLayoutInfo.pushConstantRangeCount = 1;
 	pipelineLayoutInfo.pPushConstantRanges = &pushConstantRange;
-	if (vkCreatePipelineLayout(sveDevice.device(), &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS)
+	if (vkCreatePipelineLayout(sveDevice->device(), &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS)
 	{
 		throw std::runtime_error("Failed to create pipeline layout!");
 	}
