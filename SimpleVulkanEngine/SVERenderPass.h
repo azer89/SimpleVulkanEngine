@@ -10,7 +10,7 @@ public:
 	~SVERenderPass();
 
 	SVERenderPass(const SVERenderPass&) = delete;
-	SVERenderPass operator=(const SVERenderPass&) = delete;
+	SVERenderPass& operator=(const SVERenderPass&) = delete;
 
 	VkRenderPass getRenderPass() const { return renderPass; }
 

@@ -22,7 +22,7 @@ public:
 	~SVESwapChain();
 
 	SVESwapChain(const SVESwapChain&) = delete;
-	SVEDevice operator=(const SVESwapChain&) = delete;
+	SVEDevice& operator=(const SVESwapChain&) = delete;
 
 	// TODO change the return type
 	VkFramebuffer getFrameBuffer(int index) const { return swapChainFramebuffers[index]; }

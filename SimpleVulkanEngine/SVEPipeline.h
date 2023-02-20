@@ -19,7 +19,7 @@ public:
 	~SVEPipeline();
 
 	SVEPipeline(const SVEPipeline&) = delete;
-	void operator=(const SVEPipeline&) = delete;
+	SVEPipeline& operator=(const SVEPipeline&) = delete;
 
 	void bind(VkCommandBuffer commandBuffer);
 	static void defaultPipelineConfigInfo(PipelineConfigInfo& configInfo);
