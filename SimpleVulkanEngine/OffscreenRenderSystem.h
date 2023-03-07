@@ -12,29 +12,50 @@
 #include <memory>
 #include <vector>
 
-class OfflineRenderSystem
+struct FrameBufferAttachment
+{
+	VkImage image;
+	VkDeviceMemory mem;
+	VkImageView view;
+};
+
+class OffscreenRenderSystem
 {
 private:
 	static constexpr const char* VERTEX_SHADER_PATH = "C:/Users/azer/workspace/SimpleVulkanEngine/Shaders/_.spv";
 	static constexpr const char* FRAGMENT_SHADER_PATH = "C:/Users/azer/workspace/SimpleVulkanEngine/Shaders/_.spv";
 
 public:
-	OfflineRenderSystem(std::shared_ptr<SVEDevice> device, VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout);
-	~OfflineRenderSystem();
+	OffscreenRenderSystem(const std::shared_ptr<SVEDevice>& device);
+	~OffscreenRenderSystem();
 
-	OfflineRenderSystem(const OfflineRenderSystem&) = delete;
-	OfflineRenderSystem& operator=(const OfflineRenderSystem&) = delete;
+	OffscreenRenderSystem(const OffscreenRenderSystem&) = delete;
+	OffscreenRenderSystem& operator=(const OffscreenRenderSystem&) = delete;
 
-	void render(const FrameInfo& frameInfo);
+	//void render(const FrameInfo& frameInfo);
 
 private:
-	void createPipelineLayout(VkDescriptorSetLayout globalSetLayout);
-	void createPipeline(VkRenderPass renderPass);
+	void prepareOffscreenRenderpass();
+	void prepareOffscreenFramebuffer();
+	void buildCommandBuffers();
+	//void createPipelineLayout(VkDescriptorSetLayout globalSetLayout);
+	//void createPipeline(VkRenderPass renderPass);
 
 	std::shared_ptr<SVEDevice> sveDevice;
 
-	std::unique_ptr<SVEPipeline> svePipeline;
-	VkPipelineLayout pipelineLayout;
+	//std::unique_ptr<SVEPipeline> svePipeline;
+	//VkPipelineLayout pipelineLayout;
+
+	struct OffscreenPass
+	{
+		int32_t width;
+		int32_t height;
+		VkFramebuffer frameBuffer;
+		FrameBufferAttachment depth;
+		VkRenderPass renderPass;
+		VkSampler depthSampler;
+		VkDescriptorImageInfo descriptor;
+	} offscreenPass;
 };
 
 #endif

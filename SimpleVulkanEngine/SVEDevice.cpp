@@ -458,6 +458,53 @@ VkFormat SVEDevice::findSupportedFormat(
 	throw std::runtime_error("Failed to find supported format");
 }
 
+uint32_t SVEDevice::getMemoryType(uint32_t typeBits, VkMemoryPropertyFlags properties, VkBool32* memTypeFound) const
+{
+	for (uint32_t i = 0; i < memoryProperties_.memoryTypeCount; i++)
+	{
+		if ((typeBits & 1) == 1)
+		{
+			if ((memoryProperties_.memoryTypes[i].propertyFlags & properties) == properties)
+			{
+				if (memTypeFound)
+				{
+					*memTypeFound = true;
+				}
+				return i;
+			}
+		}
+		typeBits >>= 1;
+	}
+
+	if (memTypeFound)
+	{
+		*memTypeFound = false;
+		return 0;
+	}
+	else
+	{
+		throw std::runtime_error("Could not find a matching memory type");
+	}
+}
+
+VkBool32 SVEDevice::formatIsFilterable(VkFormat format, VkImageTiling tiling)
+{
+	VkFormatProperties formatProps;
+	vkGetPhysicalDeviceFormatProperties(physicalDevice, format, &formatProps);
+
+	if (tiling == VK_IMAGE_TILING_OPTIMAL)
+	{
+		return formatProps.optimalTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT;
+	}
+
+	if (tiling == VK_IMAGE_TILING_LINEAR)
+	{
+		return formatProps.linearTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT;
+	}
+
+	return false;
+}
+
 uint32_t SVEDevice::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties)
 {
 	VkPhysicalDeviceMemoryProperties memProperties;
@@ -470,6 +517,7 @@ uint32_t SVEDevice::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags pr
 			return i;
 		}
 	}
+	memoryProperties_ = memProperties;
 
 	throw std::runtime_error("Failed to find suitable memory type");
 }

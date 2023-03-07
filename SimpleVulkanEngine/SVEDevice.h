@@ -55,6 +55,10 @@ public:
 	VkFormat findSupportedFormat(
 		const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
 
+	uint32_t getMemoryType(uint32_t typeBits, VkMemoryPropertyFlags properties, VkBool32* memTypeFound = nullptr) const;
+
+	VkBool32 formatIsFilterable(VkFormat format, VkImageTiling tiling);
+
 	VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats);
 	VkFormat getImageFormat();
 	VkFormat getDepthFormat();
@@ -124,6 +128,7 @@ private:
 	VkQueue graphicsQueue_;
 	VkQueue presentQueue_;
 	VkPhysicalDeviceProperties properties_;
+	VkPhysicalDeviceMemoryProperties memoryProperties_;
 
 	const std::vector<const char*> validationLayers = { "VK_LAYER_KHRONOS_validation" };
 	const std::vector<const char*> deviceExtensions = { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
