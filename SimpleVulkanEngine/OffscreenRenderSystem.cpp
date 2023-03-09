@@ -7,6 +7,136 @@
 #define DEFAULT_SHADOWMAP_FILTER VK_FILTER_LINEAR
 #define DEPTH_FORMAT VK_FORMAT_D16_UNORM
 
+// TODO temporary function
+inline VkDescriptorSetLayoutBinding descriptorSetLayoutBinding(
+	VkDescriptorType type,
+	VkShaderStageFlags stageFlags,
+	uint32_t binding,
+	uint32_t descriptorCount = 1)
+{
+	VkDescriptorSetLayoutBinding setLayoutBinding{};
+	setLayoutBinding.descriptorType = type;
+	setLayoutBinding.stageFlags = stageFlags;
+	setLayoutBinding.binding = binding;
+	setLayoutBinding.descriptorCount = descriptorCount;
+	return setLayoutBinding;
+}
+
+// TODO temporary function
+inline VkDescriptorSetLayoutCreateInfo descriptorSetLayoutCreateInfo(
+	const VkDescriptorSetLayoutBinding* pBindings,
+	uint32_t bindingCount)
+{
+	VkDescriptorSetLayoutCreateInfo descriptorSetLayoutCreateInfo{};
+	descriptorSetLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+	descriptorSetLayoutCreateInfo.pBindings = pBindings;
+	descriptorSetLayoutCreateInfo.bindingCount = bindingCount;
+	return descriptorSetLayoutCreateInfo;
+}
+
+// TODO temporary function
+inline VkDescriptorSetLayoutCreateInfo descriptorSetLayoutCreateInfo(
+	const std::vector<VkDescriptorSetLayoutBinding>& bindings)
+{
+	VkDescriptorSetLayoutCreateInfo descriptorSetLayoutCreateInfo{};
+	descriptorSetLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+	descriptorSetLayoutCreateInfo.pBindings = bindings.data();
+	descriptorSetLayoutCreateInfo.bindingCount = static_cast<uint32_t>(bindings.size());
+	return descriptorSetLayoutCreateInfo;
+}
+
+// TODO temporary function
+inline VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo(
+	const VkDescriptorSetLayout* pSetLayouts,
+	uint32_t setLayoutCount = 1)
+{
+	VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo{};
+	pipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+	pipelineLayoutCreateInfo.setLayoutCount = setLayoutCount;
+	pipelineLayoutCreateInfo.pSetLayouts = pSetLayouts;
+	return pipelineLayoutCreateInfo;
+}
+
+// TODO temporary function
+inline VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo(
+	uint32_t setLayoutCount = 1)
+{
+	VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo{};
+	pipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+	pipelineLayoutCreateInfo.setLayoutCount = setLayoutCount;
+	return pipelineLayoutCreateInfo;
+}
+
+// TODO temporary function
+inline VkDescriptorImageInfo descriptorImageInfo(VkSampler sampler, VkImageView imageView, VkImageLayout imageLayout)
+{
+	VkDescriptorImageInfo descriptorImageInfo{};
+	descriptorImageInfo.sampler = sampler;
+	descriptorImageInfo.imageView = imageView;
+	descriptorImageInfo.imageLayout = imageLayout;
+	return descriptorImageInfo;
+}
+
+// TODO temporary function
+inline VkWriteDescriptorSet writeDescriptorSet(
+	VkDescriptorSet dstSet,
+	VkDescriptorType type,
+	uint32_t binding,
+	VkDescriptorBufferInfo* bufferInfo,
+	uint32_t descriptorCount = 1)
+{
+	VkWriteDescriptorSet writeDescriptorSet{};
+	writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+	writeDescriptorSet.dstSet = dstSet;
+	writeDescriptorSet.descriptorType = type;
+	writeDescriptorSet.dstBinding = binding;
+	writeDescriptorSet.pBufferInfo = bufferInfo;
+	writeDescriptorSet.descriptorCount = descriptorCount;
+	return writeDescriptorSet;
+}
+
+// TODO temporary function
+inline VkWriteDescriptorSet writeDescriptorSet(
+	VkDescriptorSet dstSet,
+	VkDescriptorType type,
+	uint32_t binding,
+	VkDescriptorImageInfo* imageInfo,
+	uint32_t descriptorCount = 1)
+{
+	VkWriteDescriptorSet writeDescriptorSet{};
+	writeDescriptorSet.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+	writeDescriptorSet.dstSet = dstSet;
+	writeDescriptorSet.descriptorType = type;
+	writeDescriptorSet.dstBinding = binding;
+	writeDescriptorSet.pImageInfo = imageInfo;
+	writeDescriptorSet.descriptorCount = descriptorCount;
+	return writeDescriptorSet;
+}
+
+// TODO temporary function
+inline VkDescriptorPoolCreateInfo descriptorPoolCreateInfo(
+	const std::vector<VkDescriptorPoolSize>& poolSizes,
+	uint32_t maxSets)
+{
+	VkDescriptorPoolCreateInfo descriptorPoolInfo{};
+	descriptorPoolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+	descriptorPoolInfo.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
+	descriptorPoolInfo.pPoolSizes = poolSizes.data();
+	descriptorPoolInfo.maxSets = maxSets;
+	return descriptorPoolInfo;
+}
+
+// TODO temporary function
+inline VkDescriptorPoolSize descriptorPoolSize(
+	VkDescriptorType type,
+	uint32_t descriptorCount)
+{
+	VkDescriptorPoolSize descriptorPoolSize{};
+	descriptorPoolSize.type = type;
+	descriptorPoolSize.descriptorCount = descriptorCount;
+	return descriptorPoolSize;
+}
+
 OffscreenRenderSystem::OffscreenRenderSystem(const std::shared_ptr<SVEDevice>& device) : sveDevice(device)
 {
 }
@@ -168,6 +298,55 @@ void OffscreenRenderSystem::prepareOffscreenFramebuffer()
 	{
 		throw std::runtime_error("Failed to create an offscreen frame buffer");
 	}
+}
+
+void OffscreenRenderSystem::setupDescriptorSetLayout()
+{
+	// Shared pipeline layout for all pipelines used in this sample
+	std::vector<VkDescriptorSetLayoutBinding> setLayoutBindings = {
+		// Binding 0 : Vertex shader uniform buffer
+		descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0),
+		// Binding 1 : Fragment shader image sampler (shadow map)
+		descriptorSetLayoutBinding(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT, 1)
+	};
+	VkDescriptorSetLayoutCreateInfo descriptorLayout = descriptorSetLayoutCreateInfo(setLayoutBindings);
+	if (vkCreateDescriptorSetLayout(sveDevice->device(), &descriptorLayout, nullptr, &descriptorSetLayout) != VK_SUCCESS)
+	{
+		throw std::runtime_error("Failed to create an offscreen descriptor set layout");
+	}
+	VkPipelineLayoutCreateInfo pPipelineLayoutCreateInfo = pipelineLayoutCreateInfo(&descriptorSetLayout, 1);
+	if (vkCreatePipelineLayout(sveDevice->device(), &pPipelineLayoutCreateInfo, nullptr, &pipelineLayout) != VK_SUCCESS)
+	{
+		throw std::runtime_error("Failed to create an offscreen pipeline layout");
+	}
+}
+
+void OffscreenRenderSystem::setupDescriptorPool()
+{
+	std::vector<VkDescriptorPoolSize> poolSizes = {
+		descriptorPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 3),
+		descriptorPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 3)
+	};
+	VkDescriptorPoolCreateInfo descriptorPoolInfo = descriptorPoolCreateInfo(poolSizes, 3);
+	
+	// TODO
+	/*if (vkCreateDescriptorPool(sveDevice->device(), &descriptorPoolInfo, nullptr, &descriptorPool))
+	{
+	}*/
+}
+
+void OffscreenRenderSystem::setupDescriptorSets()
+{
+	std::vector<VkWriteDescriptorSet> writeDescriptorSets;
+
+	// Image descriptor for the shadow map attachment
+	VkDescriptorImageInfo shadowMapDescriptor =
+		descriptorImageInfo(
+			offscreenPass.depthSampler,
+			offscreenPass.depth.view,
+			VK_IMAGE_LAYOUT_DEPTH_STENCIL_READ_ONLY_OPTIMAL);
+
+	// TODO
 }
 
 void OffscreenRenderSystem::buildCommandBuffers()

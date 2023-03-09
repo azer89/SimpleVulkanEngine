@@ -37,6 +37,9 @@ public:
 private:
 	void prepareOffscreenRenderpass();
 	void prepareOffscreenFramebuffer();
+	void setupDescriptorSetLayout();
+	void setupDescriptorPool();
+	void setupDescriptorSets();
 	void buildCommandBuffers();
 	//void createPipelineLayout(VkDescriptorSetLayout globalSetLayout);
 	//void createPipeline(VkRenderPass renderPass);
@@ -44,7 +47,8 @@ private:
 	std::shared_ptr<SVEDevice> sveDevice;
 
 	//std::unique_ptr<SVEPipeline> svePipeline;
-	//VkPipelineLayout pipelineLayout;
+	VkPipelineLayout pipelineLayout;
+	VkDescriptorSetLayout descriptorSetLayout;
 
 	struct OffscreenPass
 	{
