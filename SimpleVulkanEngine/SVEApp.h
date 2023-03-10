@@ -39,6 +39,8 @@ public:
 	SVEApp(const SVEApp&) = delete;
 	SVEApp& operator=(const SVEApp&) = delete;
 
+	void init();
+
 	void run();
 
 private:

@@ -25,19 +25,24 @@ SVEApp::SVEApp()
 	sveDevice = std::make_shared<SVEDevice>(sveWindow);
 	sveRenderer = std::make_unique<SVERenderer>(sveWindow, sveDevice);
 
-	globalPool =
+	auto globalPoolBuilder =
 		SVEDescriptorPool::Builder(sveDevice)
 		.setMaxSets(SVESwapChain::MAX_FRAMES_IN_FLIGHT)
 		// UBO
 		.addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, SVESwapChain::MAX_FRAMES_IN_FLIGHT)
 		// Image Sampler
-		.addPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, SVESwapChain::MAX_FRAMES_IN_FLIGHT)
-		.build();
+		.addPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, SVESwapChain::MAX_FRAMES_IN_FLIGHT);
+	globalPool = globalPoolBuilder.build();
 	loadGameObjects();
 }
 
 SVEApp::~SVEApp()
 {
+}
+
+void SVEApp::init()
+{
+
 }
 
 void SVEApp::run()
@@ -142,16 +147,16 @@ void SVEApp::loadGameObjects()
 	std::shared_ptr<SVEModel> sveModel = SVEModel::createModelFromFile(sveDevice, DRAGON_MODEL_PATH);
 	auto dragon = SVEGameObject::createGameObject();
 	dragon.model = sveModel;
-	dragon.transform.translation = { .0f, .0f, .0f };
+	dragon.transform.translation = { .0f, 0.0f, .0f };
 	dragon.transform.scale = { 1.f, -1.f, 1.f };
 	gameObjects.emplace(dragon.getId(), std::move(dragon));
 
-	/*std::shared_ptr<SVEModel> floorModel = SVEModel::createModelFromFile(sveDevice, QUAD_MODEL_PATH);
+	std::shared_ptr<SVEModel> floorModel = SVEModel::createModelFromFile(sveDevice, QUAD_MODEL_PATH);
 	auto floor = SVEGameObject::createGameObject();
 	floor.model = floorModel;
-	floor.transform.translation = { 0.f, .5f, 0.f };
+	floor.transform.translation = { 0.f, 0.0f, 0.f };
 	floor.transform.scale = { 3.f, 1.f, 3.f };
-	addGameObjectToMap(floor);*/
+	addGameObjectToMap(floor);
 
 	std::vector<glm::vec3> lightColors{
 	  {1.f, .1f, .1f},
