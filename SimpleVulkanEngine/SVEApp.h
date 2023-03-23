@@ -7,9 +7,13 @@
 #include "SVERenderer.h"
 #include "SVEWindow.h" 
 #include "SVEBuffer.h"
-#include "SVEDescriptorPool.h"
 #include "GlobalUBO.h"
 #include "FrameInfo.h"
+#include "SVETexture.h"
+#include "SVEDescriptorPool.h"
+#include "SVEDescriptorWriter.h"
+#include "SimpleRenderSystem.h"
+#include "CircleBillboardRenderSystem.h"
 
 // std
 #include <memory>
@@ -40,19 +44,27 @@ public:
 	SVEApp& operator=(const SVEApp&) = delete;
 
 	void init();
-
 	void run();
 
 private:
 	void loadGameObjects();
-	GlobalUbo createUbo(const FrameInfo& frameInfo, const SVECamera& camera);
 	void addGameObjectToMap(SVEGameObject& go);
+	GlobalUbo createUbo(const FrameInfo& frameInfo, const SVECamera& camera);
 
 	std::shared_ptr<SVEWindow> sveWindow;
 	std::shared_ptr<SVEDevice> sveDevice;
 	std::unique_ptr<SVERenderer> sveRenderer;
-	std::unique_ptr<SVEDescriptorPool> globalPool{};
+
+	std::unique_ptr<SVEDescriptorPool> globalPool;
+	std::unique_ptr<SVEDescriptorSetLayout> globalSetLayout;
+	std::unique_ptr<SimpleRenderSystem> simpleRenderSystem;
+	std::unique_ptr<CircleBillboardRenderSystem> cbRenderSystem;
+	std::unique_ptr<SVETexture> simpleTexture;
+
 	SVEGameObject::Map gameObjects;
+
+	std::vector<std::unique_ptr<SVEBuffer>> uboBuffers;
+	std::vector<VkDescriptorSet> globalDescriptorSets;
 };
 
 #endif

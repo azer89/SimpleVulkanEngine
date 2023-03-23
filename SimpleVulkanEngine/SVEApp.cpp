@@ -1,11 +1,5 @@
 #include "SVEApp.h"
 #include "SVECamera.h"
-#include "SVEDescriptorWriter.h"
-#include "SVETexture.h"
-#include "SVEGAmeObject.h"
-
-#include "SimpleRenderSystem.h"
-#include "CircleBillboardRenderSystem.h"
 #include "UserInputController.h"
 
 #define GLM_FORCE_RADIANS
@@ -21,6 +15,16 @@
 
 SVEApp::SVEApp()
 {
+	init();
+	loadGameObjects();
+}
+
+SVEApp::~SVEApp()
+{
+}
+
+void SVEApp::init()
+{
 	sveWindow = std::make_shared<SVEWindow>(WIDTH, HEIGHT, TITLE);
 	sveDevice = std::make_shared<SVEDevice>(sveWindow);
 	sveRenderer = std::make_unique<SVERenderer>(sveWindow, sveDevice);
@@ -33,21 +37,8 @@ SVEApp::SVEApp()
 		// Image Sampler
 		.addPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, SVESwapChain::MAX_FRAMES_IN_FLIGHT);
 	globalPool = globalPoolBuilder.build();
-	loadGameObjects();
-}
 
-SVEApp::~SVEApp()
-{
-}
-
-void SVEApp::init()
-{
-
-}
-
-void SVEApp::run()
-{
-	std::vector<std::unique_ptr<SVEBuffer>> uboBuffers(SVESwapChain::MAX_FRAMES_IN_FLIGHT);
+	uboBuffers.resize(SVESwapChain::MAX_FRAMES_IN_FLIGHT);
 	for (int i = 0; i < uboBuffers.size(); i++)
 	{
 		uboBuffers[i] = std::make_unique<SVEBuffer>(
@@ -59,7 +50,7 @@ void SVEApp::run()
 		uboBuffers[i]->map();
 	}
 
-	auto globalSetLayout =
+	globalSetLayout =
 		SVEDescriptorSetLayout::Builder(sveDevice)
 		// UBO
 		.addBinding(
@@ -73,9 +64,10 @@ void SVEApp::run()
 			VK_SHADER_STAGE_FRAGMENT_BIT)
 		.build();
 
-	std::vector<VkDescriptorSet> globalDescriptorSets(SVESwapChain::MAX_FRAMES_IN_FLIGHT);
-	SVETexture simpleTexture{ sveDevice, TEXTURE_PATH };
-	VkDescriptorImageInfo imageInfo = simpleTexture.descriptorImageInfo();
+	globalDescriptorSets.resize(SVESwapChain::MAX_FRAMES_IN_FLIGHT);
+
+	simpleTexture = std::make_unique<SVETexture>(sveDevice, TEXTURE_PATH);
+	VkDescriptorImageInfo imageInfo = simpleTexture->descriptorImageInfo();
 
 	for (int i = 0; i < globalDescriptorSets.size(); i++)
 	{
@@ -86,19 +78,23 @@ void SVEApp::run()
 			.build(globalDescriptorSets[i]);
 	}
 
-	SimpleRenderSystem simpleRenderSystem{
+	simpleRenderSystem = std::make_unique<SimpleRenderSystem>
+	(
 		sveDevice,
 		sveRenderer->getSwapChainRenderPass(),
 		globalSetLayout->getDescriptorSetLayout()
-	};
+	);
 
-	CircleBillboardRenderSystem cbRenderSystem
-	{
+	cbRenderSystem = std::make_unique<CircleBillboardRenderSystem>
+	(
 		sveDevice,
 		sveRenderer->getSwapChainRenderPass(),
 		globalSetLayout->getDescriptorSetLayout()
-	};
+	);
+}
 
+void SVEApp::run()
+{
 	SVECamera camera{};
 	auto viewerObject = SVEGameObject::createGameObject();
 	viewerObject.transform.translation = { -3.39563,-3.55833,-0.955367 };
@@ -132,8 +128,8 @@ void SVEApp::run()
 
 			// render
 			sveRenderer->beginSwapChainRenderPass(commandBuffer);
-			simpleRenderSystem.render(frameInfo);
-			cbRenderSystem.render(frameInfo);
+			simpleRenderSystem->render(frameInfo);
+			cbRenderSystem->render(frameInfo);
 			sveRenderer->endSwapChainRenderPass(commandBuffer);
 			sveRenderer->endFrame();
 		}
@@ -160,11 +156,11 @@ void SVEApp::loadGameObjects()
 
 	std::vector<glm::vec3> lightColors{
 	  {1.f, .1f, .1f},
-	  {.1f, .1f, 1.f},
-	  {.1f, 1.f, .1f},
-	  {1.f, 1.f, .1f},
-	  {.1f, 1.f, 1.f},
-	  {1.f, 1.f, 1.f}  //
+	  //{.1f, .1f, 1.f},
+	  //{.1f, 1.f, .1f},
+	  //{1.f, 1.f, .1f},
+	  //{.1f, 1.f, 1.f},
+	  //{1.f, 1.f, 1.f}  //
 	};
 
 	for (int i = 0; i < lightColors.size(); i++)
@@ -178,13 +174,6 @@ void SVEApp::loadGameObjects()
 		pointLight.transform.translation = glm::vec3(rotateLight * glm::vec4(-2.f, -1.f, -2.f, 1.f));
 		addGameObjectToMap(pointLight);
 	}
-
-	/*sveModel = SVEModel::createModelFromFile(sveDevice, "models/smooth_vase.obj");
-	auto smoothVase = SVEGameObject::createGameObject();
-	smoothVase.model = sveModel;
-	smoothVase.transform.translation = { .5f, .5f, 2.5f };
-	smoothVase.transform.scale = { 3.f, 1.5f, 3.f };
-	gameObjects.push_back(std::move(smoothVase));*/
 
 	std::cout << "Number of game objects = " << gameObjects.size() << '\n';
 }
