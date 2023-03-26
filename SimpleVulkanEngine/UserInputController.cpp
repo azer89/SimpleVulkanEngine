@@ -13,7 +13,7 @@ UserInputController::~UserInputController()
 }
 
 // TODO gameObject can be a member
-void UserInputController::update(GLFWwindow* window, SVEGameObject& gameObject)
+void UserInputController::update(GLFWwindow* window, std::shared_ptr<SVEGameObject>& gameObject)
 {
 	updateTime();
 
@@ -37,14 +37,14 @@ void UserInputController::update(GLFWwindow* window, SVEGameObject& gameObject)
 
 	if (glm::dot(rotate, rotate) > std::numeric_limits<float>::epsilon())
 	{
-		gameObject.transform.rotation += lookSpeed * deltaTime * glm::normalize(rotate);
+		gameObject->transform.rotation += lookSpeed * deltaTime * glm::normalize(rotate);
 	}
 
 	// limit pitch values between about +/- 85ish degrees
-	gameObject.transform.rotation.x = glm::clamp(gameObject.transform.rotation.x, -1.5f, 1.5f);
-	gameObject.transform.rotation.y = glm::mod(gameObject.transform.rotation.y, glm::two_pi<float>());
+	gameObject->transform.rotation.x = glm::clamp(gameObject->transform.rotation.x, -1.5f, 1.5f);
+	gameObject->transform.rotation.y = glm::mod(gameObject->transform.rotation.y, glm::two_pi<float>());
 
-	float yaw = gameObject.transform.rotation.y;
+	float yaw = gameObject->transform.rotation.y;
 	const glm::vec3 forwardDir{ sin(yaw), 0.f, cos(yaw) };
 	const glm::vec3 rightDir{ forwardDir.z, 0.f, -forwardDir.x };
 	const glm::vec3 upDir{ 0.f, -1.f, 0.f };
@@ -77,7 +77,7 @@ void UserInputController::update(GLFWwindow* window, SVEGameObject& gameObject)
 
 	if (glm::dot(moveDir, moveDir) > std::numeric_limits<float>::epsilon())
 	{
-		gameObject.transform.translation += moveSpeed * deltaTime * glm::normalize(moveDir);
+		gameObject->transform.translation += moveSpeed * deltaTime * glm::normalize(moveDir);
 	}
 }
 

@@ -1,6 +1,4 @@
 #include "SVEApp.h"
-#include "SVECamera.h"
-#include "UserInputController.h"
 
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
@@ -36,6 +34,7 @@ void SVEApp::init()
 		.addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, SVESwapChain::MAX_FRAMES_IN_FLIGHT)
 		// Image Sampler
 		.addPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, SVESwapChain::MAX_FRAMES_IN_FLIGHT);
+
 	globalPool = globalPoolBuilder.build();
 
 	uboBuffers.resize(SVESwapChain::MAX_FRAMES_IN_FLIGHT);
@@ -91,38 +90,38 @@ void SVEApp::init()
 		sveRenderer->getSwapChainRenderPass(),
 		globalSetLayout->getDescriptorSetLayout()
 	);
+
+	camera = std::make_shared<SVECamera>();
+	viewerObject = std::make_shared<SVEGameObject>(SVEGameObject::createGameObject());
+	viewerObject->transform.translation = { -3.39563,-3.55833,-0.955367 };
+	viewerObject->transform.rotation = { -0.703289,1.1799,0 };
+	cameraController = std::make_unique<UserInputController>();
 }
 
 void SVEApp::run()
 {
-	SVECamera camera{};
-	auto viewerObject = SVEGameObject::createGameObject();
-	viewerObject.transform.translation = { -3.39563,-3.55833,-0.955367 };
-	viewerObject.transform.rotation = { -0.703289,1.1799,0 };
-	UserInputController cameraController{};
-
 	while (!sveWindow->shouldClose())
 	{
 		glfwPollEvents();
 
-		cameraController.update(sveWindow->getGLFWwindow(), viewerObject);
-		camera.setViewYXZ(viewerObject.transform.translation, viewerObject.transform.rotation);
+		cameraController->update(sveWindow->getGLFWwindow(), viewerObject);
+		camera->setViewYXZ(viewerObject->transform.translation, viewerObject->transform.rotation);
 
 		float aspect = sveRenderer->getAspectRatio();
-		camera.setPerspectiveProjection(glm::radians(50.f), aspect, 0.1f, 100.f);
+		camera->setPerspectiveProjection(glm::radians(50.f), aspect, 0.1f, 100.f);
 
-		if (auto commandBuffer = sveRenderer->beginFrame())
+		auto commandBuffer = sveRenderer->beginFrame(); // begin recording (vkBeginCommandBuffer)
+		if (commandBuffer != nullptr)
 		{
 			int frameIndex = sveRenderer->getFrameIndex();
 			FrameInfo frameInfo{ frameIndex,
-				cameraController.getDeltaTime(),
+				cameraController->getDeltaTime(),
 				commandBuffer,
-				camera,
 				globalDescriptorSets[frameIndex],
 				gameObjects };
 
 			// ubo
-			GlobalUbo ubo = createUbo(frameInfo, camera);
+			GlobalUbo ubo = createUbo(frameInfo);
 			uboBuffers[frameIndex]->writeToBuffer(&ubo);
 			uboBuffers[frameIndex]->flush();
 
@@ -131,7 +130,8 @@ void SVEApp::run()
 			simpleRenderSystem->render(frameInfo);
 			cbRenderSystem->render(frameInfo);
 			sveRenderer->endSwapChainRenderPass(commandBuffer);
-			sveRenderer->endFrame();
+
+			sveRenderer->endFrame(); // end command buffer (vkEndCommandBuffer) and submit command buffer
 		}
 	}
 
@@ -178,13 +178,13 @@ void SVEApp::loadGameObjects()
 	std::cout << "Number of game objects = " << gameObjects.size() << '\n';
 }
 
-GlobalUbo SVEApp::createUbo(const FrameInfo& frameInfo, const SVECamera& camera)
+GlobalUbo SVEApp::createUbo(const FrameInfo& frameInfo)
 {
 	GlobalUbo ubo;
 
-	ubo.projection = camera.getProjection();
-	ubo.view = camera.getView();
-	ubo.inverseView = camera.getInverseView();
+	ubo.projection = camera->getProjection();
+	ubo.view = camera->getView();
+	ubo.inverseView = camera->getInverseView();
 
 	auto rotateLight = glm::rotate(glm::mat4(1.f), 0.5f * frameInfo.deltaTime, { 0.f, -1.f, 0.f });
 	int lightIndex = 0;

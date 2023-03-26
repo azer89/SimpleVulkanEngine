@@ -28,7 +28,7 @@ public:
 	UserInputController();
 	~UserInputController();
 
-	void update(GLFWwindow* window, SVEGameObject& gameObject);
+	void update(GLFWwindow* window, std::shared_ptr<SVEGameObject>& gameObject);
 
 	float getDeltaTime() const
 	{

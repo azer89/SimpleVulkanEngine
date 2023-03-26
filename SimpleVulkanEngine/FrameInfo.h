@@ -12,7 +12,6 @@ struct FrameInfo
 	int frameIndex;
 	float deltaTime;
 	VkCommandBuffer commandBuffer;
-	SVECamera& camera;
 	VkDescriptorSet globalDescriptorSet;
 	SVEGameObject::Map& gameObjects;
 };

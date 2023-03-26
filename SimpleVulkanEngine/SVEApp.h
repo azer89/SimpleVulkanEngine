@@ -15,6 +15,9 @@
 #include "SimpleRenderSystem.h"
 #include "CircleBillboardRenderSystem.h"
 
+#include "SVECamera.h"
+#include "UserInputController.h"
+
 // std
 #include <memory>
 #include <vector>
@@ -49,7 +52,7 @@ public:
 private:
 	void loadGameObjects();
 	void addGameObjectToMap(SVEGameObject& go);
-	GlobalUbo createUbo(const FrameInfo& frameInfo, const SVECamera& camera);
+	GlobalUbo createUbo(const FrameInfo& frameInfo);
 
 	std::shared_ptr<SVEWindow> sveWindow;
 	std::shared_ptr<SVEDevice> sveDevice;
@@ -61,10 +64,15 @@ private:
 	std::unique_ptr<CircleBillboardRenderSystem> cbRenderSystem;
 	std::unique_ptr<SVETexture> simpleTexture;
 
-	SVEGameObject::Map gameObjects;
-
 	std::vector<std::unique_ptr<SVEBuffer>> uboBuffers;
 	std::vector<VkDescriptorSet> globalDescriptorSets;
+
+	SVEGameObject::Map gameObjects;
+
+	// Camera
+	std::shared_ptr<SVECamera> camera;
+	std::shared_ptr<SVEGameObject> viewerObject;
+	std::unique_ptr<UserInputController> cameraController;
 };
 
 #endif
