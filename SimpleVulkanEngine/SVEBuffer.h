@@ -52,7 +52,11 @@ private:
 	uint32_t instanceCount;
 	VkDeviceSize instanceSize;
 	VkDeviceSize alignmentSize;
+
+	// brief Usage flags to be filled by external source at buffer creation (to query at some later point)
 	VkBufferUsageFlags usageFlags;
+
+	// Memory property flags to be filled by external source at buffer creation (to query at some later point) 
 	VkMemoryPropertyFlags memoryPropertyFlags;
 };
 

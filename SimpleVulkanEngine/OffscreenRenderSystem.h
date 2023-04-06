@@ -41,6 +41,7 @@ private:
 	void setupDescriptorPool();
 	void setupDescriptorSets();
 	void buildCommandBuffers();
+	void prepareUniformBuffers();
 	//void createPipelineLayout(VkDescriptorSetLayout globalSetLayout);
 	//void createPipeline(VkRenderPass renderPass);
 

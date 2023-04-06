@@ -300,6 +300,11 @@ void OffscreenRenderSystem::prepareOffscreenFramebuffer()
 	}
 }
 
+void OffscreenRenderSystem::prepareUniformBuffers()
+{
+
+}
+
 void OffscreenRenderSystem::setupDescriptorSetLayout()
 {
 	// Shared pipeline layout for all pipelines used in this sample
