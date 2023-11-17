@@ -9,7 +9,6 @@
 #include <cassert>
 #include <chrono>
 #include <stdexcept>
-#include <iostream>
 
 SVEApp::SVEApp()
 {
@@ -23,10 +22,6 @@ SVEApp::~SVEApp()
 
 void SVEApp::Init()
 {
-	sveWindow = std::make_shared<SVEWindow>(WIDTH, HEIGHT, TITLE);
-	sveDevice = std::make_shared<SVEDevice>(sveWindow);
-	sveRenderer = std::make_unique<SVERenderer>(sveWindow, sveDevice);
-
 	auto globalPoolBuilder =
 		SVEDescriptorPool::Builder(sveDevice)
 		.setMaxSets(SVESwapChain::MAX_FRAMES_IN_FLIGHT)
@@ -91,7 +86,7 @@ void SVEApp::Init()
 		globalSetLayout->getDescriptorSetLayout()
 	);
 
-	camera = std::make_shared<SVECamera>();
+	//sveCamera = std::make_shared<SVECamera>();
 	viewerObject = std::make_shared<SVEGameObject>(SVEGameObject::createGameObject());
 	viewerObject->transform.translation = { -3.39563,-3.55833,-0.955367 };
 	viewerObject->transform.rotation = { -0.703289,1.1799,0 };
@@ -103,12 +98,14 @@ void SVEApp::Run()
 	while (!sveWindow->shouldClose())
 	{
 		glfwPollEvents();
+		ProcessTiming();
+		ProcessInput();
 
 		cameraController->update(sveWindow->getGLFWwindow(), viewerObject);
-		camera->setViewYXZ(viewerObject->transform.translation, viewerObject->transform.rotation);
+		//sveCamera->setViewYXZ(viewerObject->transform.translation, viewerObject->transform.rotation);
 
 		float aspect = sveRenderer->getAspectRatio();
-		camera->setPerspectiveProjection(glm::radians(50.f), aspect, 0.1f, 100.f);
+		//sveCamera->setPerspectiveProjection(glm::radians(50.f), aspect, 0.1f, 100.f);
 
 		auto commandBuffer = sveRenderer->beginFrame(); // begin recording (vkBeginCommandBuffer)
 		if (commandBuffer != nullptr)
@@ -144,7 +141,7 @@ void SVEApp::LoadGameObjects()
 	auto dragon = SVEGameObject::createGameObject();
 	dragon.model = sveModel;
 	dragon.transform.translation = { .0f, 0.0f, .0f };
-	dragon.transform.scale = { 1.f, -1.f, 1.f };
+	dragon.transform.scale = { 1.f, 1.f, 1.f };
 	gameObjects.emplace(dragon.getId(), std::move(dragon));
 
 	std::shared_ptr<SVEModel> floorModel = SVEModel::createModelFromFile(sveDevice, QUAD_MODEL_PATH);
@@ -167,11 +164,11 @@ void SVEApp::LoadGameObjects()
 	{
 		auto pointLight = SVEGameObject::makePointLight(2.2f);
 		pointLight.color = lightColors[i];
-		auto rotateLight = glm::rotate(
+		auto rotationMat = glm::rotate(
 			glm::mat4(1.f),
 			(i * glm::two_pi<float>()) / lightColors.size(),
-			{ 0.f, -1.f, 0.f });
-		pointLight.transform.translation = glm::vec3(rotateLight * glm::vec4(-2.f, -1.f, -2.f, 1.f));
+			{ 0.f, 1.f, 0.f });
+		pointLight.transform.translation = glm::vec3(rotationMat * glm::vec4(2.f, 1.f, 2.f, 1.f));
 		AddGameObjectToMap(pointLight);
 	}
 
@@ -182,9 +179,9 @@ GlobalUbo SVEApp::CreateUbo(const FrameInfo& frameInfo)
 {
 	GlobalUbo ubo;
 
-	ubo.projection = camera->getProjection();
-	ubo.view = camera->getView();
-	ubo.inverseView = camera->getInverseView();
+	ubo.projection = camera->GetProjectionMatrix();
+	ubo.view = camera->GetViewMatrix();
+	ubo.inverseView = camera->GetInverseViewMatrix();
 
 	auto rotateLight = glm::rotate(glm::mat4(1.f), 0.5f * frameInfo.deltaTime, { 0.f, -1.f, 0.f });
 	int lightIndex = 0;

@@ -26,11 +26,11 @@
 class SVEApp : AppBase
 {
 public:
-	static constexpr const char* TITLE = "Simple Vulkan";
-	static constexpr const char* VERTEX_SHADER_PATH = "C:/Users/azer/workspace/SimpleVulkanEngine/Shaders/vert.spv";
+	//static constexpr const char* TITLE = "Simple Vulkan";
+	//static constexpr const char* VERTEX_SHADER_PATH = "C:/Users/azer/workspace/SimpleVulkanEngine/Shaders/vert.spv";
 	static constexpr const char* FRAGMENT_SHADER_PATH = "C:/Users/azer/workspace/SimpleVulkanEngine/Shaders/frag.spv";
 	static constexpr int WIDTH = 800;
-	static constexpr int HEIGHT = 600;
+	//static constexpr int HEIGHT = 600;
 
 	// Models
 	static constexpr const char* SMOOTH_VASE_MODEL_PATH = "C:/Users/azer/workspace/SimpleVulkanEngine/Models/smooth_vase.obj";
@@ -45,16 +45,16 @@ public:
 	~SVEApp();
 
 	void Init();
-	void Run();
+	void Run() override;
 
 private:
 	void LoadGameObjects();
 	void AddGameObjectToMap(SVEGameObject& go);
 	GlobalUbo CreateUbo(const FrameInfo& frameInfo);
 
-	std::shared_ptr<SVEWindow> sveWindow;
-	std::shared_ptr<SVEDevice> sveDevice;
-	std::unique_ptr<SVERenderer> sveRenderer;
+	//std::shared_ptr<SVEWindow> sveWindow;
+	//std::shared_ptr<SVEDevice> sveDevice;
+	//std::unique_ptr<SVERenderer> sveRenderer;
 
 	std::unique_ptr<SVEDescriptorPool> globalPool;
 	std::unique_ptr<SVEDescriptorSetLayout> globalSetLayout;
@@ -68,7 +68,7 @@ private:
 	SVEGameObject::Map gameObjects;
 
 	// Camera
-	std::shared_ptr<SVECamera> camera;
+	//std::shared_ptr<SVECamera> sveCamera;
 	std::shared_ptr<SVEGameObject> viewerObject;
 	std::unique_ptr<UserInputController> cameraController;
 };
