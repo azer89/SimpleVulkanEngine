@@ -15,6 +15,7 @@
 #include "SimpleRenderSystem.h"
 #include "CircleBillboardRenderSystem.h"
 
+#include "AppBase.h"
 #include "SVECamera.h"
 #include "UserInputController.h"
 
@@ -22,7 +23,7 @@
 #include <memory>
 #include <vector>
 
-class SVEApp
+class SVEApp : AppBase
 {
 public:
 	static constexpr const char* TITLE = "Simple Vulkan";
@@ -43,16 +44,13 @@ public:
 	SVEApp();
 	~SVEApp();
 
-	SVEApp(const SVEApp&) = delete;
-	SVEApp& operator=(const SVEApp&) = delete;
-
-	void init();
-	void run();
+	void Init();
+	void Run();
 
 private:
-	void loadGameObjects();
-	void addGameObjectToMap(SVEGameObject& go);
-	GlobalUbo createUbo(const FrameInfo& frameInfo);
+	void LoadGameObjects();
+	void AddGameObjectToMap(SVEGameObject& go);
+	GlobalUbo CreateUbo(const FrameInfo& frameInfo);
 
 	std::shared_ptr<SVEWindow> sveWindow;
 	std::shared_ptr<SVEDevice> sveDevice;

@@ -13,15 +13,15 @@
 
 SVEApp::SVEApp()
 {
-	init();
-	loadGameObjects();
+	Init();
+	LoadGameObjects();
 }
 
 SVEApp::~SVEApp()
 {
 }
 
-void SVEApp::init()
+void SVEApp::Init()
 {
 	sveWindow = std::make_shared<SVEWindow>(WIDTH, HEIGHT, TITLE);
 	sveDevice = std::make_shared<SVEDevice>(sveWindow);
@@ -98,7 +98,7 @@ void SVEApp::init()
 	cameraController = std::make_unique<UserInputController>();
 }
 
-void SVEApp::run()
+void SVEApp::Run()
 {
 	while (!sveWindow->shouldClose())
 	{
@@ -121,7 +121,7 @@ void SVEApp::run()
 				gameObjects };
 
 			// ubo
-			GlobalUbo ubo = createUbo(frameInfo);
+			GlobalUbo ubo = CreateUbo(frameInfo);
 			uboBuffers[frameIndex]->writeToBuffer(&ubo);
 			uboBuffers[frameIndex]->flush();
 
@@ -138,7 +138,7 @@ void SVEApp::run()
 	vkDeviceWaitIdle(sveDevice->device());
 }
 
-void SVEApp::loadGameObjects()
+void SVEApp::LoadGameObjects()
 {
 	std::shared_ptr<SVEModel> sveModel = SVEModel::createModelFromFile(sveDevice, DRAGON_MODEL_PATH);
 	auto dragon = SVEGameObject::createGameObject();
@@ -152,7 +152,7 @@ void SVEApp::loadGameObjects()
 	floor.model = floorModel;
 	floor.transform.translation = { 0.f, 0.0f, 0.f };
 	floor.transform.scale = { 300.f, 1.f, 300.f };
-	addGameObjectToMap(floor);
+	AddGameObjectToMap(floor);
 
 	std::vector<glm::vec3> lightColors{
 	  {1.f, .1f, .1f},
@@ -172,13 +172,13 @@ void SVEApp::loadGameObjects()
 			(i * glm::two_pi<float>()) / lightColors.size(),
 			{ 0.f, -1.f, 0.f });
 		pointLight.transform.translation = glm::vec3(rotateLight * glm::vec4(-2.f, -1.f, -2.f, 1.f));
-		addGameObjectToMap(pointLight);
+		AddGameObjectToMap(pointLight);
 	}
 
 	std::cout << "Number of game objects = " << gameObjects.size() << '\n';
 }
 
-GlobalUbo SVEApp::createUbo(const FrameInfo& frameInfo)
+GlobalUbo SVEApp::CreateUbo(const FrameInfo& frameInfo)
 {
 	GlobalUbo ubo;
 
@@ -211,7 +211,7 @@ GlobalUbo SVEApp::createUbo(const FrameInfo& frameInfo)
 	return ubo;
 }
 
-void SVEApp::addGameObjectToMap(SVEGameObject& go)
+void SVEApp::AddGameObjectToMap(SVEGameObject& go)
 {
 	assert(gameObjects.size() < MAX_OBJECTS && "Cannot add game object anymore");
 	gameObjects.emplace(go.getId(), std::move(go));

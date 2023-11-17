@@ -163,6 +163,8 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AppBase.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CircleBillboardRenderSystem.cpp" />
     <ClCompile Include="OffscreenRenderSystem.cpp" />
     <ClCompile Include="SVERenderPass.cpp" />
@@ -186,6 +188,8 @@
     <ClCompile Include="TransformComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AppBase.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="CircleBillboardRenderSystem.h" />
     <ClInclude Include="GlobalUBO.h" />
     <ClInclude Include="OffscreenRenderSystem.h" />
