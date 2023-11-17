@@ -60,7 +60,12 @@ public:
 	void ProcessMouseScroll(float yoffset);
 
 private:
-	void UpdateCameraVectors();
+	glm::mat4 projectionMatrix;
+	glm::mat4 viewMatrix;
+	glm::mat4 inverseViewMatrix;
+
+private:
+	void UpdateInternal();
 };
 
 
