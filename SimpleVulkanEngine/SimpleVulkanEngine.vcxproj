@@ -125,7 +125,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.224.1\Include;C:\Users\azer\workspace\glm;C:\Users\azer\workspace\glfw-3.3.6.bin.WIN64\include;C:\Users\azer\workspace\SimpleVulkanEngine\Libraries;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.224.1\Include;C:\Users\azer\workspace\glm;C:\Users\azer\workspace\glfw-3.3.6.bin.WIN64\include;C:\Users\azer\workspace\SimpleVulkanEngine\Libraries;C:\Users\azer\workspace\SimpleVulkanEngine\SimpleVulkanEngine\Apps;C:\Users\azer\workspace\SimpleVulkanEngine\SimpleVulkanEngine\Legacy;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -147,7 +147,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.224.1\Include;C:\Users\azer\workspace\glm;C:\Users\azer\workspace\glfw-3.3.6.bin.WIN64\include;C:\Users\azer\workspace\SimpleVulkanEngine\Libraries;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.224.1\Include;C:\Users\azer\workspace\glm;C:\Users\azer\workspace\glfw-3.3.6.bin.WIN64\include;C:\Users\azer\workspace\SimpleVulkanEngine\Libraries;C:\Users\azer\workspace\SimpleVulkanEngine\SimpleVulkanEngine\Apps;C:\Users\azer\workspace\SimpleVulkanEngine\SimpleVulkanEngine\Legacy;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

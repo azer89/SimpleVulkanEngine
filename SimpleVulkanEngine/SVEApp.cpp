@@ -85,12 +85,6 @@ void SVEApp::Init()
 		sveRenderer->getSwapChainRenderPass(),
 		globalSetLayout->getDescriptorSetLayout()
 	);
-
-	//sveCamera = std::make_shared<SVECamera>();
-	viewerObject = std::make_shared<SVEGameObject>(SVEGameObject::createGameObject());
-	viewerObject->transform.translation = { -3.39563,-3.55833,-0.955367 };
-	viewerObject->transform.rotation = { -0.703289,1.1799,0 };
-	cameraController = std::make_unique<UserInputController>();
 }
 
 void SVEApp::Run()
@@ -101,18 +95,12 @@ void SVEApp::Run()
 		ProcessTiming();
 		ProcessInput();
 
-		cameraController->update(sveWindow->getGLFWwindow(), viewerObject);
-		//sveCamera->setViewYXZ(viewerObject->transform.translation, viewerObject->transform.rotation);
-
-		float aspect = sveRenderer->getAspectRatio();
-		//sveCamera->setPerspectiveProjection(glm::radians(50.f), aspect, 0.1f, 100.f);
-
 		auto commandBuffer = sveRenderer->beginFrame(); // begin recording (vkBeginCommandBuffer)
 		if (commandBuffer != nullptr)
 		{
 			int frameIndex = sveRenderer->getFrameIndex();
 			FrameInfo frameInfo{ frameIndex,
-				cameraController->getDeltaTime(),
+				deltaTime,
 				commandBuffer,
 				globalDescriptorSets[frameIndex],
 				gameObjects };
