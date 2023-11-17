@@ -150,9 +150,9 @@ void SVERenderer::beginSwapChainRenderPass(VkCommandBuffer commandBuffer)
 	float h = static_cast<float>(sveSwapChain->getSwapChainExtent().height);
 	VkViewport viewport{};
 	viewport.x = 0.0f;
-	viewport.y = h;
+	viewport.y = 0.0f;
 	viewport.width = w;
-	viewport.height = -h;
+	viewport.height = h;
 	viewport.minDepth = 0.0f;
 	viewport.maxDepth = 1.0f;
 	VkRect2D scissor{ {0, 0}, sveSwapChain->getSwapChainExtent() };

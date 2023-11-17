@@ -148,7 +148,7 @@ void SVEApp::LoadGameObjects()
 	auto floor = SVEGameObject::createGameObject();
 	floor.model = floorModel;
 	floor.transform.translation = { 0.f, 0.0f, 0.f };
-	floor.transform.scale = { 300.f, 1.f, 300.f };
+	floor.transform.scale = { 10.f, 1.f, 10.f };
 	AddGameObjectToMap(floor);
 
 	std::vector<glm::vec3> lightColors{

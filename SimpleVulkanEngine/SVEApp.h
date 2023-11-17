@@ -39,7 +39,7 @@ public:
 	static constexpr const char* QUAD_MODEL_PATH = "C:/Users/azer/workspace/SimpleVulkanEngine/Models/quad.obj";
 
 	// Texture, only supports a single image for now
-	static constexpr const char* TEXTURE_PATH = "C:/Users/azer/workspace/SimpleVulkanEngine/Textures/Texture.jpg";
+	static constexpr const char* TEXTURE_PATH = "C:/Users/azer/workspace/SimpleVulkanEngine/Textures/texture.jpg";
 
 	SVEApp();
 	~SVEApp();

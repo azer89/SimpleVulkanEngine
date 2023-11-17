@@ -31,12 +31,12 @@ Camera::Camera(float posX, float posY, float posZ, float upX, float upY, float u
 
 glm::mat4 Camera::GetProjectionMatrix()
 {
-	return glm::perspective(glm::radians(Zoom),
+	/*return glm::perspective(glm::radians(Zoom),
 		(float)ScreenWidth / (float)ScreenHeight,
 		0.1f,
 		100.0f);
-	
-	/*float aspect = ScreenWidth / ScreenHeight;
+	*/
+	float aspect = ScreenWidth / ScreenHeight;
 	assert(glm::abs(aspect - std::numeric_limits<float>::epsilon()) > 0.0f);
 
 	float fovy = glm::radians(Zoom);
@@ -52,13 +52,13 @@ glm::mat4 Camera::GetProjectionMatrix()
 	projectionMatrix[2][3] = 1.f;
 	projectionMatrix[3][2] = -(far * near) / (far - near);
 
-	return projectionMatrix;*/
+	return projectionMatrix;
 }
 
 glm::mat4 Camera::GetViewMatrix()
 {
-	return glm::lookAt(Position, Position + Front, Up);
-	/*const glm::vec3 w{glm::normalize(Front)};
+	//return glm::lookAt(Position, Position + Front, Up);
+	const glm::vec3 w{glm::normalize(Front)};
 	const glm::vec3 u{ glm::normalize(glm::cross(w, Up)) };
 	const glm::vec3 v{ glm::cross(w, u) };
 
@@ -76,14 +76,14 @@ glm::mat4 Camera::GetViewMatrix()
 	viewMatrix[3][1] = -glm::dot(v, Position);
 	viewMatrix[3][2] = -glm::dot(w, Position);
 
-	return viewMatrix;*/
+	return viewMatrix;
 }
 
 glm::mat4 Camera::GetInverseViewMatrix()
 {
-	glm::mat4 viewMatrix = GetViewMatrix();
-	return glm::inverse(viewMatrix);
-	/*const glm::vec3 w{glm::normalize(Front)};
+	//glm::mat4 viewMatrix = GetViewMatrix();
+	//return glm::inverse(viewMatrix);
+	const glm::vec3 w{glm::normalize(Front)};
 	const glm::vec3 u{ glm::normalize(glm::cross(w, Up)) };
 	const glm::vec3 v{ glm::cross(w, u) };
 
@@ -101,7 +101,7 @@ glm::mat4 Camera::GetInverseViewMatrix()
 	inverseViewMatrix[3][1] = Position.y;
 	inverseViewMatrix[3][2] = Position.z;
 
-	return inverseViewMatrix;*/
+	return inverseViewMatrix;
 }
 
 void Camera::ProcessKeyboard(CameraMovement direction, float deltaTime)
