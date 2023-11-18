@@ -15,21 +15,20 @@
 #include "SimpleRenderSystem.h"
 #include "CircleBillboardRenderSystem.h"
 
-#include "SVECamera.h"
-#include "UserInputController.h"
+#include "AppBase.h"
 
 // std
 #include <memory>
 #include <vector>
 
-class SVEApp
+class SVEApp : AppBase
 {
 public:
-	static constexpr const char* TITLE = "Simple Vulkan";
-	static constexpr const char* VERTEX_SHADER_PATH = "C:/Users/azer/workspace/SimpleVulkanEngine/Shaders/vert.spv";
+	//static constexpr const char* TITLE = "Simple Vulkan";
+	//static constexpr const char* VERTEX_SHADER_PATH = "C:/Users/azer/workspace/SimpleVulkanEngine/Shaders/vert.spv";
 	static constexpr const char* FRAGMENT_SHADER_PATH = "C:/Users/azer/workspace/SimpleVulkanEngine/Shaders/frag.spv";
 	static constexpr int WIDTH = 800;
-	static constexpr int HEIGHT = 600;
+	//static constexpr int HEIGHT = 600;
 
 	// Models
 	static constexpr const char* SMOOTH_VASE_MODEL_PATH = "C:/Users/azer/workspace/SimpleVulkanEngine/Models/smooth_vase.obj";
@@ -38,25 +37,18 @@ public:
 	static constexpr const char* QUAD_MODEL_PATH = "C:/Users/azer/workspace/SimpleVulkanEngine/Models/quad.obj";
 
 	// Texture, only supports a single image for now
-	static constexpr const char* TEXTURE_PATH = "C:/Users/azer/workspace/SimpleVulkanEngine/Textures/Texture.jpg";
+	static constexpr const char* TEXTURE_PATH = "C:/Users/azer/workspace/SimpleVulkanEngine/Textures/texture.jpg";
 
 	SVEApp();
 	~SVEApp();
 
-	SVEApp(const SVEApp&) = delete;
-	SVEApp& operator=(const SVEApp&) = delete;
-
-	void init();
-	void run();
+	void Init();
+	void Run() override;
 
 private:
-	void loadGameObjects();
-	void addGameObjectToMap(SVEGameObject& go);
-	GlobalUbo createUbo(const FrameInfo& frameInfo);
-
-	std::shared_ptr<SVEWindow> sveWindow;
-	std::shared_ptr<SVEDevice> sveDevice;
-	std::unique_ptr<SVERenderer> sveRenderer;
+	void LoadGameObjects();
+	void AddGameObjectToMap(SVEGameObject& go);
+	GlobalUbo CreateUbo(const FrameInfo& frameInfo);
 
 	std::unique_ptr<SVEDescriptorPool> globalPool;
 	std::unique_ptr<SVEDescriptorSetLayout> globalSetLayout;
@@ -68,11 +60,6 @@ private:
 	std::vector<VkDescriptorSet> globalDescriptorSets;
 
 	SVEGameObject::Map gameObjects;
-
-	// Camera
-	std::shared_ptr<SVECamera> camera;
-	std::shared_ptr<SVEGameObject> viewerObject;
-	std::unique_ptr<UserInputController> cameraController;
 };
 
 #endif

@@ -25,151 +25,77 @@
     <Filter Include="Source Files\RenderSystems">
       <UniqueIdentifier>{8b73853f-baec-4347-ab88-afdbfee443e3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Apps">
+      <UniqueIdentifier>{2769b95f-6628-40ea-b599-4b5969965c7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Apps">
+      <UniqueIdentifier>{0f6da5f3-a0df-4d9b-a9b6-d64eb01c7768}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SVEApp.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SVEWindow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SVEPipeline.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SVEDevice.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SVESwapChain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SVEModel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SVERenderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SVECamera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UserInputController.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TransformComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SVEBuffer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SVEDescriptorPool.cpp">
+    <ClCompile Include="System\SVEDescriptorPool.cpp">
       <Filter>Source Files\Descriptors</Filter>
     </ClCompile>
-    <ClCompile Include="SVEDescriptorSetLayout.cpp">
+    <ClCompile Include="System\SVEDescriptorSetLayout.cpp">
       <Filter>Source Files\Descriptors</Filter>
     </ClCompile>
-    <ClCompile Include="SVEDescriptorWriter.cpp">
+    <ClCompile Include="System\SVEDescriptorWriter.cpp">
       <Filter>Source Files\Descriptors</Filter>
     </ClCompile>
-    <ClCompile Include="SimpleRenderSystem.cpp">
+    <ClCompile Include="System\CircleBillboardRenderSystem.cpp">
       <Filter>Source Files\RenderSystems</Filter>
     </ClCompile>
-    <ClCompile Include="CircleBillboardRenderSystem.cpp">
+    <ClCompile Include="System\OffscreenRenderSystem.cpp">
       <Filter>Source Files\RenderSystems</Filter>
     </ClCompile>
-    <ClCompile Include="SVEGameObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SVETexture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="OffscreenRenderSystem.cpp">
+    <ClCompile Include="System\SimpleRenderSystem.cpp">
       <Filter>Source Files\RenderSystems</Filter>
     </ClCompile>
-    <ClCompile Include="SVERenderPass.cpp">
+    <ClCompile Include="System\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="SVEApp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SVEWindow.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SVEPipeline.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SVEDevice.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SVESwapChain.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SVEModel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SVEGameObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TransformComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SimplePushConstantData.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SVERenderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SVECamera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UserInputController.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SVEUtils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PipelineConfigInfo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SVEBuffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="FrameInfo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GlobalUBO.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SVEDescriptorPool.h">
-      <Filter>Header Files\Descriptors</Filter>
-    </ClInclude>
-    <ClInclude Include="SVEDescriptorSetLayout.h">
-      <Filter>Header Files\Descriptors</Filter>
-    </ClInclude>
-    <ClInclude Include="SVEDescriptorWriter.h">
-      <Filter>Header Files\Descriptors</Filter>
-    </ClInclude>
-    <ClInclude Include="SimpleRenderSystem.h">
-      <Filter>Header Files\RenderSystems</Filter>
-    </ClInclude>
-    <ClInclude Include="CircleBillboardRenderSystem.h">
-      <Filter>Header Files\RenderSystems</Filter>
-    </ClInclude>
-    <ClInclude Include="PointLight.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SVETexture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="OffscreenRenderSystem.h">
-      <Filter>Header Files\RenderSystems</Filter>
-    </ClInclude>
-    <ClInclude Include="SVERenderPass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <ClCompile Include="System\SVEBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="System\SVEDevice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="System\SVEGameObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="System\SVEModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="System\SVEPipeline.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="System\SVERenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="System\SVERenderPass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="System\SVESwapChain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="System\SVETexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="System\SVEWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="System\TransformComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Apps\AppBase.cpp">
+      <Filter>Source Files\Apps</Filter>
+    </ClCompile>
+    <ClCompile Include="Apps\SVEApp.cpp">
+      <Filter>Source Files\Apps</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Shaders\compile.bat">
@@ -190,5 +116,85 @@
     <None Include="..\README.md">
       <Filter>Resource Files</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="System\SVEDescriptorPool.h">
+      <Filter>Header Files\Descriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="System\SVEDescriptorSetLayout.h">
+      <Filter>Header Files\Descriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="System\SVEDescriptorWriter.h">
+      <Filter>Header Files\Descriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="System\CircleBillboardRenderSystem.h">
+      <Filter>Header Files\RenderSystems</Filter>
+    </ClInclude>
+    <ClInclude Include="System\OffscreenRenderSystem.h">
+      <Filter>Header Files\RenderSystems</Filter>
+    </ClInclude>
+    <ClInclude Include="System\SimpleRenderSystem.h">
+      <Filter>Source Files\Descriptors</Filter>
+    </ClInclude>
+    <ClInclude Include="System\Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="System\FrameInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="System\GlobalUBO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="System\PipelineConfigInfo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="System\PointLight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="System\SimplePushConstantData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="System\SVEBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="System\SVEDevice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="System\SVEGameObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="System\SVEModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="System\SVEPipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="System\SVERenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="System\SVERenderPass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="System\SVESwapChain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="System\SVETexture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="System\SVEUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="System\SVEWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="System\TransformComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Apps\AppBase.h">
+      <Filter>Header Files\Apps</Filter>
+    </ClInclude>
+    <ClInclude Include="Apps\SVEApp.h">
+      <Filter>Header Files\Apps</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

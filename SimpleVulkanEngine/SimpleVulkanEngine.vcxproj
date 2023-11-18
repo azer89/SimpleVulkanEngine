@@ -125,7 +125,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.224.1\Include;C:\Users\azer\workspace\glm;C:\Users\azer\workspace\glfw-3.3.6.bin.WIN64\include;C:\Users\azer\workspace\SimpleVulkanEngine\Libraries;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.224.1\Include;C:\Users\azer\workspace\glm;C:\Users\azer\workspace\glfw-3.3.6.bin.WIN64\include;C:\Users\azer\workspace\SimpleVulkanEngine\Libraries;C:\Users\azer\workspace\SimpleVulkanEngine\SimpleVulkanEngine\Apps;C:\Users\azer\workspace\SimpleVulkanEngine\SimpleVulkanEngine\System;C:\Users\azer\workspace\SimpleVulkanEngine\SimpleVulkanEngine\Legacy;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -147,7 +147,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.224.1\Include;C:\Users\azer\workspace\glm;C:\Users\azer\workspace\glfw-3.3.6.bin.WIN64\include;C:\Users\azer\workspace\SimpleVulkanEngine\Libraries;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\VulkanSDK\1.3.224.1\Include;C:\Users\azer\workspace\glm;C:\Users\azer\workspace\glfw-3.3.6.bin.WIN64\include;C:\Users\azer\workspace\SimpleVulkanEngine\Libraries;C:\Users\azer\workspace\SimpleVulkanEngine\SimpleVulkanEngine\Apps;C:\Users\azer\workspace\SimpleVulkanEngine\SimpleVulkanEngine\System;C:\Users\azer\workspace\SimpleVulkanEngine\SimpleVulkanEngine\Legacy;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -163,55 +163,27 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CircleBillboardRenderSystem.cpp" />
-    <ClCompile Include="OffscreenRenderSystem.cpp" />
-    <ClCompile Include="SVERenderPass.cpp" />
-    <ClCompile Include="SVETexture.cpp" />
-    <ClCompile Include="UserInputController.cpp" />
+    <ClCompile Include="Apps\AppBase.cpp" />
+    <ClCompile Include="Apps\SVEApp.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="SimpleRenderSystem.cpp" />
-    <ClCompile Include="SVEBuffer.cpp" />
-    <ClCompile Include="SVECamera.cpp" />
-    <ClCompile Include="SVEDescriptorPool.cpp" />
-    <ClCompile Include="SVEDescriptorSetLayout.cpp" />
-    <ClCompile Include="SVEDescriptorWriter.cpp" />
-    <ClCompile Include="SVEDevice.cpp" />
-    <ClCompile Include="SVEApp.cpp" />
-    <ClCompile Include="SVEGameObject.cpp" />
-    <ClCompile Include="SVEModel.cpp" />
-    <ClCompile Include="SVEPipeline.cpp" />
-    <ClCompile Include="SVERenderer.cpp" />
-    <ClCompile Include="SVESwapChain.cpp" />
-    <ClCompile Include="SVEWindow.cpp" />
-    <ClCompile Include="TransformComponent.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="CircleBillboardRenderSystem.h" />
-    <ClInclude Include="GlobalUBO.h" />
-    <ClInclude Include="OffscreenRenderSystem.h" />
-    <ClInclude Include="SVERenderPass.h" />
-    <ClInclude Include="SVETexture.h" />
-    <ClInclude Include="UserInputController.h" />
-    <ClInclude Include="PipelineConfigInfo.h" />
-    <ClInclude Include="PointLight.h" />
-    <ClInclude Include="SimplePushConstantData.h" />
-    <ClInclude Include="SimpleRenderSystem.h" />
-    <ClInclude Include="SVEBuffer.h" />
-    <ClInclude Include="SVECamera.h" />
-    <ClInclude Include="SVEDescriptorPool.h" />
-    <ClInclude Include="SVEDescriptorSetLayout.h" />
-    <ClInclude Include="SVEDescriptorWriter.h" />
-    <ClInclude Include="SVEDevice.h" />
-    <ClInclude Include="SVEApp.h" />
-    <ClInclude Include="FrameInfo.h" />
-    <ClInclude Include="SVEGameObject.h" />
-    <ClInclude Include="SVEModel.h" />
-    <ClInclude Include="SVEPipeline.h" />
-    <ClInclude Include="SVERenderer.h" />
-    <ClInclude Include="SVESwapChain.h" />
-    <ClInclude Include="SVEUtils.h" />
-    <ClInclude Include="SVEWindow.h" />
-    <ClInclude Include="TransformComponent.h" />
+    <ClCompile Include="System\Camera.cpp" />
+    <ClCompile Include="System\CircleBillboardRenderSystem.cpp" />
+    <ClCompile Include="System\OffscreenRenderSystem.cpp" />
+    <ClCompile Include="System\SimpleRenderSystem.cpp" />
+    <ClCompile Include="System\SVEBuffer.cpp" />
+    <ClCompile Include="System\SVEDescriptorPool.cpp" />
+    <ClCompile Include="System\SVEDescriptorSetLayout.cpp" />
+    <ClCompile Include="System\SVEDescriptorWriter.cpp" />
+    <ClCompile Include="System\SVEDevice.cpp" />
+    <ClCompile Include="System\SVEGameObject.cpp" />
+    <ClCompile Include="System\SVEModel.cpp" />
+    <ClCompile Include="System\SVEPipeline.cpp" />
+    <ClCompile Include="System\SVERenderer.cpp" />
+    <ClCompile Include="System\SVERenderPass.cpp" />
+    <ClCompile Include="System\SVESwapChain.cpp" />
+    <ClCompile Include="System\SVETexture.cpp" />
+    <ClCompile Include="System\SVEWindow.cpp" />
+    <ClCompile Include="System\TransformComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />
@@ -220,6 +192,34 @@
     <None Include="..\Shaders\compile.bat" />
     <None Include="..\Shaders\simple_shader.frag" />
     <None Include="..\Shaders\simple_shader.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Apps\AppBase.h" />
+    <ClInclude Include="Apps\SVEApp.h" />
+    <ClInclude Include="System\Camera.h" />
+    <ClInclude Include="System\CircleBillboardRenderSystem.h" />
+    <ClInclude Include="System\FrameInfo.h" />
+    <ClInclude Include="System\GlobalUBO.h" />
+    <ClInclude Include="System\OffscreenRenderSystem.h" />
+    <ClInclude Include="System\PipelineConfigInfo.h" />
+    <ClInclude Include="System\PointLight.h" />
+    <ClInclude Include="System\SimplePushConstantData.h" />
+    <ClInclude Include="System\SimpleRenderSystem.h" />
+    <ClInclude Include="System\SVEBuffer.h" />
+    <ClInclude Include="System\SVEDescriptorPool.h" />
+    <ClInclude Include="System\SVEDescriptorSetLayout.h" />
+    <ClInclude Include="System\SVEDescriptorWriter.h" />
+    <ClInclude Include="System\SVEDevice.h" />
+    <ClInclude Include="System\SVEGameObject.h" />
+    <ClInclude Include="System\SVEModel.h" />
+    <ClInclude Include="System\SVEPipeline.h" />
+    <ClInclude Include="System\SVERenderer.h" />
+    <ClInclude Include="System\SVERenderPass.h" />
+    <ClInclude Include="System\SVESwapChain.h" />
+    <ClInclude Include="System\SVETexture.h" />
+    <ClInclude Include="System\SVEUtils.h" />
+    <ClInclude Include="System\SVEWindow.h" />
+    <ClInclude Include="System\TransformComponent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

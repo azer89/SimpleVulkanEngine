@@ -14,7 +14,7 @@ SVERenderer::SVERenderer(const std::shared_ptr<SVEWindow>& window, const std::sh
 
 SVERenderer::~SVERenderer() 
 { 
-	freeCommandBuffers(); 
+	freeCommandBuffers();
 }
 
 // Recreate a swapchain if the window is resized
@@ -145,11 +145,14 @@ void SVERenderer::beginSwapChainRenderPass(VkCommandBuffer commandBuffer)
 
 	vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
+	// Viewport
+	float w = static_cast<float>(sveSwapChain->getSwapChainExtent().width);
+	float h = static_cast<float>(sveSwapChain->getSwapChainExtent().height);
 	VkViewport viewport{};
 	viewport.x = 0.0f;
 	viewport.y = 0.0f;
-	viewport.width = static_cast<float>(sveSwapChain->getSwapChainExtent().width);
-	viewport.height = static_cast<float>(sveSwapChain->getSwapChainExtent().height);
+	viewport.width = w;
+	viewport.height = h;
 	viewport.minDepth = 0.0f;
 	viewport.maxDepth = 1.0f;
 	VkRect2D scissor{ {0, 0}, sveSwapChain->getSwapChainExtent() };
