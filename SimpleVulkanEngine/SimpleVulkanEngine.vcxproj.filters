@@ -31,6 +31,12 @@
     <Filter Include="Source Files\Apps">
       <UniqueIdentifier>{0f6da5f3-a0df-4d9b-a9b6-d64eb01c7768}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Legacy">
+      <UniqueIdentifier>{665b483b-5861-4de7-8411-e634467162fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Legacy">
+      <UniqueIdentifier>{0242925b-0435-4a0a-a9c4-b5418430fea5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -93,8 +99,14 @@
     <ClCompile Include="Apps\AppBase.cpp">
       <Filter>Source Files\Apps</Filter>
     </ClCompile>
-    <ClCompile Include="Apps\SVEApp.cpp">
+    <ClCompile Include="Apps\AppSimpleLighting.cpp">
       <Filter>Source Files\Apps</Filter>
+    </ClCompile>
+    <ClCompile Include="Legacy\SVECamera.cpp">
+      <Filter>Source Files\Legacy</Filter>
+    </ClCompile>
+    <ClCompile Include="Legacy\UserInputController.cpp">
+      <Filter>Source Files\Legacy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -193,8 +205,14 @@
     <ClInclude Include="Apps\AppBase.h">
       <Filter>Header Files\Apps</Filter>
     </ClInclude>
-    <ClInclude Include="Apps\SVEApp.h">
+    <ClInclude Include="Apps\AppSimpleLighting.h">
       <Filter>Header Files\Apps</Filter>
+    </ClInclude>
+    <ClInclude Include="Legacy\SVECamera.h">
+      <Filter>Header Files\Legacy</Filter>
+    </ClInclude>
+    <ClInclude Include="Legacy\UserInputController.h">
+      <Filter>Header Files\Legacy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -68,5 +68,4 @@ private:
 	void UpdateInternal();
 };
 
-
 #endif

@@ -7,7 +7,6 @@
 #include <iostream>
 #include <stdexcept>
 
-
 SVEPipeline::SVEPipeline(
 	const std::shared_ptr<SVEDevice>& device,
 	const std::string& vertFilepath,

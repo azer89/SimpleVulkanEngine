@@ -1,5 +1,5 @@
 
-#include "SVEApp.h"
+#include "AppSimpleLighting.h"
 
 // std
 #include <cstdlib>
@@ -8,7 +8,7 @@
 
 int main()
 {
-	SVEApp app{};
+	AppSimpleLighting app{};
 
 	try
 	{

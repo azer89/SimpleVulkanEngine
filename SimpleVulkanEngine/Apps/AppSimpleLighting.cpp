@@ -1,4 +1,4 @@
-#include "SVEApp.h"
+#include "AppSimpleLighting.h"
 
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
@@ -10,17 +10,17 @@
 #include <chrono>
 #include <stdexcept>
 
-SVEApp::SVEApp()
+AppSimpleLighting::AppSimpleLighting()
 {
 	Init();
 	LoadGameObjects();
 }
 
-SVEApp::~SVEApp()
+AppSimpleLighting::~AppSimpleLighting()
 {
 }
 
-void SVEApp::Init()
+void AppSimpleLighting::Init()
 {
 	auto globalPoolBuilder =
 		SVEDescriptorPool::Builder(sveDevice)
@@ -87,7 +87,7 @@ void SVEApp::Init()
 	);
 }
 
-void SVEApp::Run()
+void AppSimpleLighting::Run()
 {
 	while (!sveWindow->shouldClose())
 	{
@@ -123,7 +123,7 @@ void SVEApp::Run()
 	vkDeviceWaitIdle(sveDevice->device());
 }
 
-void SVEApp::LoadGameObjects()
+void AppSimpleLighting::LoadGameObjects()
 {
 	std::shared_ptr<SVEModel> sveModel = SVEModel::createModelFromFile(sveDevice, DRAGON_MODEL_PATH);
 	auto dragon = SVEGameObject::createGameObject();
@@ -163,7 +163,7 @@ void SVEApp::LoadGameObjects()
 	std::cout << "Number of game objects = " << gameObjects.size() << '\n';
 }
 
-GlobalUbo SVEApp::CreateUbo(const FrameInfo& frameInfo)
+GlobalUbo AppSimpleLighting::CreateUbo(const FrameInfo& frameInfo)
 {
 	GlobalUbo ubo;
 
@@ -196,7 +196,7 @@ GlobalUbo SVEApp::CreateUbo(const FrameInfo& frameInfo)
 	return ubo;
 }
 
-void SVEApp::AddGameObjectToMap(SVEGameObject& go)
+void AppSimpleLighting::AddGameObjectToMap(SVEGameObject& go)
 {
 	assert(gameObjects.size() < MAX_OBJECTS && "Cannot add game object anymore");
 	gameObjects.emplace(go.getId(), std::move(go));

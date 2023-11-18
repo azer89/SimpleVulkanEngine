@@ -8,7 +8,6 @@
 #include "SVEGameObject.h"
 #include "SVEPipeline.h"
 
-// std
 #include <memory>
 #include <vector>
 

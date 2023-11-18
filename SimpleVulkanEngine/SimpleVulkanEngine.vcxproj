@@ -164,7 +164,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Apps\AppBase.cpp" />
-    <ClCompile Include="Apps\SVEApp.cpp" />
+    <ClCompile Include="Apps\AppSimpleLighting.cpp" />
+    <ClCompile Include="Legacy\SVECamera.cpp" />
+    <ClCompile Include="Legacy\UserInputController.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="System\Camera.cpp" />
     <ClCompile Include="System\CircleBillboardRenderSystem.cpp" />
@@ -195,7 +197,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Apps\AppBase.h" />
-    <ClInclude Include="Apps\SVEApp.h" />
+    <ClInclude Include="Apps\AppSimpleLighting.h" />
+    <ClInclude Include="Legacy\SVECamera.h" />
+    <ClInclude Include="Legacy\UserInputController.h" />
     <ClInclude Include="System\Camera.h" />
     <ClInclude Include="System\CircleBillboardRenderSystem.h" />
     <ClInclude Include="System\FrameInfo.h" />
