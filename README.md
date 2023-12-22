@@ -1,5 +1,7 @@
 # Simple Vulkan Demo
 
+### ⚠️ This project is not maintained anymore, check out my latest project [HelloVulkan](https://github.com/azer89/HelloVulkan)
+
 ### Features
 * Point lights
 * Blinn-Phong shading
